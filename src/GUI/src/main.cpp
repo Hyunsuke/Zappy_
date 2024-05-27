@@ -5,3 +5,11 @@
 ** main.cpp
 */
 
+#include "gui.hpp"
+
+int main()
+{
+    Zappy::GUI gui;
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
