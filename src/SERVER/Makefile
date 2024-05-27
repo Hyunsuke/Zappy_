@@ -1,35 +1,37 @@
 ##
-## EPITECH PROJECT, 2023
-## zappy
+## EPITECH PROJECT, 2024
+## Makefile
 ## File description:
 ## Makefile
 ##
 
-SRCDIR = src
+CC	= gcc
 
-SRCDIRS = $(SRCDIR)
-SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
-SRC_OBJ = $(SRC_ALL:.cpp=.o)
+SRC	=	src/main.c	\
+		src/parsing/parsing.c \
+		src/utils/error.c \
+		src/utils/gorbage_collector.c \
+		src/utils/my_strdup.c \
 
-CPPFLAGS = -W -Wall -Wextra -Iinclude -g -std=c++20
+INCLUDEDIR = ../../include/SERVER/
 
-CC = g++ -g
+OBJ	=	$(SRC:.c=.o)
 
-NAME = zappy_server
+CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid
+
+NAME	=	../../zappy_server
 
 all: $(NAME)
 
-$(NAME): $(SRC_OBJ)
-	$(CC) -o $@ $^ $(CPPFLAGS)
+$(NAME): $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
 
 clean:
-	rm -f $(SRC_OBJ)
-
+	rm -f $(OBJ)
 
 fclean: clean
 	rm -f $(NAME)
 
-
-re: fclean all
+re:	fclean all
 
 .PHONY: all clean fclean re

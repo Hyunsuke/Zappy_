@@ -5,7 +5,7 @@
 ** Function my_malloc and my_free
 */
 
-#include "../../../include/server/server.h"
+#include "server.h"
 
 GarbageCollector_t *get_struct_collector(void)
 {
