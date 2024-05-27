@@ -1,0 +1,7 @@
+.vscode/*
+*.o
+zappy_server
+zappy_ai
+zappy_gui
+.idea/*
+vgcore*

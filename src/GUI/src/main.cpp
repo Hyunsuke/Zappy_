@@ -10,6 +10,7 @@
 int main()
 {
     Zappy::GUI gui;
+    (void)gui;
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }

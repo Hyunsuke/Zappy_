@@ -6,6 +6,7 @@
 ##
 
 SRCDIR = src
+OUTDIR = ../../
 
 SRCDIRS = $(SRCDIR)
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
@@ -15,7 +16,7 @@ CPPFLAGS = -W -Wall -Wextra -I../../include/GUI -g -std=c++20
 
 CC = g++ -g
 
-NAME = zappy_gui
+NAME = $(OUTDIR)/zappy_gui
 
 all: $(NAME)
 
