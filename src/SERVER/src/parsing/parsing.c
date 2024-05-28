@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void parse_names(int ac, char **av, int i, struct_t *s)
+static void parse_names(int ac, char **av, int i, struct_t *s)
 {
     int names_start = i + 1;
     int names_end = names_start;
@@ -17,14 +17,14 @@ void parse_names(int ac, char **av, int i, struct_t *s)
         names_end++;
     }
     name_count = names_end - names_start;
-    s->list_names = malloc(name_count * sizeof(char *));
+    s->list_names = my_malloc(name_count * sizeof(char *));
     for (int j = 0; j < name_count; j++) {
         s->list_names[j] = strdup(av[names_start + j]);
     }
     i = names_end - 1;
 }
 
-void def_int_values(int ac, char **av, struct_t *s, int i)
+static void def_int_values(int ac, char **av, struct_t *s, int i)
 {
     if (strcmp(av[i], "-p") == 0 && i + 1 < ac) {
         i++;
@@ -59,12 +59,15 @@ void parse_args(int ac, char **av, struct_t *s)
     }
 }
 
-void parsing(int ac, char **av, struct_t *s)
+int parsing(int ac, char **av, struct_t *s)
 {
     if (ac == 2 && strcmp(av[1], "-help") == 0) {
         printf("USAGE: ./zappy_server -p port -x width -y height -n name1 ");
         printf("name2 ... -c clientsNb -f freq\n");
-        return;
+        return 0;
     }
+    if (check_error(ac, av) == 84)
+        return 84;
     parse_args(ac, av, s);
+    return 0;
 }

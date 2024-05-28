@@ -9,8 +9,9 @@ CC	= gcc
 
 SRC	=	src/main.c	\
 		src/parsing/parsing.c \
+		src/parsing/error.c \
 		src/utils/error.c \
-		src/utils/gorbage_collector.c \
+		src/utils/garbage_collector.c \
 		src/utils/my_strdup.c \
 
 INCLUDEDIR = ../../include/SERVER/
