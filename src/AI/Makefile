@@ -5,33 +5,25 @@
 ## Makefile
 ##
 
-# SRCDIR = src
+# Définition des variables
+SOURCE = src/main.py
+COPIE = zappy_ai.py
+DESTINATION = ../../
+DEST_FILE = $(DESTINATION)/$(COPIE)
 
-# SRCDIRS = $(SRCDIR) $(SRCDIR)/core $(SRCDIR)/Interfaces
-# SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
-# SRC_OBJ = $(SRC_ALL:.cpp=.o)
+all: copy move
 
-# CPPFLAGS = -W -Wall -Wextra -Iinclude -Iinclude/core -Iinclude/Interfaces -lconfig++ -g -pthread -std=c++20
+copy:
+	@echo "Copie de $(SOURCE) vers $(COPIE)"
+	@cp $(SOURCE) $(COPIE)
 
-# CC = g++ -g
+move: copy
+	@echo "Déplacement de $(COPIE) vers $(DESTINATION)"
+	@mv $(COPIE) $(DESTINATION)
+	@chmod +x $(DEST_FILE)
 
-# NAME = zappy_ai
+clean:
+	@echo "Nettoyage des fichiers générés"
+	@rm -f $(DESTINATION)/$(COPIE)
 
-# all: $(NAME)
-
-# $(NAME): $(SRC_OBJ)
-# 	$(CC) -o $@ $^ $(CPPFLAGS)
-
-# clean:
-# 	rm -f $(SRC_OBJ)
-# 	rm -f /tmp/pizzeria_*
-# 	rm -f socket/kitchen_socket*
-
-
-# fclean: clean
-# 	rm -f $(NAME)
-
-
-# re: fclean all
-
-# .PHONY: all clean fclean re
+.PHONY: all copy move clean
