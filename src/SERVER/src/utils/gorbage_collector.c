@@ -7,9 +7,9 @@
 
 #include "server.h"
 
-GarbageCollector_t *get_struct_collector(void)
+garbage_collector_t *get_struct_collector(void)
 {
-    static GarbageCollector_t gc = { .head = NULL };
+    static garbage_collector_t gc = { .head = NULL };
 
     return &gc;
 }
@@ -18,7 +18,7 @@ void *my_malloc(size_t size_malloc)
 {
     void *pointer;
     GCNode_t *node;
-    GarbageCollector_t *gc = get_struct_collector();
+    garbage_collector_t *gc = get_struct_collector();
 
     pointer = malloc(size_malloc);
     node = malloc(sizeof(GCNode_t));
@@ -30,7 +30,7 @@ void *my_malloc(size_t size_malloc)
 
 void full_free(void)
 {
-    GarbageCollector_t *gc = get_struct_collector();
+    garbage_collector_t *gc = get_struct_collector();
     GCNode_t *node = gc->head;
     GCNode_t *temp;
 
@@ -47,7 +47,7 @@ void *my_realloc(void *ptr, size_t size)
 {
     void *newPtr;
     GCNode_t *node;
-    GarbageCollector_t *gc = get_struct_collector();
+    garbage_collector_t *gc = get_struct_collector();
 
     if (ptr == NULL)
         return my_malloc(size);
@@ -67,7 +67,7 @@ void *my_realloc(void *ptr, size_t size)
 
 void my_free(void *ptr)
 {
-    GarbageCollector_t *gc = get_struct_collector();
+    garbage_collector_t *gc = get_struct_collector();
     GCNode_t **indirect = &gc->head;
     GCNode_t *temp;
 
