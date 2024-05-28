@@ -7,10 +7,8 @@
 
 #include "gui.hpp"
 
-int main()
-{
-    Zappy::GUI gui;
-    (void)gui;
-    std::cout << "Hello, World!" << std::endl;
+int main() {
+    Game game(800, 600);
+    game.Run();
     return 0;
 }

@@ -8,15 +8,9 @@
 #ifndef GUI_HPP_
 #define GUI_HPP_
 
-#include <iostream>
-
-namespace Zappy {
-    class GUI {
-        public:
-            GUI() = default;
-            ~GUI() = default;
-    };
-}
-
+#include "core/CameraController.hpp"
+#include "core/Game.hpp"
+#include "core/Object3D.hpp"
+#include "core/ModelLoader.hpp"
 
 #endif /* !GUI_HPP_ */
