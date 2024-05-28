@@ -18,7 +18,35 @@ Game::Game(int screenWidth, int screenHeight)
 
     modelLoader = new ModelLoader("src/GUI/assets/tree_texts/Low_Poly_Tree_Blender.glb"); // Chargez votre modèle GLB ici
 
-    std::cout << "Game initialized with window size: "
+    // if (modelLoader->GetModel().materialCount > 0) {
+    //     std::cout << "Material count: " << modelLoader->GetModel().materialCount << std::endl;
+    //     modelLoader->GetModel().materials[0].maps[MATERIAL_MAP_DIFFUSE].color = (Color){0, 255, 0, 255}; // Rouge
+    // }
+    // if (modelLoader->GetModel().materialCount > 1) {
+    //     modelLoader->GetModel().materials[1].maps[MATERIAL_MAP_DIFFUSE].color = (Color){0, 255, 0, 255}; // Vert
+    // }
+
+    // Load shader
+    // Shader shader = LoadShader("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
+    // modelLoader->SetShader(shader);
+
+    // // Configure shader
+    // int lightPosLoc = GetShaderLocation(shader, "lightPosition");
+    // int viewPosLoc = GetShaderLocation(shader, "viewPosition");
+    // int lightColorLoc = GetShaderLocation(shader, "lightColor");
+    // int ambientColorLoc = GetShaderLocation(shader, "ambientColor");
+
+    // Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
+    // Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
+    // Vector3 lightColor = { 1.0f, 1.0f, 1.0f };
+    // Vector3 ambientColor = { 0.2f, 0.2f, 0.2f };
+
+    // SetShaderValue(shader, lightPosLoc, &lightPosition, SHADER_UNIFORM_VEC3);
+    // SetShaderValue(shader, viewPosLoc, &viewPosition, SHADER_UNIFORM_VEC3);
+    // SetShaderValue(shader, lightColorLoc, &lightColor, SHADER_UNIFORM_VEC3);
+    // SetShaderValue(shader, ambientColorLoc, &ambientColor, SHADER_UNIFORM_VEC3);
+
+    std::cout << "Game initialized with window size: " 
               << screenWidth << "x" << screenHeight << std::endl;
 }
 
@@ -46,10 +74,6 @@ void Game::Draw() {
 
     // Draw a grid at the ground
     DrawGrid(10, 1.0f);
-
-    // // Draw a basic cube to ensure drawing works
-    // DrawCube((Vector3){0.0f, 1.0f, 0.0f}, 2.0f, 2.0f, 2.0f, RED);
-    // DrawCubeWires((Vector3){0.0f, 1.0f, 0.0f}, 2.0f, 2.0f, 2.0f, MAROON);
 
     // Draw all objects
     for (auto& object : objects) {

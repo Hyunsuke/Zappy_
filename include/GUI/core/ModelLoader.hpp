@@ -1,12 +1,5 @@
-/*
-** EPITECH PROJECT, 2024
-** zappy
-** File description:
-** ModelLoader
-*/
-
-#ifndef MODELLOADER_HPP_
-#define MODELLOADER_HPP_
+#ifndef MODEL_LOADER_H
+#define MODEL_LOADER_H
 
 #include "raylib.h"
 #include <string>
@@ -17,10 +10,13 @@ public:
     ModelLoader(const std::string& filePath);
     ~ModelLoader();
     void Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
+    void SetShader(Shader shader);
+    Model GetModel() const { return model; }
 
 private:
     Model model;
-    std::vector<Texture2D> textures;
+    Shader shader;
+    std::vector<Color> objectColors; // Couleurs des matériaux
 };
 
-#endif /* !MODELLOADER_HPP_ */
+#endif // MODEL_LOADER_H
