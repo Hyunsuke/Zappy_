@@ -40,7 +40,7 @@ static void def_int_values(int ac, char **av, struct_t *s, int i)
     }
 }
 
-void parse_args(int ac, char **av, struct_t *s)
+static void parse_args(int ac, char **av, struct_t *s)
 {
     for (int i = 1; i < ac; i++) {
         def_int_values(ac, av, s, i);
