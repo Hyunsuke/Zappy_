@@ -12,6 +12,7 @@ public:
     void Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
     void SetShader(Shader shader);
     Model GetModel() const { return model; }
+    void SetTexture(const std::string& texturePath);
 
 private:
     Model model;

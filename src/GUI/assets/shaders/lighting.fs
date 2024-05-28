@@ -11,7 +11,6 @@ uniform vec3 lightPosition;
 uniform vec3 viewPosition;
 uniform vec3 lightColor;
 uniform vec3 ambientColor;
-uniform vec3 objectColor;  // Ajout d'une couleur uniforme pour l'objet
 
 // Output fragment color
 out vec4 fragColor;
@@ -32,10 +31,7 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
     vec3 specular = spec * lightColor;
-
-    // Utiliser la couleur uniforme pour l'objet
-    vec3 resultColor = objectColor;
-
-    vec3 result = (ambient + diffuse + specular) * resultColor;
+    
+    vec3 result = (ambient + diffuse + specular) * vec3(texture(texture0, fragTexCoord));
     fragColor = vec4(result, 1.0);
 }

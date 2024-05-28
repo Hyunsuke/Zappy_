@@ -20,19 +20,19 @@ ModelLoader::~ModelLoader() {
 }
 
 void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
-    // for (int i = 0; i < model.materialCount; i++) {
-    //     model.materials[i].shader = shader;
-    //     int objectColorLoc = GetShaderLocation(shader, "objectColor");
-    //     Color materialColor = model.materials[i].maps[MATERIAL_MAP_DIFFUSE].color;
-    //     float objectColorVal[3] = { (float)materialColor.r / 255.0f, (float)materialColor.g / 255.0f, (float)materialColor.b / 255.0f };
-    //     SetShaderValue(shader, objectColorLoc, objectColorVal, SHADER_UNIFORM_VEC3);
-    // }
-
-    // for 
-
+    for (int i = 0; i < model.materialCount; i++) {
+        model.materials[i].shader = shader;
+    }
     DrawModelEx(model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
 }
 
 void ModelLoader::SetShader(Shader newShader) {
     shader = newShader;
+}
+
+void ModelLoader::SetTexture(const std::string& texturePath) {
+    Texture2D texture = LoadTexture(texturePath.c_str());
+    for (int i = 0; i < model.materialCount; i++) {
+        SetMaterialTexture(&model.materials[i], MATERIAL_MAP_DIFFUSE, texture);
+    }
 }
