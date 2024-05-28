@@ -29,7 +29,6 @@ void def_int_values(int ac, char **av, struct_t *s, int i)
     if (strcmp(av[i], "-p") == 0 && i + 1 < ac) {
         i++;
         s->port = atoi(av[i]);
-        printf("%d\n", s->port);
     }
     if (strcmp(av[i], "-x") == 0 && i + 1 < ac) {
         i++;
