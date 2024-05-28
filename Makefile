@@ -11,7 +11,7 @@ all:
 	make -C src/SERVER/
 
 AI:
-	# make -C src/AI/
+	make -C src/AI/
 
 GUI:
 	make -C src/GUI/
@@ -25,7 +25,6 @@ clean:
 	make -C src/SERVER/ clean
 
 fclean: clean
-	make -C src/AI/ fclean
 	make -C src/GUI/ fclean
 	make -C src/SERVER/ fclean
 
