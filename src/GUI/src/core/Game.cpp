@@ -8,24 +8,20 @@
 #include "gui.hpp"
 
 Game::Game(int screenWidth, int screenHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight) {
+    : screenWidth(screenWidth), screenHeight(screenHeight), modelLoader(nullptr) {
     InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
     SetTargetFPS(60);
 
     // Initialize objects
-    objects.emplace_back(Vector3{ 0.0f, 0.0f, 0.0f }, 2.0f, RED);   // Cube au centre
+    objects.emplace_back(Vector3{ 0.0f, 1.0f, 0.0f }, 2.0f, RED);   // Cube au centre
     objects.emplace_back(Vector3{ 3.0f, 1.0f, 3.0f }, 2.0f, BLUE);  // Cube à une autre position
 
-    std::vector<std::string> texturePaths = {
-        "src/GUI/assets/tree_texts/Trunk_4_Cartoon.png",
-        "src/GUI/assets/tree_texts/Leafs2.png",
-        // Ajoutez d'autres chemins de textures si nécessaire
-    };
-    modelLoader = new ModelLoader("src/GUI/assets/tree.obj", texturePaths);
+    modelLoader = new ModelLoader("src/GUI/assets/tree_texts/Low_Poly_Tree_Blender.glb"); // Chargez votre modèle GLB ici
 
     std::cout << "Game initialized with window size: "
               << screenWidth << "x" << screenHeight << std::endl;
 }
+
 Game::~Game() {
     delete modelLoader;
     CloseWindow();
@@ -61,7 +57,7 @@ void Game::Draw() {
     }
 
     if (modelLoader) {
-        modelLoader->Draw((Vector3){5.0f, 1.0f, 5.0f}, 1.0f, WHITE);
+        modelLoader->Draw((Vector3){5.0f, 1.0f, 5.0f}, 0.1f, (Vector3){1.0f, 0.0f, 0.0f}, 90.0f, WHITE); // Rotation de 45 degrés autour de l'axe Y
     }
 
     EndMode3D();

@@ -14,9 +14,9 @@
 
 class ModelLoader {
 public:
-    ModelLoader(const std::string& filePath, const std::vector<std::string>& texturePaths);
+    ModelLoader(const std::string& filePath);
     ~ModelLoader();
-    void Draw(Vector3 position, float scale, Color tint);
+    void Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
 
 private:
     Model model;
