@@ -13,6 +13,13 @@ SRC	=	src/main.c	\
 		src/utils/error.c \
 		src/utils/garbage_collector.c \
 		src/utils/my_strdup.c \
+		src/server/server.c \
+		src/server/server_usage.c \
+		src/server/print.c \
+		src/server/init.c \
+		src/server/handle.c \
+		src/server/handle_cmd.c \
+		src/server/config.c \
 
 INCLUDEDIR = ../../include/SERVER/
 

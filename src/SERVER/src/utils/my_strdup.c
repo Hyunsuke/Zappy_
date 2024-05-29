@@ -5,7 +5,7 @@
 ** Function my_malloc and my_free
 */
 
-#include "server.h"
+#include "all.h"
 
 char *my_strdup(const char *str)
 {

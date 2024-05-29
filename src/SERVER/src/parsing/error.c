@@ -5,7 +5,7 @@
 ** error in parsing file
 */
 
-#include "server.h"
+#include "all.h"
 
 static int is_num(const char *str)
 {
@@ -110,7 +110,7 @@ static int check_option(int ac, char **av, check_t *c, int i)
 
 int check_error(int ac, char **av)
 {
-    check_t *c = malloc(sizeof(check_t));
+    check_t *c = my_malloc(sizeof(check_t));
 
     if (ac == 0)
         return 84;

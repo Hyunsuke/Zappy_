@@ -5,7 +5,7 @@
 ** error
 */
 
-#include "server.h"
+#include "all.h"
 
 
 int my_error(char *message)

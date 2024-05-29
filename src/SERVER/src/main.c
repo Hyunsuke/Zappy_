@@ -5,12 +5,14 @@
 ** main.c
 */
 
-#include "server.h"
+#include "all.h"
 
 int main(int ac, char **av)
 {
     struct_t *s = my_malloc(sizeof(struct_t));
+    server_t *server = my_malloc(sizeof(server_t));
 
     if (parsing(ac, av, s) == 84)
         return 84;
+    server_gestion(server, s);
 }
