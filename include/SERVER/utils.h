@@ -47,7 +47,7 @@ typedef struct GCNode_t {
 
 typedef struct {
     GCNode_t *head;
-} GarbageCollector_t;
+} garbage_collector_t;
 
 
     //////////////////////// MY_MALLOC and MY_FREE ///

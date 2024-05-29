@@ -14,5 +14,6 @@ int main(int ac, char **av)
 
     if (parsing(ac, av, s) == 84)
         return 84;
+    generator_map(s);
     server_gestion(server, s);
 }

@@ -23,4 +23,10 @@ typedef struct check_s {
 int parsing(int ac, char **av, struct_t *s);
 int check_error(int ac, char **av);
 
+// Generator map
+void init_map(struct_t *s);
+void generator_map(struct_t *s);
+void print_map(struct_t *s);
+
+
 #endif /* !PARSING_H */
