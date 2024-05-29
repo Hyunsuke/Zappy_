@@ -28,6 +28,8 @@ class InventoryManager:
 
         # Parcourir les éléments et mettre à jour le dictionnaire
         for item in items:
+            if (item == "ok" or "ko"): # Gestion d'erreur du broadcast
+                return
             key, value = item.split()
             self.current_inventory[key] = int(value)
         if p == True:
@@ -119,8 +121,58 @@ class ZappyClient:
     def broadcast(self, message):
         print("Broadcast : " + self.send_command(f"Broadcast {message}"))
 
+    def connect_nbr(self):
+        return self.send_command("Connect_nbr")
+
+    def fork(self):
+        return self.send_command("Fork")
+
+    def eject(self):
+        return self.send_command("Eject")
+
     def take_object(self, object):
         print("Take object : " + self.send_command("Take " + object))
+
+    def set_object_down(self, object):
+        print("Set object : " + self.send_command("Set " + object))
+
+    def incantation(self):
+        print("Incantation : " + self.send_command("Incantation"))
+
+    # List de ce qu'on doit avoir entre le niveau 2 & 10. L'algo doit prendre ça en compte à partir du lvl2
+    finalObjectiveList = [
+        ("linemate", 10),
+        ("deraumere", 5),
+        ("sibur", 20),
+        ("mendiane", 7),
+        ("phiras", 3),
+        ("thystame", 12)
+    ]
+
+    def getBroadcastMessage(response):
+        if (response == "ok" or response == "ko"):
+            return response
+        parts = response('_')
+        if len(parts) != 2:
+            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object'")
+        # On récupère le nom de l'équipe et l'objet
+        team_name = parts[0]
+        object_name = parts[1]
+        return team_name, object_name
+
+    def broadcastMaterial(self, material):
+        if (material == "linemate"):
+            self.broadcast("[teamname]_linemate")
+        elif (material == "deraumere"):
+            self.broadcast("[teamname]_deraumere")
+        elif (material == "sibur"):
+            self.broadcast("[teamname]_sibur")
+        elif (material == "mendiane"):
+            self.broadcast("[teamname]_mendiane")
+        elif (material == "phiras"):
+            self.broadcast("[teamname]_phiras")
+        elif (material == "thystame"):
+            self.broadcast("[teamname]_thystame")
 
     def main_loop(self):
         try:
