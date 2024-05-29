@@ -100,5 +100,4 @@ void generator_map(struct_t *s)
 {
     init_map(s);
     add_resources(s);
-    print_map(s);
 }
