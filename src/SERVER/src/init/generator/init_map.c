@@ -18,7 +18,7 @@ static void init_map_element(map_element_t *element, int client_nb)
     element->mendiane = false;
     element->phiras = false;
     element->thystame = false;
-    element->id_mob = malloc(client_nb * sizeof(int));
+    element->id_mob = my_malloc(client_nb * sizeof(int));
     if (element->id_mob == NULL)
         return;
     for (int i = 0; i < client_nb; i++)
@@ -27,11 +27,11 @@ static void init_map_element(map_element_t *element, int client_nb)
 
 void init_map(struct_t *s)
 {
-    s->map = malloc(s->map_height * sizeof(map_element_t *));
+    s->map = my_malloc(s->map_height * sizeof(map_element_t *) + 2);
     if (s->map == NULL)
         return;
     for (int i = 0; i < s->map_height; i++) {
-        s->map[i] = malloc(s->map_width * sizeof(map_element_t));
+        s->map[i] = my_malloc(s->map_width * sizeof(map_element_t) + 2);
         for (int j = 0; j < s->map_width; j++)
             init_map_element(&(s->map[i][j]), s->client_nb);
     }

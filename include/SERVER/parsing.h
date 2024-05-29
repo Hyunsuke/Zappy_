@@ -8,8 +8,14 @@
 #ifndef PARSING_H
     #define PARSING_H
 
-//Fonction parsing
+// Fonction parsing
 
 void parsing(int ac, char **av, struct_t *s);
+
+// Generator map
+void init_map(struct_t *s);
+void generator_map(struct_t *s);
+void print_map(struct_t *s);
+
 
 #endif /* !PARSING_H */
