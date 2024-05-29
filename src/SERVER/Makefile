@@ -13,6 +13,9 @@ SRC	=	src/main.c	\
 		src/utils/error.c \
 		src/utils/garbage_collector.c \
 		src/utils/my_strdup.c \
+		src/init/generator/generator_map.c \
+		src/init/generator/init_map.c \
+		src/init/generator/display_map.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
