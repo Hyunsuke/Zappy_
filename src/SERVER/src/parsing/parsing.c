@@ -5,7 +5,7 @@
 ** parsing file
 */
 
-#include "server.h"
+#include "all.h"
 
 static void parse_names(int ac, char **av, int i, struct_t *s)
 {

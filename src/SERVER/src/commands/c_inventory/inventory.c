@@ -5,4 +5,4 @@
 ** Function inventory
 */
 
-#include "server.h"
+#include "all.h"

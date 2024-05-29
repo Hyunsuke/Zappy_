@@ -5,4 +5,4 @@
 ** Function right
 */
 
-#include "server.h"
+#include "all.h"

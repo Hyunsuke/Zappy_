@@ -5,7 +5,7 @@
 ** error in parsing file
 */
 
-#include "server.h"
+#include "all.h"
 
 static int is_num(const char *str)
 {

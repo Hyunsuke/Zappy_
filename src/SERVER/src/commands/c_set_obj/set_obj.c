@@ -5,4 +5,4 @@
 ** Function set_obj
 */
 
-#include "server.h"
+#include "all.h"

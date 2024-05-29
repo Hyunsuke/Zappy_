@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include "server.h"
+#include "all.h"
 
 static void init_map_element(map_element_t *element, int client_nb)
 {

@@ -5,4 +5,4 @@
 ** Function eject
 */
 
-#include "server.h"
+#include "all.h"

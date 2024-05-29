@@ -5,4 +5,4 @@
 ** Function run_commands
 */
 
-#include "server.h"
+#include "all.h"

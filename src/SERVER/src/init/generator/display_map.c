@@ -5,7 +5,7 @@
 ** Function generator_map
 */
 
-#include "server.h"
+#include "all.h"
 
 static void print_map_element(map_element_t *element, int client_nb)
 {

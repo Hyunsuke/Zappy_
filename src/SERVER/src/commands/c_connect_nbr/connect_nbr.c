@@ -5,4 +5,4 @@
 ** Function connect_nbr
 */
 
-#include "server.h"
+#include "all.h"

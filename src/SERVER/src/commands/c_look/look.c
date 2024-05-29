@@ -5,4 +5,4 @@
 ** Function look
 */
 
-#include "server.h"
+#include "all.h"

@@ -5,4 +5,4 @@
 ** Function fork
 */
 
-#include "server.h"
+#include "all.h"

@@ -5,4 +5,4 @@
 ** Function incantation
 */
 
-#include "server.h"
+#include "all.h"

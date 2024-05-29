@@ -5,7 +5,7 @@
 ** Function generator_map
 */
 
-#include "server.h"
+#include "all.h"
 
 static void add_resource_to_map(struct_t *s, int quantity, bool *resource_ptr)
 {
