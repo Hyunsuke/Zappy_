@@ -126,14 +126,14 @@ std::shared_ptr<Island> Game::GetIslandUnderMouse() {
 }
 
 void Game::InitializeMap(int width, int height) {
-    float spacing = 10.0f;
+    float spacing = 15.0f;
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
             Vector3 position = {i * spacing, 0.0f, j * spacing};
-            float scale = 0.2f;
+            float scale = 0.7f;
             Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
             float rotationAngle = 0.0f;
-            auto island = std::make_shared<Island>(i * width + j, position, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", scale, rotationAxis, rotationAngle);
+            auto island = std::make_shared<Island>(i * width + j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
             island->SetShader(shader);
             gameMap.AddIsland(island);
         }
