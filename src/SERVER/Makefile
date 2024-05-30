@@ -37,6 +37,9 @@ SRC	=	src/main.c	\
 		src/commands/c_set_obj/set_obj.c \
 		src/commands/c_take_obj/take_obj.c \
 		src/run_commands/run_commands.c \
+		src/utils/players/create_player.c \
+		src/utils/players/display_player.c \
+		src/utils/players/get_player.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
