@@ -1,29 +1,24 @@
 ##
-## EPITECH PROJECT, 2023
+## EPITECH PROJECT, 2024
 ## zappy
 ## File description:
 ## Makefile
 ##
 
-# Définition des variables
-SOURCE = src/main.py
-COPIE = zappy_ai.py
-DESTINATION = ../../
-DEST_FILE = $(DESTINATION)/$(COPIE)
+NAME = ../../zappy_ai
 
-all: copy move
+all: $(NAME)
 
-copy:
-	@echo "Copie de $(SOURCE) vers $(COPIE)"
-	@cp $(SOURCE) $(COPIE)
-
-move: copy
-	@echo "Déplacement de $(COPIE) vers $(DESTINATION)"
-	@mv $(COPIE) $(DESTINATION)
-	@chmod +x $(DEST_FILE)
+$(NAME): src/main.py
+	@echo '#!/bin/bash' > $(NAME)
+	@echo '' >> $(NAME)
+	@echo 'python3 src/AI/src/main.py "$$@"' >> $(NAME)
+	@chmod +x $(NAME)
 
 clean:
-	@echo "Nettoyage des fichiers générés"
-	@rm -f $(DESTINATION)/$(COPIE)
+	echo "Nothing to clean in Python"
 
-.PHONY: all copy move clean
+fclean: clean
+	@rm -f $(NAME)
+
+re: fclean all

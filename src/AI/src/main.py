@@ -3,41 +3,9 @@
 import socket
 import sys
 from sys import argv, exit, stdout
+from InventoryManager import InventoryManager
+from Command import Command
 import time
-
-
-class InventoryManager:
-    def __init__(self):
-        self.current_inventory = {
-            'food': 0,
-            'linemate': 0,
-            'deraumere': 0,
-            'sibur': 0,
-            'mendiane': 0,
-            'phiras': 0,
-            'thystame': 0
-        }
-
-    def update_inventory(self, inventory_string, p=False):
-        if inventory_string is None:
-            print("Error: Inventory string is None")
-            return
-        # Nettoyer et séparer la chaîne de caractères
-        inventory_string = inventory_string.strip('[] ')
-        items = inventory_string.split(', ')
-
-        # Parcourir les éléments et mettre à jour le dictionnaire
-        for item in items:
-            if (item == "ok" or "ko"): # Gestion d'erreur du broadcast
-                return
-            key, value = item.split()
-            self.current_inventory[key] = int(value)
-        if p == True:
-            print("Inventory updated: ", self.current_inventory)
-
-    def __str__(self):
-        return str(self.current_inventory)
-
 
 
 class ZappyClient:
@@ -49,25 +17,14 @@ class ZappyClient:
             self.buffer = ""
             self.level = 1
             self.initial_handshake()
+            self.cmd = Command(self.socket)
             self.current_inventory = InventoryManager()
-            self.current_inventory.update_inventory(self.inventory())
+            self.current_inventory.update_inventory(self.cmd.inventory())
             self.main_loop()
         except socket.error as e:
             print(f"Socket error: {e}")
             sys.exit(1)
 
-
-    def send_command(self, command):
-        try:
-            self.socket.sendall(f"{command}\n".encode())
-            response = self.socket.recv(1024).decode().strip()
-            if response == "dead":
-                print("Dead")
-                sys.exit(1)
-            return response
-        except socket.error as e:
-            print(f"Error sending command '{command}': {e}")
-            return None
 
     def parse_arguments(self):
         for i in argv:
@@ -97,47 +54,6 @@ class ZappyClient:
             print(f"Handshake error: {e}")
             sys.exit(1)
 
-    def move_forward(self):
-        response = self.send_command("Forward")
-        if print == True:
-            print("Move forward : " + response)
-
-    def turn_right(self):
-        response = self.send_command("Right")
-        if print == True:
-            print("Turn right : " + response)
-
-    def turn_left(self):
-        response = self.send_command("Left")
-        if print == True:
-            print("Turn left : " + response)
-
-    def look(self):
-        return self.send_command("Look")
-
-    def inventory(self):
-        return self.send_command("Inventory")
-
-    def broadcast(self, message):
-        print("Broadcast : " + self.send_command(f"Broadcast {message}"))
-
-    def connect_nbr(self):
-        return self.send_command("Connect_nbr")
-
-    def fork(self):
-        return self.send_command("Fork")
-
-    def eject(self):
-        return self.send_command("Eject")
-
-    def take_object(self, object):
-        print("Take object : " + self.send_command("Take " + object))
-
-    def set_object_down(self, object):
-        print("Set object : " + self.send_command("Set " + object))
-
-    def incantation(self):
-        print("Incantation : " + self.send_command("Incantation"))
 
     # List de ce qu'on doit avoir entre le niveau 2 & 10. L'algo doit prendre ça en compte à partir du lvl2
     finalObjectiveList = [
@@ -149,7 +65,7 @@ class ZappyClient:
         ("thystame", 12)
     ]
 
-    def getBroadcastMessage(response):
+    def getBroadcastMessage(self, response):
         if (response == "ok" or response == "ko"):
             return response
         parts = response('_')
@@ -177,22 +93,17 @@ class ZappyClient:
     def main_loop(self):
         try:
             while True:
-                self.current_inventory.update_inventory(self.inventory())
-                self.move_forward()
-                # self.move_forward()
-                # self.look()
-                # self.take_object("food")
-                # self.current_inventory.update_inventory(self.inventory())
+                self.current_inventory.update_inventory(self.cmd.inventory())
+                self.cmd.move_forward()
                 if self.current_inventory.current_inventory['food'] < 5:
-                    self.eat_nearest_food()
-                    # sys.exit(1)
+                    self.eat_nearest_food(True)
         except KeyboardInterrupt:
             print("Terminating AI client.")
         finally:
             self.socket.close()
 
-    def eat_nearest_food(self):
-        response = self.look()
+    def eat_nearest_food(self, needPrint=False):
+        response = self.cmd.look()
         if response is None:
             return
         a = 0
@@ -201,47 +112,47 @@ class ZappyClient:
             object = object.split(" ")
             for obj in object:
                 if obj.startswith("food"):
-                    # print("Found food!")
-                    # print(f"Response: {response}")
                     print("Moving to tile: ", a)
-                    print("Food " + str(self.current_inventory.current_inventory['food']))
-                    self.move_to_tile(a)
-                    self.take_object("food")
-                    print("Food " + str(self.current_inventory.current_inventory['food']))
+                    self.move_to_tile(a, needPrint)
+                    self.cmd.take_object("food")
                     return
             a += 1
 
-    def move_to_tile(self, target_tile):
-        vision = self.look()
-
+    def move_to_tile(self, target_tile, needPrint=False):
+        self.cmd.look(needPrint)
         if target_tile == 0:
-            return  # Already at the target tile
-
-        # Determine the direction and distance to the target tile
-        current_level = int((len(vision) ** 0.5 - 1) / 2)
-        distance = 1
-        while distance * distance <= target_tile:
-            distance += 1
-        distance -= 1
-
-        if self.level > 1:
-            while target_tile >= distance:
-                target_tile -= distance
-                self.move_forward()
-
-        # Adjust direction
-        if target_tile == 1:
-            self.turn_left()
-            self.move_forward()
-            self.turn_right()
-        elif target_tile == 2:
-            self.move_forward()
-        elif target_tile == 3:
-            self.turn_right()
-            self.move_forward()
-            self.turn_left()
-
-        self.look()  # Refresh vision to confirm
+            return
+        a = 0
+        b = 0
+        tab = []
+        for i in range(9): ## max level + 1
+            tab.append([])
+            b = (i * 2) + 1
+            a += b
+            b = a - b
+            while b < a:
+                tab[i].append(b)
+                b += 1
+        c = 0
+        for i in tab:
+            tmp = i
+            if c != 0:
+                self.cmd.move_forward(needPrint)
+            if target_tile <= i[-1]:
+                break
+            c += 1
+        c = tmp[-1] -c
+        if target_tile < c:
+            self.cmd.turn_left(needPrint)
+            while c != target_tile:
+                self.cmd.move_forward(needPrint)
+                c -= 1
+        elif target_tile > c:
+            self.cmd.turn_right(needPrint)
+            while c != target_tile:
+                self.cmd.move_forward(needPrint)
+                c += 1
+        self.cmd.look(needPrint)
 
 if __name__ == "__main__":
     client = ZappyClient()
