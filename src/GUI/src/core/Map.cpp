@@ -21,8 +21,10 @@ void Map::Draw() {
     }
 }
 
-void Map::Update() {
-    // Update logic for map
+void Map::Update(float deltaTime) {
+    for (auto& island : islands) {
+        island->Update(deltaTime);
+    }
 }
 
 std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {

@@ -8,7 +8,7 @@
 #include "gui.hpp"
 
 Island::Island(int x, int y, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale, Vector3 rotationAxis, float rotationAngle)
-    : x(x), y(y), position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
+    : x(x), y(y), position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle), floatSpeed((rand() % 100) / 50.0f + 1.0f), baseY(position.y) {
     modelLoader.SetTexture(texturePath);
 
     float objectScale = 0.01f;
@@ -38,6 +38,15 @@ void Island::Draw() {
         if (obj->GetQuantity() > 0) {
             obj->Draw();
         }
+    }
+}
+
+void Island::Update(float deltaTime) {
+    position.y = baseY + sin(deltaTime * floatSpeed) * 0.5f;  // Floating effect
+    for (auto& obj : objects) {
+        Vector3 objPosition = obj->GetPosition();
+        objPosition.y = baseY + sin(deltaTime * floatSpeed) * 0.5f;  // Apply same floating effect to objects
+        obj->Move(objPosition);
     }
 }
 
@@ -100,7 +109,7 @@ std::vector<std::shared_ptr<Object3D>> Island::GetObjects() const {
     return objects;
 }
 
-Model Island::GetModel() const {
+std::shared_ptr<Model> Island::GetModel() const {
     return modelLoader.GetModel();
 }
 

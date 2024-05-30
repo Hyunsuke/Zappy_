@@ -19,7 +19,7 @@ public:
 
     void AddIsland(std::shared_ptr<Island> island);
     void Draw();
-    void Update();
+    void Update(float deltaTime);
     std::shared_ptr<Island> GetIslandByXY(int x, int y);
     std::vector<std::shared_ptr<Island>> GetIslands() const;
 

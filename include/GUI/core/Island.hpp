@@ -17,6 +17,7 @@ public:
     Island(int x, int y, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale = 1.0f, Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}, float rotationAngle = 0.0f);
     ~Island();
     void Draw();
+    void Update(float deltaTime);
     void Move(Vector3 newPosition);
     void SetScale(float scale);
     float GetScale() const;
@@ -29,7 +30,7 @@ public:
     int GetY() const;
     BoundingBox GetBoundingBox() const;
     std::vector<std::shared_ptr<Object3D>> GetObjects() const;
-    Model GetModel() const;
+    std::shared_ptr<Model> GetModel() const;
     void SetShader(const Shader& shader);
 
     std::shared_ptr<Object3D> food;
@@ -49,6 +50,9 @@ private:
     float scale;
     Vector3 rotationAxis;
     float rotationAngle;
+    float floatOffset;
+    float floatSpeed;
+    float baseY;
 };
 
 #endif // ISLAND_HPP_

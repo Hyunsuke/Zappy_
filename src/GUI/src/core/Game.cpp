@@ -12,7 +12,6 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
     InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
     SetTargetFPS(60);
 
-    // Load the shader
     shader = LoadShader("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     int lightPosLoc = GetShaderLocation(shader, "lightPosition");
     int viewPosLoc = GetShaderLocation(shader, "viewPosition");
@@ -49,9 +48,8 @@ void Game::Run() {
 
 void Game::Update() {
     cameraController.Update();
-    gameMap.Update();
+    gameMap.Update(GetFrameTime());
 
-    // Get the picking ray from mouse position
     ray = GetMouseRay(GetMousePosition(), cameraController.GetCamera());
     collision.hit = false;
     cursorColor = WHITE;
@@ -75,9 +73,9 @@ void Game::Draw() {
 
     if (selectedIsland) {
          glLineWidth(100.0f);
-        DrawModelWiresEx(selectedIsland->GetModel(), selectedIsland->GetPosition(), selectedIsland->GetRotationAxis(), selectedIsland->GetRotationAngle(), Vector3{selectedIsland->GetScale(), selectedIsland->GetScale(), selectedIsland->GetScale()}, RED);
+        DrawModelWiresEx(*selectedIsland->GetModel(), selectedIsland->GetPosition(), selectedIsland->GetRotationAxis(), selectedIsland->GetRotationAngle(), Vector3{selectedIsland->GetScale(), selectedIsland->GetScale(), selectedIsland->GetScale()}, RED);
         for (const auto& obj : selectedIsland->GetObjects()) {
-            DrawModelWiresEx(obj->GetModel(), obj->GetPosition(), obj->GetRotationAxis(), obj->GetRotationAngle(), Vector3{obj->GetScale(), obj->GetScale(), obj->GetScale()}, RED);
+            DrawModelWiresEx(*obj->GetModel(), obj->GetPosition(), obj->GetRotationAxis(), obj->GetRotationAngle(), Vector3{obj->GetScale(), obj->GetScale(), obj->GetScale()}, RED);
         }
          glLineWidth(1.0f);
     }

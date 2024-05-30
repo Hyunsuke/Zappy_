@@ -58,7 +58,7 @@ BoundingBox Object3D::GetBoundingBox() const {
     return modelLoader.GetBoundingBox();
 }
 
-Model Object3D::GetModel() const {
+std::shared_ptr<Model> Object3D::GetModel() const {
     return modelLoader.GetModel();
 }
 

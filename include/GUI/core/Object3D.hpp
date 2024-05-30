@@ -25,7 +25,7 @@ public:
     Vector3 GetPosition() const;
     void SetShader(const Shader& shader);
     BoundingBox GetBoundingBox() const;
-    Model GetModel() const;
+    std::shared_ptr<Model> GetModel() const;
     void SetQuantity(int quantity);
     int GetQuantity() const;
 

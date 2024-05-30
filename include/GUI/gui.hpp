@@ -15,4 +15,7 @@
 #include "core/Island.hpp"
 #include "core/Map.hpp"
 
+#include "Collector/ModelCollector.hpp"
+#include "Collector/TextureCollector.hpp"
+
 #endif /* !GUI_HPP_ */
