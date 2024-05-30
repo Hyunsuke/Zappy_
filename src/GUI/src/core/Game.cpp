@@ -84,12 +84,28 @@ void Game::Draw() {
 
     EndMode3D();
 
-    // Draw UI elements
-    DrawRectangle(10, 10, 320, 93, Fade(SKYBLUE, 0.5f));
-    DrawRectangleLines(10, 10, 320, 93, BLUE);
+    const int baseX = 10;
+    const int baseY = 10;
+    const int lineSpacing = 30;
+    const int padding = 10;
+    const int textSize = 30;
+    int lines = 8;
+
+    int rectHeight = (lines * lineSpacing) + (2 * padding);
+    int rectWidth = 500;
+
+    DrawRectangle(baseX, baseY, rectWidth, rectHeight, Fade(SKYBLUE, 0.5f));
+    DrawRectangleLines(baseX, baseY, rectWidth, rectHeight, BLUE);
 
     if (selectedIsland) {
-        DrawText(TextFormat("Selected Island ID: %d", selectedIsland->GetId()), 20, 20, 10, BLACK);
+        DrawText(TextFormat("Selected Island ID: %d", selectedIsland->GetId()), baseX + padding, baseY + padding, textSize, BLACK);
+        DrawText(TextFormat("Food : %d", selectedIsland->food->GetQuantity()), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
+        DrawText(TextFormat("Linemate : %d", selectedIsland->linemate->GetQuantity()), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Deraumere : %d", selectedIsland->deraumere->GetQuantity()), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Sibur : %d", selectedIsland->sibur->GetQuantity()), baseX + padding, baseY + padding + (4 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Mendiane : %d", selectedIsland->mendiane->GetQuantity()), baseX + padding, baseY + padding + (5 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Phiras : %d", selectedIsland->phiras->GetQuantity()), baseX + padding, baseY + padding + (6 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Thystame : %d", selectedIsland->thystame->GetQuantity()), baseX + padding, baseY + padding + (7 * lineSpacing), textSize, BLACK);
     }
 
     EndDrawing();
@@ -114,9 +130,9 @@ void Game::InitializeMap(int width, int height) {
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
             Vector3 position = {i * spacing, 0.0f, j * spacing};
-            float scale = 0.2f; // Set the desired scale here
-            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}; // Set the desired rotation axis here
-            float rotationAngle = 0.0f; // Set the desired rotation angle here
+            float scale = 0.2f;
+            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
+            float rotationAngle = 0.0f;
             auto island = std::make_shared<Island>(i * width + j, position, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", scale, rotationAxis, rotationAngle);
             island->SetShader(shader);
             gameMap.AddIsland(island);
@@ -124,23 +140,23 @@ void Game::InitializeMap(int width, int height) {
     }
 }
 
-void Game::ToggleObjectActive(int islandId, const std::string& objectType, bool active) {
+void Game::ToggleObjectActive(int islandId, const std::string& objectType, int value) {
     auto island = gameMap.GetIslandById(islandId);
     if (island) {
         if (objectType == "food") {
-            island->food->SetActive(active);
+            island->food->SetQuantity(island->food->GetQuantity() + value);
         } else if (objectType == "linemate") {
-            island->linemate->SetActive(active);
+            island->linemate->SetQuantity(island->linemate->GetQuantity() + value);
         } else if (objectType == "deraumere") {
-            island->deraumere->SetActive(active);
+            island->deraumere->SetQuantity(island->deraumere->GetQuantity() + value);
         } else if (objectType == "sibur") {
-            island->sibur->SetActive(active);
+            island->sibur->SetQuantity(island->sibur->GetQuantity() + value);
         } else if (objectType == "mendiane") {
-            island->mendiane->SetActive(active);
+            island->mendiane->SetQuantity(island->mendiane->GetQuantity() + value);
         } else if (objectType == "phiras") {
-            island->phiras->SetActive(active);
+            island->phiras->SetQuantity(island->phiras->GetQuantity() + value);
         } else if (objectType == "thystame") {
-            island->thystame->SetActive(active);
+            island->thystame->SetQuantity(island->thystame->GetQuantity() + value);
         }
     }
 }

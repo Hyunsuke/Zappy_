@@ -8,7 +8,7 @@
 #include "gui.hpp"
 
 int main() {
-    Game game(1920, 1080, 10, 10);
+    Game game(1920, 1080, 5, 5);
     game.Run();
     return 0;
 }

@@ -23,11 +23,11 @@ public:
     Vector3 GetRotationAxis() const;
     float GetRotationAngle() const;
     Vector3 GetPosition() const;
-    void SetActive(bool active);
-    bool IsActive() const;
     void SetShader(const Shader& shader);
     BoundingBox GetBoundingBox() const;
     Model GetModel() const;
+    void SetQuantity(int quantity);
+    int GetQuantity() const;
 
 private:
     Vector3 position;
@@ -37,6 +37,8 @@ private:
     float scale;
     Vector3 rotationAxis;
     float rotationAngle;
+    int quantity = 0;
 };
 
 #endif // OBJECT3D_HPP_
+

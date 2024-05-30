@@ -49,14 +49,6 @@ Vector3 Object3D::GetPosition() const {
     return position;
 }
 
-void Object3D::SetActive(bool active) {
-    this->active = active;
-}
-
-bool Object3D::IsActive() const {
-    return active;
-}
-
 void Object3D::SetShader(const Shader& shader) {
     this->shader = shader;
     modelLoader.SetShader(shader);
@@ -68,4 +60,12 @@ BoundingBox Object3D::GetBoundingBox() const {
 
 Model Object3D::GetModel() const {
     return modelLoader.GetModel();
+}
+
+void Object3D::SetQuantity(int quantity) {
+    this->quantity = quantity;
+}
+
+int Object3D::GetQuantity() const {
+    return quantity;
 }
