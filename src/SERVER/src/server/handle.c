@@ -28,7 +28,7 @@ void handle_new_client(server_t *server)
             perror("accept");
             exit(EXIT_FAILURE);
         }
-        print_response("220 new connection successful\r\n", new_socket);
+        print_response("WELCOME\n", new_socket);
         FD_SET(new_socket, &server->fd_tab);
         if (new_socket > server->last_cli) {
             server->last_cli = new_socket;
