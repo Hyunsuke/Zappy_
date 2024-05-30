@@ -20,7 +20,7 @@ public:
     void AddIsland(std::shared_ptr<Island> island);
     void Draw();
     void Update();
-    std::shared_ptr<Island> GetIslandById(int id);
+    std::shared_ptr<Island> GetIslandByXY(int x, int y);
     std::vector<std::shared_ptr<Island>> GetIslands() const;
 
 private:

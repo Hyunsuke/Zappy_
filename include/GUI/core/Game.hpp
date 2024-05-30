@@ -22,9 +22,9 @@ public:
     Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight);
     ~Game();
     void Run();
-    void ToggleObjectActive(int islandId, const std::string& objectType, int value);
-    void SetIslandScale(int islandId, float scale);
-    void SetIslandRotation(int islandId, Vector3 rotationAxis, float rotationAngle);
+    void ToggleObjectActive(int x, int y, const std::string& objectType, int value);
+    void SetIslandScale(int x, int y, float scale);
+    void SetIslandRotation(int x, int y, Vector3 rotationAxis, float rotationAngle);
 
 private:
     void Update();

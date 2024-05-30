@@ -98,7 +98,7 @@ void Game::Draw() {
     DrawRectangleLines(baseX, baseY, rectWidth, rectHeight, BLUE);
 
     if (selectedIsland) {
-        DrawText(TextFormat("Selected Island ID: %d", selectedIsland->GetId()), baseX + padding, baseY + padding, textSize, BLACK);
+        DrawText(TextFormat("Selected Island Pos : %d, %d", selectedIsland->GetX(), selectedIsland->GetY()), baseX + padding, baseY + padding, textSize, BLACK);
         DrawText(TextFormat("Food : %d", selectedIsland->food->GetQuantity()), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
         DrawText(TextFormat("Linemate : %d", selectedIsland->linemate->GetQuantity()), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
         DrawText(TextFormat("Deraumere : %d", selectedIsland->deraumere->GetQuantity()), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
@@ -133,15 +133,15 @@ void Game::InitializeMap(int width, int height) {
             float scale = 0.7f;
             Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
             float rotationAngle = 0.0f;
-            auto island = std::make_shared<Island>(i * width + j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
+            auto island = std::make_shared<Island>(i, j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
             island->SetShader(shader);
             gameMap.AddIsland(island);
         }
     }
 }
 
-void Game::ToggleObjectActive(int islandId, const std::string& objectType, int value) {
-    auto island = gameMap.GetIslandById(islandId);
+void Game::ToggleObjectActive(int x, int y, const std::string& objectType, int value) {
+    auto island = gameMap.GetIslandByXY(x, y);
     if (island) {
         if (objectType == "food") {
             island->food->SetQuantity(island->food->GetQuantity() + value);
@@ -161,15 +161,15 @@ void Game::ToggleObjectActive(int islandId, const std::string& objectType, int v
     }
 }
 
-void Game::SetIslandScale(int islandId, float scale) {
-    auto island = gameMap.GetIslandById(islandId);
+void Game::SetIslandScale(int x, int y, float scale) {
+    auto island = gameMap.GetIslandByXY(x, y);
     if (island) {
         island->SetScale(scale);
     }
 }
 
-void Game::SetIslandRotation(int islandId, Vector3 rotationAxis, float rotationAngle) {
-    auto island = gameMap.GetIslandById(islandId);
+void Game::SetIslandRotation(int x, int y, Vector3 rotationAxis, float rotationAngle) {
+    auto island = gameMap.GetIslandByXY(x, y);
     if (island) {
         island->SetRotation(rotationAxis, rotationAngle);
     }

@@ -25,9 +25,9 @@ void Map::Update() {
     // Update logic for map
 }
 
-std::shared_ptr<Island> Map::GetIslandById(int id) {
+std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
     for (auto& island : islands) {
-        if (island->GetId() == id) {
+        if (island->GetX() == x && island->GetY() == y) {
             return island;
         }
     }

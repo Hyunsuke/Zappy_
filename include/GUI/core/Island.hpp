@@ -14,9 +14,8 @@
 
 class Island {
 public:
-    Island(int id, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale = 1.0f, Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}, float rotationAngle = 0.0f);
+    Island(int x, int y, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale = 1.0f, Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}, float rotationAngle = 0.0f);
     ~Island();
-
     void Draw();
     void Move(Vector3 newPosition);
     void SetScale(float scale);
@@ -26,7 +25,8 @@ public:
     float GetRotationAngle() const;
     void AddObject(std::shared_ptr<Object3D> object);
     Vector3 GetPosition() const;
-    int GetId() const;
+    int GetX() const;
+    int GetY() const;
     BoundingBox GetBoundingBox() const;
     std::vector<std::shared_ptr<Object3D>> GetObjects() const;
     Model GetModel() const;
@@ -41,7 +41,7 @@ public:
     std::shared_ptr<Object3D> thystame;
 
 private:
-    int id;
+    int x, y;
     Vector3 position;
     ModelLoader modelLoader;
     std::vector<std::shared_ptr<Object3D>> objects;

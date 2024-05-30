@@ -7,8 +7,8 @@
 
 #include "gui.hpp"
 
-Island::Island(int id, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale, Vector3 rotationAxis, float rotationAngle)
-    : id(id), position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
+Island::Island(int x, int y, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale, Vector3 rotationAxis, float rotationAngle)
+    : x(x), y(y), position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
     modelLoader.SetTexture(texturePath);
 
     float objectScale = 0.01f;
@@ -84,8 +84,12 @@ Vector3 Island::GetPosition() const {
     return position;
 }
 
-int Island::GetId() const {
-    return id;
+int Island::GetX() const {
+    return x;
+}
+
+int Island::GetY() const {
+    return y;
 }
 
 BoundingBox Island::GetBoundingBox() const {
