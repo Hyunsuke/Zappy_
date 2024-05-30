@@ -6,3 +6,9 @@
 */
 
 #include "all.h"
+
+int c_connect_nbr(struct_t *s, int fd)
+{
+    printf("c_connect_nbr\n");
+    return 0;
+}

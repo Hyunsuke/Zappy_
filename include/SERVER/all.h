@@ -16,5 +16,6 @@
     #include "struct.h"
     #include "parsing.h"
     #include "server.h"
+    #include "commands.h"
 
 #endif /* !SERVER_H_ */

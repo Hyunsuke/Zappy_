@@ -6,3 +6,9 @@
 */
 
 #include "all.h"
+
+int c_forward(struct_t *s, int fd)
+{
+    printf("c_forward\n");
+    return 0;
+}
