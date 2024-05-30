@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-void add_player(struct_t *list, int fd, const char *name_player)
+void add_player(struct_t *list, int fd, int id_team, const char *name_player)
 {
     Player *new_player = my_malloc(sizeof(Player));
 
@@ -20,16 +20,9 @@ void add_player(struct_t *list, int fd, const char *name_player)
     new_player->thystame = 0;
     new_player->fd = fd;
     new_player->id_player = list->next_id++;
+    new_player->id_team = id_team;
     new_player->name_player = my_strdup(name_player);
     new_player->next = list->head_player;
     list->head_player = new_player;
     // Function for add player in map
-}
-
-struct_t* init_player_list()
-{
-    struct_t *list = my_malloc(sizeof(struct_t));
-    list->head_player = NULL;
-    list->next_id = 0;
-    return list;
 }
