@@ -7,18 +7,13 @@
 
 #include "gui.hpp"
 
-Game::Game(int screenWidth, int screenHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight), modelLoader(nullptr), cursorColor(WHITE) {
+Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
+    : screenWidth(screenWidth), screenHeight(screenHeight), gameMap(mapWidth,mapHeight), cursorColor(WHITE) {
     InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
     SetTargetFPS(60);
 
-    modelLoader = new ModelLoader("src/GUI/assets/duck/RubberDuck_LOD0.obj");
-    modelLoader->SetTexture("src/GUI/assets/duck/duck_text.png");
-
-    Shader shader = LoadShader("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
-    modelLoader->SetShader(shader);
-
-    // Configure shader
+    // Load the shader
+    shader = LoadShader("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     int lightPosLoc = GetShaderLocation(shader, "lightPosition");
     int viewPosLoc = GetShaderLocation(shader, "viewPosition");
     int lightColorLoc = GetShaderLocation(shader, "lightColor");
@@ -34,14 +29,14 @@ Game::Game(int screenWidth, int screenHeight)
     SetShaderValue(shader, lightColorLoc, &lightColor, SHADER_UNIFORM_VEC3);
     SetShaderValue(shader, ambientColorLoc, &ambientColor, SHADER_UNIFORM_VEC3);
 
-    modelBBox = GetMeshBoundingBox(modelLoader->GetModel().meshes[0]);
+    InitializeMap(mapWidth, mapHeight);
 
     std::cout << "Game initialized with window size: "
               << screenWidth << "x" << screenHeight << std::endl;
 }
 
 Game::~Game() {
-    delete modelLoader;
+    if (shader.id != 0) UnloadShader(shader);
     CloseWindow();
 }
 
@@ -54,28 +49,18 @@ void Game::Run() {
 
 void Game::Update() {
     cameraController.Update();
+    gameMap.Update();
 
     // Get the picking ray from mouse position
     ray = GetMouseRay(GetMousePosition(), cameraController.GetCamera());
     collision.hit = false;
     cursorColor = WHITE;
     strcpy(hitObjectName, "None");
+    selectedIsland = GetIslandUnderMouse();
 
-    // Define the model position and scale
-    Vector3 modelPosition = { 5.0f, 1.0f, 5.0f };
-    float modelScale = 0.1f;
-
-    // Transform the bounding box to account for the model's position and scale
-    BoundingBox transformedBBox;
-    transformedBBox.min = Vector3Add(Vector3Scale(modelBBox.min, modelScale), modelPosition);
-    transformedBBox.max = Vector3Add(Vector3Scale(modelBBox.max, modelScale), modelPosition);
-
-    // Check collision with the transformed bounding box
-    RayCollision modelBoxCollision = GetRayCollisionBox(ray, transformedBBox);
-    if (modelBoxCollision.hit && (!collision.hit || modelBoxCollision.distance < collision.distance)) {
-        collision = modelBoxCollision;
+    if (selectedIsland) {
         cursorColor = BLUE;
-        strcpy(hitObjectName, "Model Box");
+        strcpy(hitObjectName, "Island");
     }
 }
 
@@ -85,43 +70,16 @@ void Game::Draw() {
 
     BeginMode3D(cameraController.GetCamera());
 
-    // Draw a grid at the ground
-    DrawGrid(10, 1.0f);
+    // Draw the game map
+    gameMap.Draw();
 
-    // Define the model position and scale
-    Vector3 modelPosition = { 5.0f, 1.0f, 5.0f };
-    float modelScale = 0.1f;
-
-    // Draw the model
-    if (modelLoader) {
-        modelLoader->Draw(modelPosition, modelScale, (Vector3){0.0f, 0.0f, 0.0f}, 0.0f, WHITE);
-    }
-
-    if (collision.hit) {
-        glLineWidth(1000.0f);  // Set the line width to 3 pixels (or any desired width)
-        DrawModelWiresEx(modelLoader->GetModel(), modelPosition, (Vector3){0.0f, 0.0f, 0.0f}, 0.0f, (Vector3){modelScale, modelScale, modelScale}, BLACK);
-        glLineWidth(1.0f);  // Reset the line width to default (1 pixel)
-    }
-
-    // Transform the bounding box to account for the model's position and scale
-    BoundingBox transformedBBox;
-    transformedBBox.min = Vector3Add(Vector3Scale(modelBBox.min, modelScale), modelPosition);
-    transformedBBox.max = Vector3Add(Vector3Scale(modelBBox.max, modelScale), modelPosition);
-
-    // Draw bounding box for the model
-    // DrawBoundingBox(transformedBBox, LIME);
-
-    // If there is a collision, draw the collision point and normal
-    if (collision.hit) {
-        DrawCube(collision.point, 0.3f, 0.3f, 0.3f, cursorColor);
-        DrawCubeWires(collision.point, 0.3f, 0.3f, 0.3f, RED);
-
-        Vector3 normalEnd;
-        normalEnd.x = collision.point.x + collision.normal.x;
-        normalEnd.y = collision.point.y + collision.normal.y;
-        normalEnd.z = collision.point.z + collision.normal.z;
-
-        DrawLine3D(collision.point, normalEnd, RED);
+    if (selectedIsland) {
+         glLineWidth(100.0f);
+        DrawModelWiresEx(selectedIsland->GetModel(), selectedIsland->GetPosition(), selectedIsland->GetRotationAxis(), selectedIsland->GetRotationAngle(), Vector3{selectedIsland->GetScale(), selectedIsland->GetScale(), selectedIsland->GetScale()}, RED);
+        for (const auto& obj : selectedIsland->GetObjects()) {
+            DrawModelWiresEx(obj->GetModel(), obj->GetPosition(), obj->GetRotationAxis(), obj->GetRotationAngle(), Vector3{obj->GetScale(), obj->GetScale(), obj->GetScale()}, RED);
+        }
+         glLineWidth(1.0f);
     }
 
     EndMode3D();
@@ -130,25 +88,73 @@ void Game::Draw() {
     DrawRectangle(10, 10, 320, 93, Fade(SKYBLUE, 0.5f));
     DrawRectangleLines(10, 10, 320, 93, BLUE);
 
-    DrawText("Free camera default controls:", 20, 20, 10, BLACK);
-    DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-    DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-    DrawText("- Z to zoom to (0, 0, 0)", 40, 80, 10, DARKGRAY);
-
-    // Draw debug information
-    DrawText(TextFormat("Hit Object: %s", hitObjectName), 10, 110, 10, BLACK);
-    if (collision.hit) {
-        int ypos = 130;
-        DrawText(TextFormat("Distance: %3.2f", collision.distance), 10, ypos, 10, BLACK);
-        DrawText(TextFormat("Hit Pos: %3.2f %3.2f %3.2f",
-                            collision.point.x,
-                            collision.point.y,
-                            collision.point.z), 10, ypos + 15, 10, BLACK);
-        DrawText(TextFormat("Hit Norm: %3.2f %3.2f %3.2f",
-                            collision.normal.x,
-                            collision.normal.y,
-                            collision.normal.z), 10, ypos + 30, 10, BLACK);
+    if (selectedIsland) {
+        DrawText(TextFormat("Selected Island ID: %d", selectedIsland->GetId()), 20, 20, 10, BLACK);
     }
 
     EndDrawing();
+}
+
+std::shared_ptr<Island> Game::GetIslandUnderMouse() {
+    for (auto& island : gameMap.GetIslands()) {
+        BoundingBox transformedBBox;
+        transformedBBox.min = Vector3Add(Vector3Scale(island->GetBoundingBox().min, island->GetScale()), island->GetPosition());
+        transformedBBox.max = Vector3Add(Vector3Scale(island->GetBoundingBox().max, island->GetScale()), island->GetPosition());
+
+        RayCollision collision = GetRayCollisionBox(ray, transformedBBox);
+        if (collision.hit) {
+            return island;
+        }
+    }
+    return nullptr;
+}
+
+void Game::InitializeMap(int width, int height) {
+    float spacing = 10.0f;
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            Vector3 position = {i * spacing, 0.0f, j * spacing};
+            float scale = 0.2f; // Set the desired scale here
+            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}; // Set the desired rotation axis here
+            float rotationAngle = 0.0f; // Set the desired rotation angle here
+            auto island = std::make_shared<Island>(i * width + j, position, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", scale, rotationAxis, rotationAngle);
+            island->SetShader(shader);
+            gameMap.AddIsland(island);
+        }
+    }
+}
+
+void Game::ToggleObjectActive(int islandId, const std::string& objectType, bool active) {
+    auto island = gameMap.GetIslandById(islandId);
+    if (island) {
+        if (objectType == "food") {
+            island->food->SetActive(active);
+        } else if (objectType == "linemate") {
+            island->linemate->SetActive(active);
+        } else if (objectType == "deraumere") {
+            island->deraumere->SetActive(active);
+        } else if (objectType == "sibur") {
+            island->sibur->SetActive(active);
+        } else if (objectType == "mendiane") {
+            island->mendiane->SetActive(active);
+        } else if (objectType == "phiras") {
+            island->phiras->SetActive(active);
+        } else if (objectType == "thystame") {
+            island->thystame->SetActive(active);
+        }
+    }
+}
+
+void Game::SetIslandScale(int islandId, float scale) {
+    auto island = gameMap.GetIslandById(islandId);
+    if (island) {
+        island->SetScale(scale);
+    }
+}
+
+void Game::SetIslandRotation(int islandId, Vector3 rotationAxis, float rotationAngle) {
+    auto island = gameMap.GetIslandById(islandId);
+    if (island) {
+        island->SetRotation(rotationAxis, rotationAngle);
+    }
 }

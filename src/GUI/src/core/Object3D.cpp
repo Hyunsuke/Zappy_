@@ -7,14 +7,65 @@
 
 #include "gui.hpp"
 
-Object3D::Object3D(Vector3 position, float size, Color color)
-    : position(position), size(size), color(color) {}
+Object3D::Object3D(const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale, Vector3 rotationAxis, float rotationAngle)
+    : position(position), modelLoader(modelPath), active(true), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
+    modelLoader.SetTexture(texturePath);
+}
+
+Object3D::~Object3D() {}
 
 void Object3D::Draw() {
-    DrawCube(position, size, size, size, color);
-    DrawCubeWires(position, size, size, size, MAROON);
+    if (active) {
+        modelLoader.Draw(position, scale, rotationAxis, rotationAngle, WHITE);
+    }
+}
+
+void Object3D::Move(Vector3 newPosition) {
+    position = newPosition;
+}
+
+void Object3D::SetScale(float scale) {
+    this->scale = scale;
+}
+
+float Object3D::GetScale() const {
+    return scale;
+}
+
+void Object3D::SetRotation(Vector3 rotationAxis, float rotationAngle) {
+    this->rotationAxis = rotationAxis;
+    this->rotationAngle = rotationAngle;
+}
+
+Vector3 Object3D::GetRotationAxis() const {
+    return rotationAxis;
+}
+
+float Object3D::GetRotationAngle() const {
+    return rotationAngle;
 }
 
 Vector3 Object3D::GetPosition() const {
     return position;
+}
+
+void Object3D::SetActive(bool active) {
+    this->active = active;
+}
+
+bool Object3D::IsActive() const {
+    return active;
+}
+
+void Object3D::SetShader(const Shader& shader) {
+    this->shader = shader;
+    modelLoader.SetShader(shader);
+}
+
+BoundingBox Object3D::GetBoundingBox() const {
+    return modelLoader.GetBoundingBox();
+}
+
+Model Object3D::GetModel() const {
+    return modelLoader.GetModel();
 }

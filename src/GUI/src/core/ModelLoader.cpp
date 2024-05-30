@@ -16,7 +16,7 @@ ModelLoader::ModelLoader(const std::string& filePath) {
 
 ModelLoader::~ModelLoader() {
     UnloadModel(model);
-    if (shader.id != 0) UnloadShader(shader);
+    // if (shader.id != 0) UnloadShader(shader);
 }
 
 void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {

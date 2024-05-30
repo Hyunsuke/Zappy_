@@ -9,8 +9,8 @@
 #include <cmath>
 
 CameraController::CameraController() {
-    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f }; // Position de la caméra
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };     // Cible initiale de la caméra
+    camera.position = (Vector3){ 10.0f, 20.0f, 10.0f }; // Position de la caméra
+    camera.target = (Vector3){ 150.0f, 0.0f, 100.0f };     // Cible initiale de la caméra
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };         // Vecteur "up" de la caméra
     camera.fovy = 45.0f;                               // Champ de vision Y de la caméra
     camera.projection = CAMERA_PERSPECTIVE;            // Projection de la caméra

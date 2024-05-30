@@ -9,8 +9,7 @@
 #define GAME_HPP_
 
 #include "CameraController.hpp"
-#include "Object3D.hpp"
-#include "ModelLoader.hpp"
+#include "Map.hpp"
 #include <vector>
 #include <iostream>
 #include <raymath.h>
@@ -18,28 +17,32 @@
 #include <cstring>
 #include <GL/gl.h>
 
-
 class Game {
 public:
-    Game(int screenWidth, int screenHeight);
+    Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight);
     ~Game();
     void Run();
+    void ToggleObjectActive(int islandId, const std::string& objectType, bool active);
+    void SetIslandScale(int islandId, float scale);
+    void SetIslandRotation(int islandId, Vector3 rotationAxis, float rotationAngle);
 
 private:
     void Update();
     void Draw();
+    void InitializeMap(int width, int height);
+    std::shared_ptr<Island> GetIslandUnderMouse();
 
     int screenWidth;
     int screenHeight;
     CameraController cameraController;
-    std::vector<Object3D> objects;
-    ModelLoader* modelLoader;
+    Map gameMap;
+    Shader shader;
 
-    Ray ray;                       // Ray for picking
-    RayCollision collision;        // Collision information
-    Color cursorColor;             // Color of the cursor at hit point
-    char hitObjectName[50];        // Name of the hit object
-    BoundingBox modelBBox;         // Bounding box for the model
+    Ray ray;
+    RayCollision collision;
+    Color cursorColor;
+    char hitObjectName[50];
+    std::shared_ptr<Island> selectedIsland;
 };
 
 #endif /* !GAME_HPP_ */
