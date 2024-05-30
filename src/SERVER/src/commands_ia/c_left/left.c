@@ -6,3 +6,9 @@
 */
 
 #include "all.h"
+
+int c_left(struct_t *s, int fd)
+{
+    printf("c_left\n");
+    return 0;
+}

@@ -23,20 +23,22 @@ SRC	=	src/main.c	\
 		src/init/generator/generator_map.c \
 		src/init/generator/init_map.c \
 		src/init/generator/display_map.c \
-		src/run_commands/run_commands.c \
-		src/commands/c_broadcast_txt/broadcast_txt.c \
-		src/commands/c_connect_nbr/connect_nbr.c \
-		src/commands/c_eject/eject.c \
-		src/commands/c_fork/fork.c \
-		src/commands/c_forward/forward.c \
-		src/commands/c_incantation/incantation.c \
-		src/commands/c_inventory/inventory.c \
-		src/commands/c_left/left.c \
-		src/commands/c_look/look.c \
-		src/commands/c_right/right.c \
-		src/commands/c_set_obj/set_obj.c \
-		src/commands/c_take_obj/take_obj.c \
-		src/run_commands/run_commands.c \
+		src/commands_ia/c_broadcast_txt/broadcast_txt.c \
+		src/commands_ia/c_connect_nbr/connect_nbr.c \
+		src/commands_ia/c_eject/eject.c \
+		src/commands_ia/c_fork/fork.c \
+		src/commands_ia/c_forward/forward.c \
+		src/commands_ia/c_incantation/incantation.c \
+		src/commands_ia/c_inventory/inventory.c \
+		src/commands_ia/c_left/left.c \
+		src/commands_ia/c_look/look.c \
+		src/commands_ia/c_right/right.c \
+		src/commands_ia/c_set_obj/set_obj.c \
+		src/commands_ia/c_take_obj/take_obj.c \
+		src/run_commands/run_commands_ia.c \
+		src/utils/players/create_player.c \
+		src/utils/players/display_player.c \
+		src/utils/players/get_player.c \
 
 INCLUDEDIR = ../../include/SERVER/
 

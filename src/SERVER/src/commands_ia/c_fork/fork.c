@@ -6,3 +6,9 @@
 */
 
 #include "all.h"
+
+int c_fork(struct_t *s, int fd)
+{
+    printf("c_fork\n");
+    return 0;
+}

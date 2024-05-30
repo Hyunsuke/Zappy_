@@ -6,3 +6,9 @@
 */
 
 #include "all.h"
+
+int c_look(struct_t *s, int fd)
+{
+    printf("c_look\n");
+    return 0;
+}

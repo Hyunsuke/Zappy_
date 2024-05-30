@@ -14,6 +14,8 @@ int main(int ac, char **av)
 
     if (parsing(ac, av, s) == 84)
         return 84;
+    s->head_player = NULL;
+    s->next_id = 0;
     generator_map(s);
     server_gestion(server, s);
 }
