@@ -6,7 +6,7 @@
 */
 
 #ifndef SERVER_H
-#define SERVER_H
+    #define SERVER_H
 
 typedef struct server_s {
     int server_fd;

@@ -12,7 +12,9 @@
 ////// PLAYERS ////////////////////
 //////////////////////////////////
 
-typedef struct Player {
+typedef struct player_s player_t;
+
+typedef struct player_s {
     int food;
     int linemate;
     int deraumere;
@@ -25,8 +27,8 @@ typedef struct Player {
     int id_team;
     char *name_player;
     int view_direction; // 0 = top; 1 = right; 2 = bottom; 3 = left
-    struct Player *next;
-} Player;
+    player_t *next;
+} player_t;
 
 ////////////////////////////////////
 ////// MAP ////////////////////////
@@ -55,7 +57,7 @@ typedef struct struct_s {
     int time;
     char **list_names;
     map_element_t **map;
-    Player *head_player;
+    player_t *head_player;
     int next_id; // For incrementation id_player
 } struct_t;
 

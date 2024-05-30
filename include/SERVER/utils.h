@@ -40,8 +40,8 @@
 
     //////////////////////// PLAYERS ///
 void add_player(struct_t *list, int fd, int id_team, const char *name_player);
-Player* get_player_by_fd(struct_t *list, int fd);
-Player* get_player_by_id(struct_t *list, int id_player);
+player_t *get_player_by_fd(struct_t *list, int fd);
+player_t *get_player_by_id(struct_t *list, int id_player);
 void print_players(struct_t *list);
     /////////////////////////////////
 
