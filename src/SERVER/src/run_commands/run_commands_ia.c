@@ -7,14 +7,14 @@
 
 #include "all.h"
 
-static int execute_command_ia(struct_t *s, int fd, char *buffer, char *command)
+static int execute_command_ia(struct_t *s, int fd, char *command)
 {
-    command_struct commands[] = {
+    command_struct_t commands[] = {
         {"Forward", c_forward}, {"Right", c_right}, {"Left", c_left},
-        {"Look", c_look}, {"Inventory", c_inventory}, {"Broadcast text", c_broadcast_txt},
-        {"Connect_nbr", c_connect_nbr}, {"Fork", c_fork}, {"Eject", c_eject},
-        {"Take object", c_take_obj}, {"Set object", c_set_obj},
-        {"Incantation", c_incantation}, {NULL, NULL}
+        {"Look", c_look}, {"Inventory", c_inventory},
+        {"Broadcast text", c_broadcast_txt}, {"Connect_nbr", c_connect_nbr},
+        {"Fork", c_fork}, {"Eject", c_eject}, {"Take object", c_take_obj},
+        {"Set object", c_set_obj}, {"Incantation", c_incantation}, {NULL, NULL}
     };
 
     for (int i = 0; commands[i].command != NULL; i++) {
@@ -34,5 +34,5 @@ int run_commands_ia(struct_t *s, int fd, char *buffer)
         printf("Command not found -> run_commands_IA\n");
         return -1;
     }
-    return execute_command_ia(s, fd, buffer, command);
+    return execute_command_ia(s, fd, command);
 }
