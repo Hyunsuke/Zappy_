@@ -25,7 +25,6 @@ typedef struct player_s {
     int fd;
     int id_player;
     int id_team;
-    char *name_player;
     int view_direction; // 0 = top; 1 = right; 2 = bottom; 3 = left
     player_t *next;
 } player_t;
