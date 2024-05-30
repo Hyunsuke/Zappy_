@@ -9,7 +9,7 @@
 
 static void parse_names(int ac, char **av, int i, struct_t *s)
 {
-    int names_start = i + 1;
+    int names_start = i;
     int names_end = names_start;
     int name_count = 0;
 

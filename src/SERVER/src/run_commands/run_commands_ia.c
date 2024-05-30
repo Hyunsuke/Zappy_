@@ -29,7 +29,7 @@ int run_commands_ia(struct_t *s, int fd, char *buffer)
 {
     char *command;
 
-    command = strtok(buffer, " ");
+    command = strtok(buffer, "\n");
     if (command == NULL) {
         printf("Command not found -> run_commands_IA\n");
         return -1;

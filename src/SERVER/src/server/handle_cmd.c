@@ -19,10 +19,10 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
         if (strcmp(buffer, s->list_names[i]) == 0) {
             printf("It's AI\n");
             print_response("Server: You're an AI\n", client_fd);
-            break;
+            return;
         }
     }
-    print_response("You're nothing little piece of s***\n", client_fd);
+    print_response("Team name that you gave don't exist\n", client_fd);
 }
 
 void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
