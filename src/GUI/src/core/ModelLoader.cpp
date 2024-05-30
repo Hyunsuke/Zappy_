@@ -36,3 +36,22 @@ void ModelLoader::SetTexture(const std::string& texturePath) {
         SetMaterialTexture(&model.materials[i], MATERIAL_MAP_DIFFUSE, texture);
     }
 }
+
+BoundingBox ModelLoader::GetBoundingBox() const {
+    BoundingBox bbox = { {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
+    Mesh mesh = model.meshes[0];
+    if (mesh.vertexCount > 0) {
+        bbox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
+        bbox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+        for (int i = 0; i < mesh.vertexCount; i++) {
+            Vector3 v = { mesh.vertices[i*3 + 0], mesh.vertices[i*3 + 1], mesh.vertices[i*3 + 2] };
+            if (v.x < bbox.min.x) bbox.min.x = v.x;
+            if (v.y < bbox.min.y) bbox.min.y = v.y;
+            if (v.z < bbox.min.z) bbox.min.z = v.z;
+            if (v.x > bbox.max.x) bbox.max.x = v.x;
+            if (v.y > bbox.max.y) bbox.max.y = v.y;
+            if (v.z > bbox.max.z) bbox.max.z = v.z;
+        }
+    }
+    return bbox;
+}

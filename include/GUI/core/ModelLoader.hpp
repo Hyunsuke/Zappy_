@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include <string>
 #include <vector>
+#include <float.h>
 
 class ModelLoader {
 public:
@@ -13,6 +14,8 @@ public:
     void SetShader(Shader shader);
     Model GetModel() const { return model; }
     void SetTexture(const std::string& texturePath);
+    Matrix GetTransform() const { return model.transform; }
+    BoundingBox GetBoundingBox() const;  // Add this method
 
 private:
     Model model;

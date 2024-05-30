@@ -13,6 +13,11 @@
 #include "ModelLoader.hpp"
 #include <vector>
 #include <iostream>
+#include <raymath.h>
+#include <raylib.h>
+#include <cstring>
+#include <GL/gl.h>
+
 
 class Game {
 public:
@@ -29,6 +34,12 @@ private:
     CameraController cameraController;
     std::vector<Object3D> objects;
     ModelLoader* modelLoader;
+
+    Ray ray;                       // Ray for picking
+    RayCollision collision;        // Collision information
+    Color cursorColor;             // Color of the cursor at hit point
+    char hitObjectName[50];        // Name of the hit object
+    BoundingBox modelBBox;         // Bounding box for the model
 };
 
 #endif /* !GAME_HPP_ */

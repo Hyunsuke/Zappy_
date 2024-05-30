@@ -8,41 +8,6 @@
 #include "gui.hpp"
 #include <cmath>
 
-// Fonction pour normaliser un vecteur
-Vector3 Vector3Normalize(Vector3 v) {
-    float length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-    if (length != 0.0f) {
-        v.x /= length;
-        v.y /= length;
-        v.z /= length;
-    }
-    return v;
-}
-
-// Fonction pour soustraire deux vecteurs
-Vector3 Vector3Subtract(Vector3 v1, Vector3 v2) {
-    return (Vector3){ v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
-}
-
-// Fonction pour calculer le produit vectoriel de deux vecteurs
-Vector3 Vector3CrossProduct(Vector3 v1, Vector3 v2) {
-    return (Vector3){
-        v1.y * v2.z - v1.z * v2.y,
-        v1.z * v2.x - v1.x * v2.z,
-        v1.x * v2.y - v1.y * v2.x
-    };
-}
-
-// Fonction pour ajouter deux vecteurs
-Vector3 Vector3Add(Vector3 v1, Vector3 v2) {
-    return (Vector3){ v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
-}
-
-// Fonction pour multiplier un vecteur par un scalaire
-Vector3 Vector3Scale(Vector3 v, float scale) {
-    return (Vector3){ v.x * scale, v.y * scale, v.z * scale };
-}
-
 CameraController::CameraController() {
     camera.position = (Vector3){ 10.0f, 10.0f, 10.0f }; // Position de la caméra
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };     // Cible initiale de la caméra
