@@ -25,6 +25,7 @@ clean:
 	make -C src/SERVER/ clean
 
 fclean: clean
+	make -C src/AI/ fclean
 	make -C src/GUI/ fclean
 	make -C src/SERVER/ fclean
 
