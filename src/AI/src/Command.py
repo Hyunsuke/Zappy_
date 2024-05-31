@@ -3,10 +3,13 @@
 from sys import stdout
 import sys
 import socket
+from InventoryManager import InventoryManager
+
 
 class Command:
-    def __init__(self, socket):
+    def __init__(self, socket, current_inventory):
         self.socket = socket
+        self.current_inventory = current_inventory
 
     def send_command(self, command):
         try:
@@ -73,9 +76,21 @@ class Command:
 
     def take_object(self, object):
         print("Take object : " + self.send_command("Take " + object))
+        if object in self.current_inventory.current_inventory:
+            self.current_inventory.current_inventory[object] += 1
+            if object != "food":
+                self.broadcastMaterial(object)
+                self.current_inventory.shared_inventory[object] += 1
 
     def set_object_down(self, object):
         print("Set object : " + self.send_command("Set " + object))
+        if object in self.current_inventory.current_inventory:
+            if self.current_inventory.current_inventory[object] > 0:
+                self.current_inventory.current_inventory[object] -= 1
+                if object != "food":
+                    # self.broadcastMaterial(object)
+                    self.current_inventory.shared_inventory[object] -= 1
+
 
     def incantation(self, needPrint=False):
         response = self.send_command("Incantation")

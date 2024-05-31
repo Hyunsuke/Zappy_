@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-from Command import Command
-
-
 class InventoryManager:
     def __init__(self):
         self.current_inventory = {
