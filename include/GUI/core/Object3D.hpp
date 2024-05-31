@@ -9,6 +9,7 @@
 #define OBJECT3D_HPP_
 
 #include "ModelLoader.hpp"
+#include "../Utils/utils.hpp"
 
 class Object3D {
 public:
@@ -37,7 +38,7 @@ private:
     float scale;
     Vector3 rotationAxis;
     float rotationAngle;
-    int quantity = 0;
+    int quantity = rand() % 3;
 };
 
 #endif // OBJECT3D_HPP_

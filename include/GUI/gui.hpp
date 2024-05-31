@@ -18,4 +18,6 @@
 #include "Collector/ModelCollector.hpp"
 #include "Collector/TextureCollector.hpp"
 
+#include "Utils/utils.hpp"
+
 #endif /* !GUI_HPP_ */
