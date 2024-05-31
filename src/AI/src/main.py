@@ -65,31 +65,6 @@ class ZappyClient:
         ("thystame", 12)
     ]
 
-    def getBroadcastMessage(self, response):
-        if (response == "ok" or response == "ko"):
-            return response
-        parts = response('_')
-        if len(parts) != 2:
-            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object'")
-        # On récupère le nom de l'équipe et l'objet
-        team_name = parts[0]
-        object_name = parts[1]
-        return team_name, object_name
-
-    def broadcastMaterial(self, material):
-        if (material == "linemate"):
-            self.broadcast("[teamname]_linemate")
-        elif (material == "deraumere"):
-            self.broadcast("[teamname]_deraumere")
-        elif (material == "sibur"):
-            self.broadcast("[teamname]_sibur")
-        elif (material == "mendiane"):
-            self.broadcast("[teamname]_mendiane")
-        elif (material == "phiras"):
-            self.broadcast("[teamname]_phiras")
-        elif (material == "thystame"):
-            self.broadcast("[teamname]_thystame")
-
     def main_loop(self):
         try:
             while True:

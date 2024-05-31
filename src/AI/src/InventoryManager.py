@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from Command import Command
+
+
 class InventoryManager:
     def __init__(self):
         self.current_inventory = {
@@ -10,6 +13,24 @@ class InventoryManager:
             'mendiane': 0,
             'phiras': 0,
             'thystame': 0
+        }
+
+        self.shared_inventory  = {
+            'linemate': 0,
+            'deraumere': 0,
+            'sibur': 0,
+            'mendiane': 0,
+            'phiras': 0,
+            'thystame': 0
+        }
+
+        self.objective_inventory = {
+            'linemate': 8,
+            'deraumere': 8,
+            'sibur': 10,
+            'mendiane': 5,
+            'phiras': 6,
+            'thystame': 1
         }
 
     def update_inventory(self, inventory_string, p=False):

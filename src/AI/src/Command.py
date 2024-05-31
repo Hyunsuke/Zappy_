@@ -51,7 +51,7 @@ class Command:
         return response
 
     def broadcast(self, message):
-        print("Broadcast : " + self.send_command(f"Broadcast {message}"))
+        return self.send_command(f"Broadcast {message}")
 
     def connect_nbr(self, needPrint=False):
         response = self.send_command("Connect_nbr")
@@ -82,3 +82,28 @@ class Command:
         if needPrint:
             print("Incantation : " + response)
         return response
+
+    def getBroadcastMessage(self, response):
+        if (response == "ok" or response == "ko"):
+            return response
+        parts = response('_')
+        if len(parts) != 2:
+            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object'")
+        # On récupère le nom de l'équipe et l'objet
+        team_name = parts[0]
+        object_name = parts[1]
+        return team_name, object_name
+
+    def broadcastMaterial(self, material):
+        if (material == "linemate"):
+            return self.broadcast("[teamname]_linemate")
+        elif (material == "deraumere"):
+            return self.broadcast("[teamname]_deraumere")
+        elif (material == "sibur"):
+            return self.broadcast("[teamname]_sibur")
+        elif (material == "mendiane"):
+            return self.broadcast("[teamname]_mendiane")
+        elif (material == "phiras"):
+            return self.broadcast("[teamname]_phiras")
+        elif (material == "thystame"):
+            return self.broadcast("[teamname]_thystame")
