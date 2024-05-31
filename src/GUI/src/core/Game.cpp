@@ -48,7 +48,7 @@ void Game::Run() {
 
 void Game::Update() {
     cameraController.Update();
-    gameMap.Update(GetFrameTime());
+    gameMap.Update();
 
     ray = GetMouseRay(GetMousePosition(), cameraController.GetCamera());
     collision.hit = false;

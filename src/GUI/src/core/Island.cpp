@@ -41,15 +41,6 @@ void Island::Draw() {
     }
 }
 
-void Island::Update(float deltaTime) {
-    position.y = baseY + sin(deltaTime * floatSpeed) * 0.5f;  // Floating effect
-    for (auto& obj : objects) {
-        Vector3 objPosition = obj->GetPosition();
-        objPosition.y = baseY + sin(deltaTime * floatSpeed) * 0.5f;  // Apply same floating effect to objects
-        obj->Move(objPosition);
-    }
-}
-
 void Island::Move(Vector3 newPosition) {
     Vector3 delta = Vector3Subtract(newPosition, position);
     position = newPosition;

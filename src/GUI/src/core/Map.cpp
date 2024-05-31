@@ -21,11 +21,16 @@ void Map::Draw() {
     }
 }
 
-void Map::Update(float deltaTime) {
+void Map::Update() {
+    float time = GetTime();
     for (auto& island : islands) {
-        island->Update(deltaTime);
+        float offset = 0.5f * sin(time + (island->GetX() * 0.3f) + (island->GetY() * 0.3f));
+        Vector3 position = island->GetPosition();
+        position.y = offset;
+        island->Move(position);
     }
 }
+
 
 std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
     for (auto& island : islands) {
