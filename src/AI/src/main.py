@@ -70,8 +70,8 @@ class ZappyClient:
             while True:
                 self.current_inventory.update_inventory(self.cmd.inventory())
                 self.cmd.move_forward()
-                # if self.current_inventory.current_inventory['food'] < 5:
-                self.eat_nearest_food(True)
+                if self.current_inventory.current_inventory['food'] < 5:
+                    self.eat_nearest_food(True)
         except KeyboardInterrupt:
             print("Terminating AI client.")
         finally:
