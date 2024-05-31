@@ -16,11 +16,14 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     float deramereScale = 1.0f;
     Vector3 deramereRotationAxis = {1.0f, 0.0f, 0.0f};
     float deramereRotationAngle = 45.0f;
+    float siburScale = 0.5f;
+    Vector3 siburrotationAxis = {1.0f, 0.0f, 0.0f};
+    float siburrotationAngle = 25.0f;
 
     food = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
     linemate = std::make_shared<Object3D>(Vector3{position.x + 1.9f, position.y + 1.0f, position.z - 0.2f}, "src/GUI/assets/Linemate/Linemate.obj", "src/GUI/assets/Linemate/Linemate.png", linemateScale, rotationAxis, rotationAngle);
     deraumere = std::make_shared<Object3D>(Vector3{position.x - 3.5f, position.y + 0.6f, position.z + 0.3f}, "src/GUI/assets/Deraumere/deraumere.obj", "src/GUI/assets/Deraumere/deraumere.png", deramereScale, deramereRotationAxis, deramereRotationAngle);
-    sibur = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
+    sibur = std::make_shared<Object3D>(Vector3{position.x + 3.5f, position.y + 2.0f, position.z - 0.3f}, "src/GUI/assets/Sibur/Sword.obj", "src/GUI/assets/Sibur/Sword.png", siburScale, siburrotationAxis, siburrotationAngle);
     mendiane = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
     phiras = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
     thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
