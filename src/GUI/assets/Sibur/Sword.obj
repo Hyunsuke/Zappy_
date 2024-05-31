@@ -1,6 +1,5 @@
 # Blender 3.1.0
 # www.blender.org
-mtllib swordreturn.mtl
 o Sword01
 v -1.093866 0.475446 -0.391540
 v -1.093866 -2.449533 -0.391539

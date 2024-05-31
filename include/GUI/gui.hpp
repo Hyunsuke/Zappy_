@@ -20,4 +20,10 @@
 
 #include "Utils/utils.hpp"
 
+#include "Wrapper/Raylib/RLModel.hpp"
+#include "Wrapper/Raylib/RLShader.hpp"
+#include "Wrapper/Raylib/RLWindow.hpp"
+#include "Wrapper/Raylib/RLText.hpp"
+#include "Wrapper/Raylib/RLRay.hpp"
+
 #endif /* !GUI_HPP_ */
