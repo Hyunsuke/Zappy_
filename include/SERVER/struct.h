@@ -28,6 +28,8 @@
         int id_team;
         int level_player;
         int view_direction; // 0 = top; 1 = right; 2 = bottom; 3 = left
+        int x;
+        int y;
         player_t *next;
     } player_t;
 

@@ -22,6 +22,8 @@ void add_player(struct_t *list, int fd, int id_team)
     list->next_id++;
     new_player->id_player = list->next_id;
     new_player->id_team = id_team;
+    new_player->x = 0;
+    new_player->y = 0;
     new_player->next = list->head_player;
     list->head_player = new_player;
     // Function for add player in map
