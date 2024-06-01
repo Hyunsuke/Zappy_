@@ -8,24 +8,18 @@
 #include "gui.hpp"
 
 Object3D::Object3D(const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale, Vector3 rotationAxis, float rotationAngle)
-    : position(position), modelLoader(modelPath), active(true), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
+    : position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle) {
     modelLoader.SetTexture(texturePath);
 }
 
 Object3D::~Object3D() {}
 
 void Object3D::Draw() {
-    if (active) {
-        modelLoader.Draw(position, scale, rotationAxis, rotationAngle, WHITE);
-    }
+    modelLoader.Draw(position, scale, rotationAxis, rotationAngle, WHITE);
 }
 
 void Object3D::DrawWires() {
-    if (active) {
-        glLineWidth(100.0f);
-        modelLoader.DrawWires(position, scale, rotationAxis, rotationAngle, WHITE);
-        glLineWidth(1.0f);
-    }
+    modelLoader.DrawWires(position, scale, rotationAxis, rotationAngle, WHITE);
 }
 
 void Object3D::Move(Vector3 newPosition) {

@@ -34,6 +34,21 @@ Game::~Game() {
     CloseWindow();
 }
 
+void Game::InitializeMap(int width, int height) {
+    float spacing = 15.0f;
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            Vector3 position = {i * spacing, 0.0f, j * spacing};
+            float scale = 0.7f;
+            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
+            float rotationAngle = 0.0f;
+            auto island = std::make_shared<Island>(i, j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
+            island->SetShader(shaderManager->GetShader());
+            gameMap.AddIsland(island);
+        }
+    }
+}
+
 void Game::Run() {
     while (!WindowShouldClose()) {
         Update();
@@ -70,21 +85,6 @@ void Game::Draw() {
     EndMode3D();
     uiManager.DrawUI(selectedIsland, GetFPS());
     EndDrawing();
-}
-
-void Game::InitializeMap(int width, int height) {
-    float spacing = 15.0f;
-    for (int i = 0; i < width; ++i) {
-        for (int j = 0; j < height; ++j) {
-            Vector3 position = {i * spacing, 0.0f, j * spacing};
-            float scale = 0.7f;
-            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
-            float rotationAngle = 0.0f;
-            auto island = std::make_shared<Island>(i, j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
-            island->SetShader(shaderManager->GetShader());
-            gameMap.AddIsland(island);
-        }
-    }
 }
 
 void Game::ToggleObjectActive(int x, int y, const std::string& objectType, int value) {

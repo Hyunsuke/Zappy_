@@ -36,7 +36,6 @@ public:
 private:
     Vector3 position;
     ModelLoader modelLoader;
-    bool active;
     Shader shader;
     float scale;
     Vector3 rotationAxis;
