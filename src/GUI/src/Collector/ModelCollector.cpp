@@ -18,7 +18,11 @@ std::shared_ptr<Model> ModelCollector::LoadModel(const std::string& filePath) {
         return it->second;
     }
 
-    std::shared_ptr<Model> model = std::make_shared<Model>(::LoadModel(filePath.c_str()));
+    Model rawModel = ::LoadModel(filePath.c_str());
+    if (rawModel.meshCount == 0) {
+        throw GameException("Failed to load model: " + filePath);
+    }
+    std::shared_ptr<Model> model = std::make_shared<Model>(rawModel);
     modelCache[filePath] = model;
 
     return model;

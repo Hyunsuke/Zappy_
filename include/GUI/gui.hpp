@@ -14,6 +14,7 @@
 #include "core/ModelLoader.hpp"
 #include "core/Island.hpp"
 #include "core/Map.hpp"
+#include "core/GameException.hpp"
 
 #include "Collector/ModelCollector.hpp"
 #include "Collector/TextureCollector.hpp"

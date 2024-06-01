@@ -18,7 +18,11 @@ std::shared_ptr<Texture2D> TextureCollector::LoadTexture(const std::string& file
         return it->second;
     }
 
-    std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(::LoadTexture(filePath.c_str()));
+    Texture2D rawTexture = ::LoadTexture(filePath.c_str());
+    if (rawTexture.id == 0) {
+        throw GameException("Failed to load texture: " + filePath);
+    }
+    std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(rawTexture);
     textureCache[filePath] = texture;
 
     return texture;
