@@ -1,4 +1,3 @@
-
 /*
 ** EPITECH PROJECT, 2024
 ** pdi.c

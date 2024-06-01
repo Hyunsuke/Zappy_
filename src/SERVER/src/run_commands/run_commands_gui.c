@@ -11,7 +11,7 @@ static int execute_command_gui(struct_t *s, char *command, char *buffer)
 {
     command_struct_gui_t commands[] = {
         {"msz", c_msz}, {"bct", c_bct}, {"mct", c_mct},
-        {"tna", c_tna}, {"ppo", c_ppo},{"plv", c_plv}, {"pin", c_pin},
+        {"tna", c_tna}, {"ppo", c_ppo}, {"plv", c_plv}, {"pin", c_pin},
         {"sgt", c_sgt}, {"sst", c_sst}, {NULL, NULL}
     };
 

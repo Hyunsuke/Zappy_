@@ -2,14 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B4 - Network Programming
 ** File description:
-** UTILS
+** commands.c
 */
 
 #ifndef COMMANDS_H_
     #define COMMANDS_H_
 
     #include "struct.h"
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// COMMANDS IA ///////////////////////////////////////
@@ -30,12 +29,48 @@ int c_incantation(struct_t *s, int fd);
 
 
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////  STRUCT ///////////////////////////////////////////////
+/////////////////////////// COMMANDS GUI///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+int c_msz(struct_t *s, char *buffer);
+int c_bct(struct_t *s, char *buffer);
+int c_mct(struct_t *s, char *buffer);
+int c_tna(struct_t *s, char *buffer);
+int c_ppo(struct_t *s, char *buffer);
+int c_plv(struct_t *s, char *buffer);
+int c_pin(struct_t *s, char *buffer);
+int c_sgt(struct_t *s, char *buffer);
+int c_sst(struct_t *s, char *buffer);
+
+int c_pnw(struct_t *s);
+int c_pex(struct_t *s);
+int c_pbc(struct_t *s);
+int c_pic(struct_t *s);
+int c_pie(struct_t *s);
+int c_pfk(struct_t *s);
+int c_pdr(struct_t *s);
+int c_pgt(struct_t *s);
+int c_pdi(struct_t *s);
+int c_enw(struct_t *s);
+int c_ebo(struct_t *s);
+int c_edi(struct_t *s);
+int c_seg(struct_t *s);
+int c_smg(struct_t *s);
+int c_suc(struct_t *s);
+int c_sbp(struct_t *s);
+
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////// STRUCT ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef struct {
     char *command;
+    int (*func)(struct_t *s, char *buffer);
+    } command_struct_gui_t;
+    typedef struct {
+    char *command;
     int (*func)(struct_t *s, int fd);
-} command_struct_t;
+} command_struct_ia_t;
 
 #endif /* !COMMANDS_H_ */
