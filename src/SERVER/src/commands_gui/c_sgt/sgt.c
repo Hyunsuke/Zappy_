@@ -10,6 +10,6 @@
 int c_sgt(struct_t *s, char *buffer)
 {
     (void)buffer;
-    printf("c_sgt\n");
+    dprintf(s->fd_gui, "sgt %d\n", s->time);
     return 0;
 }
