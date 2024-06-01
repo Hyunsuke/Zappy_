@@ -28,4 +28,8 @@
 
 #include "Sky/Sky.hpp"
 
+#include "Manager/ShaderManager.hpp"
+#include "Manager/UIManager.hpp"
+#include "Manager/RayManager.hpp"
+
 #endif /* !GUI_HPP_ */

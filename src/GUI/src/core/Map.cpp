@@ -21,6 +21,16 @@ void Map::Draw() {
     }
 }
 
+void Map::DrawIslandWires(const std::shared_ptr<Island>& selectedIsland) {
+    if (!selectedIsland)
+        return;
+    for (auto& island : islands) {
+        if (island == selectedIsland) {
+            island->DrawWires();
+        }
+    }
+}
+
 void Map::Update() {
     float time = GetTime();
     for (auto& island : islands) {

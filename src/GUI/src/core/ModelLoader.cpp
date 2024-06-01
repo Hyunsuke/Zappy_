@@ -21,6 +21,12 @@ void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, floa
     DrawModelEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
 }
 
+void ModelLoader::DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
+    glLineWidth(100.0f);
+    DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+    glLineWidth(1.0f);
+}
+
 void ModelLoader::SetShader(Shader newShader) {
     shader = newShader;
 }

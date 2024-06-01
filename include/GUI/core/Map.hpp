@@ -19,6 +19,7 @@ public:
 
     void AddIsland(std::shared_ptr<Island> island);
     void Draw();
+    void DrawIslandWires(const std::shared_ptr<Island>& selectedIsland);
     void Update();
     std::shared_ptr<Island> GetIslandByXY(int x, int y);
     std::vector<std::shared_ptr<Island>> GetIslands() const;

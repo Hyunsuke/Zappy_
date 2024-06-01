@@ -10,6 +10,8 @@
 
 #include "ModelLoader.hpp"
 #include "../Utils/utils.hpp"
+#include <GL/gl.h>
+
 
 class Object3D {
 public:
@@ -17,6 +19,7 @@ public:
     ~Object3D();
 
     void Draw();
+    void DrawWires();
     void Move(Vector3 newPosition);
     void SetScale(float scale);
     float GetScale() const;

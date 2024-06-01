@@ -17,6 +17,9 @@
 #include <cstring>
 #include <GL/gl.h>
 #include "../Sky/Sky.hpp"
+#include "../Manager/ShaderManager.hpp"
+#include "../Manager/UIManager.hpp"
+#include "../Manager/RayManager.hpp"
 
 class Game {
 public:
@@ -24,28 +27,22 @@ public:
     ~Game();
     void Run();
     void ToggleObjectActive(int x, int y, const std::string& objectType, int value);
-    void SetIslandScale(int x, int y, float scale);
-    void SetIslandRotation(int x, int y, Vector3 rotationAxis, float rotationAngle);
 
 private:
     void Update();
     void Draw();
     void InitializeMap(int width, int height);
-    std::shared_ptr<Island> GetIslandUnderMouse();
 
     int screenWidth;
     int screenHeight;
     CameraController cameraController;
     Map gameMap;
-    Shader shader;
-
-    Ray ray;
-    RayCollision collision;
-    Color cursorColor;
-    char hitObjectName[50];
-    std::shared_ptr<Island> selectedIsland;
-
     Sky sky;
+    std::unique_ptr<ShaderManager> shaderManager;
+    UIManager uiManager;
+    RayManager rayManager;
+
+    std::shared_ptr<Island> selectedIsland;
 };
 
 #endif /* !GAME_HPP_ */

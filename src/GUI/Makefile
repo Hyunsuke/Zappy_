@@ -8,7 +8,13 @@
 SRCDIR = src
 OUTDIR = ../../
 
-SRCDIRS = $(SRCDIR) $(SRCDIR)/core $(SRCDIR)/Collector $(SRCDIR)/Utils $(SRCDIR)/Wrapper/Raylib $(SRCDIR)/Sky
+SRCDIRS = 	$(SRCDIR) \
+            $(SRCDIR)/core \
+            $(SRCDIR)/Collector \
+            $(SRCDIR)/Utils \
+            $(SRCDIR)/Sky \
+            $(SRCDIR)/Manager \
+
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 SRC_OBJ = $(SRC_ALL:.cpp=.o)
 

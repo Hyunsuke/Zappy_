@@ -6,12 +6,14 @@
 #include <vector>
 #include <float.h>
 #include "../Collector/ModelCollector.hpp"
+#include <GL/gl.h>
 
 class ModelLoader {
 public:
     ModelLoader(const std::string& filePath);
     ~ModelLoader();
     void Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
+    void DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
     void SetShader(Shader shader);
     std::shared_ptr<Model> GetModel() const { return model; }
     void SetTexture(const std::string& texturePath);

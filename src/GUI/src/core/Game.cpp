@@ -11,32 +11,26 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
     :   screenWidth(screenWidth),
         screenHeight(screenHeight),
         gameMap(mapWidth,mapHeight),
-        cursorColor(WHITE),
-        sky(screenWidth, screenHeight) {
+        sky(screenWidth, screenHeight),
+        uiManager(screenWidth, screenHeight) {
+
     InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
     SetTargetFPS(60);
 
-    shader = LoadShader("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
-    int lightPosLoc = GetShaderLocation(shader, "lightPosition");
-    int viewPosLoc = GetShaderLocation(shader, "viewPosition");
-    int lightColorLoc = GetShaderLocation(shader, "lightColor");
-    int ambientColorLoc = GetShaderLocation(shader, "ambientColor");
-
+    shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
     Vector3 lightColor = { 1.0f, 1.0f, 1.0f };
     Vector3 ambientColor = { 0.2f, 0.2f, 0.2f };
-
-    SetShaderValue(shader, lightPosLoc, &lightPosition, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, viewPosLoc, &viewPosition, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, lightColorLoc, &lightColor, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, ambientColorLoc, &ambientColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightPosition", &lightPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("viewPosition", &viewPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
 
     InitializeMap(mapWidth, mapHeight);
 }
 
 Game::~Game() {
-    if (shader.id != 0) UnloadShader(shader);
     CloseWindow();
 }
 
@@ -53,92 +47,29 @@ void Game::Update() {
 
     sky.Update();
 
-    // Update the light position and color in the shader
-    int lightPosLoc = GetShaderLocation(shader, "lightPosition");
-    int lightColorLoc = GetShaderLocation(shader, "lightColor");
     Vector3 lightPos = sky.GetLightPosition();
     Vector3 lightCol = sky.GetLightColor();
-    SetShaderValue(shader, lightPosLoc, &lightPos, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, lightColorLoc, &lightCol, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightPosition", &lightPos, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", &lightCol, SHADER_UNIFORM_VEC3);
 
-    ray = GetMouseRay(GetMousePosition(), cameraController.GetCamera());
-    collision.hit = false;
-    cursorColor = WHITE;
-    strcpy(hitObjectName, "None");
-    selectedIsland = GetIslandUnderMouse();
-
-    if (selectedIsland) {
-        cursorColor = BLUE;
-        strcpy(hitObjectName, "Island");
-    }
+    rayManager.UpdateRay(cameraController.GetCamera());
+    selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
 }
 
 void Game::Draw() {
     BeginDrawing();
     ClearBackground(WHITE);
-
     sky.DrawBackground();
-
 
     BeginMode3D(cameraController.GetCamera());
 
     sky.DrawSunAndMoon();
-
     gameMap.Draw();
-
-    if (selectedIsland) {
-         glLineWidth(100.0f);
-        DrawModelWiresEx(*selectedIsland->GetModel(), selectedIsland->GetPosition(), selectedIsland->GetRotationAxis(), selectedIsland->GetRotationAngle(), Vector3{selectedIsland->GetScale(), selectedIsland->GetScale(), selectedIsland->GetScale()}, RED);
-        for (const auto& obj : selectedIsland->GetObjects()) {
-            if (obj->GetQuantity() > 0)
-            DrawModelWiresEx(*obj->GetModel(), obj->GetPosition(), obj->GetRotationAxis(), obj->GetRotationAngle(), Vector3{obj->GetScale(), obj->GetScale(), obj->GetScale()}, RED);
-        }
-         glLineWidth(1.0f);
-    }
+    gameMap.DrawIslandWires(selectedIsland);
 
     EndMode3D();
-
-    const int baseX = 10;
-    const int baseY = 10;
-    const int lineSpacing = 30;
-    const int padding = 10;
-    const int textSize = 30;
-    int lines = 9;
-
-    int rectHeight = (lines * lineSpacing) + (2 * padding);
-    int rectWidth = 500;
-
-    DrawRectangle(baseX, baseY, rectWidth, rectHeight, Fade(SKYBLUE, 0.5f));
-    DrawRectangleLines(baseX, baseY, rectWidth, rectHeight, BLUE);
-
-    RLText::DrawText(TextFormat("FPS: %d", GetFPS()), baseX + padding, baseY + padding, textSize, BLACK);
-    if (selectedIsland) {
-        RLText::DrawText(TextFormat("Selected Island Pos : %d, %d", selectedIsland->GetX(), selectedIsland->GetY()), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
-        RLText::DrawText(TextFormat("Food : %d", selectedIsland->food->GetQuantity()), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Linemate : %d", selectedIsland->linemate->GetQuantity()), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Deraumere : %d", selectedIsland->deraumere->GetQuantity()), baseX + padding, baseY + padding + (4 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Sibur : %d", selectedIsland->sibur->GetQuantity()), baseX + padding, baseY + padding + (5 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Mendiane : %d", selectedIsland->mendiane->GetQuantity()), baseX + padding, baseY + padding + (6 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Phiras : %d", selectedIsland->phiras->GetQuantity()), baseX + padding, baseY + padding + (7 * lineSpacing), textSize, BLACK);
-        RLText::DrawText(TextFormat("Thystame : %d", selectedIsland->thystame->GetQuantity()), baseX + padding, baseY + padding + (8 * lineSpacing), textSize, BLACK);
-    }
-
+    uiManager.DrawUI(selectedIsland, GetFPS());
     EndDrawing();
-}
-
-
-std::shared_ptr<Island> Game::GetIslandUnderMouse() {
-    for (auto& island : gameMap.GetIslands()) {
-        BoundingBox transformedBBox;
-        transformedBBox.min = Vector3Add(Vector3Scale(island->GetBoundingBox().min, island->GetScale()), island->GetPosition());
-        transformedBBox.max = Vector3Add(Vector3Scale(island->GetBoundingBox().max, island->GetScale()), island->GetPosition());
-
-        RayCollision collision = GetRayCollisionBox(ray, transformedBBox);
-        if (collision.hit) {
-            return island;
-        }
-    }
-    return nullptr;
 }
 
 void Game::InitializeMap(int width, int height) {
@@ -150,7 +81,7 @@ void Game::InitializeMap(int width, int height) {
             Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
             float rotationAngle = 0.0f;
             auto island = std::make_shared<Island>(i, j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
-            island->SetShader(shader);
+            island->SetShader(shaderManager->GetShader());
             gameMap.AddIsland(island);
         }
     }
@@ -174,19 +105,5 @@ void Game::ToggleObjectActive(int x, int y, const std::string& objectType, int v
         } else if (objectType == "thystame") {
             island->thystame->SetQuantity(island->thystame->GetQuantity() + value);
         }
-    }
-}
-
-void Game::SetIslandScale(int x, int y, float scale) {
-    auto island = gameMap.GetIslandByXY(x, y);
-    if (island) {
-        island->SetScale(scale);
-    }
-}
-
-void Game::SetIslandRotation(int x, int y, Vector3 rotationAxis, float rotationAngle) {
-    auto island = gameMap.GetIslandByXY(x, y);
-    if (island) {
-        island->SetRotation(rotationAxis, rotationAngle);
     }
 }

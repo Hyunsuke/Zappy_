@@ -20,6 +20,14 @@ void Object3D::Draw() {
     }
 }
 
+void Object3D::DrawWires() {
+    if (active) {
+        glLineWidth(100.0f);
+        modelLoader.DrawWires(position, scale, rotationAxis, rotationAngle, WHITE);
+        glLineWidth(1.0f);
+    }
+}
+
 void Object3D::Move(Vector3 newPosition) {
     position = newPosition;
 }

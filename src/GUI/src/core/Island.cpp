@@ -51,6 +51,16 @@ void Island::Draw() {
     }
 }
 
+void Island::DrawWires() {
+    modelLoader.DrawWires(position, scale, rotationAxis, rotationAngle, WHITE);
+    for (auto& obj : objects) {
+        if (obj->GetQuantity() > 0) {
+            obj->DrawWires();
+        }
+    }
+
+}
+
 void Island::Move(Vector3 newPosition) {
     Vector3 delta = Vector3Subtract(newPosition, position);
     position = newPosition;

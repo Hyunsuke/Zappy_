@@ -18,6 +18,7 @@ public:
     Island(int x, int y, const Vector3& position, const std::string& modelPath, const std::string& texturePath, float scale = 1.0f, Vector3 rotationAxis = {0.0f, 1.0f, 0.0f}, float rotationAngle = 0.0f);
     ~Island();
     void Draw();
+    void DrawWires();
     void Move(Vector3 newPosition);
     void SetScale(float scale);
     float GetScale() const;
