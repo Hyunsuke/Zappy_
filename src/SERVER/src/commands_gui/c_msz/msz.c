@@ -10,6 +10,6 @@
 int c_msz(struct_t *s, char *buffer)
 {
     (void)buffer;
-    printf("c_msz\n");
+    dprintf(s->fd_gui, "msz %d %d\n", s->map_width, s->map_height);
     return 0;
 }

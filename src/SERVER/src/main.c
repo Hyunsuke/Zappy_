@@ -16,6 +16,7 @@ int main(int ac, char **av)
         return 84;
     s->head_player = NULL;
     s->next_id = 0;
+    s->fd_gui = -1;
     generator_map(s);
     server_gestion(server, s);
 }

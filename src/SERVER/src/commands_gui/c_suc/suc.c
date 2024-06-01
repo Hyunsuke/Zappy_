@@ -9,6 +9,6 @@
 
 int c_suc(struct_t *s)
 {
-    printf("c_suc\n");
+    printf("suc\n");
     return 0;
 }
