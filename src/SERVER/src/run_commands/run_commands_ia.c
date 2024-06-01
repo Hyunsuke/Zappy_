@@ -9,7 +9,7 @@
 
 static int execute_command_ia(struct_t *s, int fd, char *command)
 {
-    command_struct_t commands[] = {
+    command_struct_ia_t commands[] = {
         {"Forward", c_forward}, {"Right", c_right}, {"Left", c_left},
         {"Look", c_look}, {"Inventory", c_inventory},
         {"Broadcast text", c_broadcast_txt}, {"Connect_nbr", c_connect_nbr},

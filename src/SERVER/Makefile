@@ -39,6 +39,34 @@ SRC	=	src/main.c	\
 		src/utils/players/create_player.c \
 		src/utils/players/display_player.c \
 		src/utils/players/get_player.c \
+		src/commands_gui/c_msz/msz.c \
+		src/commands_gui/c_bct/bct.c \
+		src/commands_gui/c_mct/mct.c \
+		src/commands_gui/c_tna/tna.c \
+		src/commands_gui/c_ppo/ppo.c \
+		src/commands_gui/c_plv/plv.c \
+		src/commands_gui/c_pin/pin.c \
+		src/commands_gui/c_sgt/sgt.c \
+		src/commands_gui/c_sst/sst.c \
+		src/commands_gui/c_pnw/pnw.c \
+		src/commands_gui/c_pex/pex.c \
+		src/commands_gui/c_pbc/pbc.c \
+		src/commands_gui/c_pic/pic.c \
+		src/commands_gui/c_pie/pie.c \
+		src/commands_gui/c_pfk/pfk.c \
+		src/commands_gui/c_pdr/pdr.c \
+		src/commands_gui/c_pgt/pgt.c \
+		src/commands_gui/c_pdi/pdi.c \
+		src/commands_gui/c_enw/enw.c \
+		src/commands_gui/c_ebo/ebo.c \
+		src/commands_gui/c_edi/edi.c \
+		src/commands_gui/c_seg/seg.c \
+		src/commands_gui/c_smg/smg.c \
+		src/commands_gui/c_suc/suc.c \
+		src/commands_gui/c_sbp/sbp.c \
+		src/run_commands/run_commands_gui.c \
+
+
 
 INCLUDEDIR = ../../include/SERVER/
 
