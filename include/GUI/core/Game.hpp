@@ -16,6 +16,7 @@
 #include <raylib.h>
 #include <cstring>
 #include <GL/gl.h>
+#include "../Sky/Sky.hpp"
 
 class Game {
 public:
@@ -43,6 +44,8 @@ private:
     Color cursorColor;
     char hitObjectName[50];
     std::shared_ptr<Island> selectedIsland;
+
+    Sky sky;
 };
 
 #endif /* !GAME_HPP_ */

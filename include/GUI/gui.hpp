@@ -26,4 +26,6 @@
 #include "Wrapper/Raylib/RLText.hpp"
 #include "Wrapper/Raylib/RLRay.hpp"
 
+#include "Sky/Sky.hpp"
+
 #endif /* !GUI_HPP_ */

@@ -8,7 +8,11 @@
 #include "gui.hpp"
 
 Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight), gameMap(mapWidth,mapHeight), cursorColor(WHITE) {
+    :   screenWidth(screenWidth),
+        screenHeight(screenHeight),
+        gameMap(mapWidth,mapHeight),
+        cursorColor(WHITE),
+        sky(screenWidth, screenHeight) {
     InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
     SetTargetFPS(60);
 
@@ -29,9 +33,6 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
     SetShaderValue(shader, ambientColorLoc, &ambientColor, SHADER_UNIFORM_VEC3);
 
     InitializeMap(mapWidth, mapHeight);
-
-    std::cout << "Game initialized with window size: "
-              << screenWidth << "x" << screenHeight << std::endl;
 }
 
 Game::~Game() {
@@ -50,6 +51,16 @@ void Game::Update() {
     cameraController.Update();
     gameMap.Update();
 
+    sky.Update();
+
+    // Update the light position and color in the shader
+    int lightPosLoc = GetShaderLocation(shader, "lightPosition");
+    int lightColorLoc = GetShaderLocation(shader, "lightColor");
+    Vector3 lightPos = sky.GetLightPosition();
+    Vector3 lightCol = sky.GetLightColor();
+    SetShaderValue(shader, lightPosLoc, &lightPos, SHADER_UNIFORM_VEC3);
+    SetShaderValue(shader, lightColorLoc, &lightCol, SHADER_UNIFORM_VEC3);
+
     ray = GetMouseRay(GetMousePosition(), cameraController.GetCamera());
     collision.hit = false;
     cursorColor = WHITE;
@@ -64,11 +75,15 @@ void Game::Update() {
 
 void Game::Draw() {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(WHITE);
+
+    sky.DrawBackground();
+
 
     BeginMode3D(cameraController.GetCamera());
 
-    // Draw the game map
+    sky.DrawSunAndMoon();
+
     gameMap.Draw();
 
     if (selectedIsland) {
@@ -110,6 +125,7 @@ void Game::Draw() {
 
     EndDrawing();
 }
+
 
 std::shared_ptr<Island> Game::GetIslandUnderMouse() {
     for (auto& island : gameMap.GetIslands()) {
