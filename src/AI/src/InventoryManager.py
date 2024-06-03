@@ -21,19 +21,21 @@ class InventoryManager:
             'thystame': 0
         }
 
+        # List de ce qu'on doit avoir entre le niveau 2 & 8. L'algo doit prendre ça en compte à partir du lvl 2
         self.objective_inventory = {
-            'linemate': 8,
-            'deraumere': 8,
-            'sibur': 10,
-            'mendiane': 5,
+            'thystame': 1,
             'phiras': 6,
-            'thystame': 1
+            'mendiane': 5,
+            'sibur': 10,
+            'deraumere': 8,
+            'linemate': 8
         }
 
     def update_inventory(self, inventory_string, p=False):
-        if inventory_string is None:
+        if inventory_string is None or inventory_string.startswith("[ food") == False:
             print("Error: Inventory string is None")
             return
+        print("Update Inventory " +  inventory_string)
         # Nettoyer et séparer la chaîne de caractères
         inventory_string = inventory_string.strip('[] ')
         items = inventory_string.split(', ')

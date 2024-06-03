@@ -7,7 +7,8 @@ from InventoryManager import InventoryManager
 
 
 class Command:
-    def __init__(self, socket, current_inventory):
+    def __init__(self, socket, current_inventory, team_name):
+        self.team_name = team_name
         self.socket = socket
         self.current_inventory = current_inventory
 
@@ -15,6 +16,7 @@ class Command:
         try:
             self.socket.sendall(f"{command}\n".encode())
             response = self.socket.recv(1024).decode().strip()
+            print(response)
             if response == "dead":
                 print("Dead")
                 sys.exit(1)
@@ -79,7 +81,7 @@ class Command:
         if object in self.current_inventory.current_inventory:
             self.current_inventory.current_inventory[object] += 1
             if object != "food":
-                self.broadcastMaterial(object)
+                # self.broadcastMaterial(object)
                 self.current_inventory.shared_inventory[object] += 1
 
     def set_object_down(self, object):
@@ -111,14 +113,14 @@ class Command:
 
     def broadcastMaterial(self, material):
         if (material == "linemate"):
-            return self.broadcast("[teamname]_linemate")
+            return self.broadcast(f"[{self.team_name}]_linemate")
         elif (material == "deraumere"):
-            return self.broadcast("[teamname]_deraumere")
+            return self.broadcast(f"[{self.team_name}]_deraumere")
         elif (material == "sibur"):
-            return self.broadcast("[teamname]_sibur")
+            return self.broadcast(f"[{self.team_name}]_sibur")
         elif (material == "mendiane"):
-            return self.broadcast("[teamname]_mendiane")
+            return self.broadcast(f"[{self.team_name}]_mendiane")
         elif (material == "phiras"):
-            return self.broadcast("[teamname]_phiras")
+            return self.broadcast(f"[{self.team_name}]_phiras")
         elif (material == "thystame"):
-            return self.broadcast("[teamname]_thystame")
+            return self.broadcast(f"[{self.team_name}]_thystame")

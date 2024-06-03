@@ -18,7 +18,7 @@ class ZappyClient:
             self.level = 1
             self.initial_handshake()
             self.current_inventory = InventoryManager()
-            self.cmd = Command(self.socket, self.current_inventory)
+            self.cmd = Command(self.socket, self.current_inventory, self.team_name)
             self.current_inventory.update_inventory(self.cmd.inventory())
             self.main_loop()
         except socket.error as e:
@@ -55,8 +55,7 @@ class ZappyClient:
             sys.exit(1)
 
 
-    # List de ce qu'on doit avoir entre le niveau 2 & 10. L'algo doit prendre ça en compte à partir du lvl2
-    finalObjectiveList = [
+    level_2_objectives = [
         ("linemate", 10),
         ("deraumere", 5),
         ("sibur", 20),
@@ -70,14 +69,18 @@ class ZappyClient:
             while True:
                 self.current_inventory.update_inventory(self.cmd.inventory())
                 self.cmd.move_forward()
-                if self.current_inventory.current_inventory['food'] < 5:
-                    self.eat_nearest_food(True)
+                # self.cmd.broadcast("I'm_moving_forward")
+                if self.current_inventory.current_inventory['food'] < 2:
+                    self.eat_nearest_ressource("food", False)
+                else:
+                    self.look_for_rarest_stone()
+
         except KeyboardInterrupt:
             print("Terminating AI client.")
         finally:
             self.socket.close()
 
-    def eat_nearest_food(self, needPrint=False):
+    def eat_nearest_ressource(self, ressource, needPrint=False):
         response = self.cmd.look()
         if response is None:
             return
@@ -86,12 +89,31 @@ class ZappyClient:
         for object in objects:
             object = object.split(" ")
             for obj in object:
-                if obj.startswith("food"):
+                if obj.startswith(ressource):
                     print("Moving to tile: ", a)
                     self.move_to_tile(a, needPrint)
-                    self.cmd.take_object("food")
+                    self.cmd.take_object(ressource)
                     return
             a += 1
+
+    def look_for_rarest_stone(self):
+        print("Looking for rarest stone")
+        response = self.cmd.look()
+        total_value = 0
+        # print(response)
+        for key, value in self.current_inventory.objective_inventory.items():
+            total_value += value
+            # print(key, value)
+            if key in response and self.current_inventory.objective_inventory[key] > 0:
+                print("Found ", key)
+                self.eat_nearest_ressource(key, True)
+                self.current_inventory.objective_inventory[key] -= 1
+                return
+            # if self.current_inventory.current_inventory[key] < value:
+            #     self.lookForTile(key)
+        if total_value == 0:
+            print("All stones have been found")
+            exit(1)
 
     def move_to_tile(self, target_tile, needPrint=False):
         self.cmd.look(needPrint)
