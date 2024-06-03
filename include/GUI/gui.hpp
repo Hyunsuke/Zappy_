@@ -33,4 +33,7 @@
 #include "Manager/UIManager.hpp"
 #include "Manager/RayManager.hpp"
 
+#include "Particles/Particle.hpp"
+#include "Particles/ParticleSystem.hpp"
+
 #endif /* !GUI_HPP_ */

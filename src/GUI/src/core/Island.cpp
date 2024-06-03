@@ -22,13 +22,19 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     float siburScale = 0.5f;
     Vector3 siburrotationAxis = {1.0f, 0.0f, 0.0f};
     float siburrotationAngle = 25.0f;
+    float mendianeScale = 0.03f;
+    Vector3 mendianeRotationAxis = {1.0f, 0.0f, 0.0f};
+    float mendianeRotationAngle = 40.0f;
+    float phirasScale = 6.0f;
+    Vector3 phirasRotationAxis = {0.0f, 1.0f, 0.0f};
+    float phirasRotationAngle = -35.0f;
 
     food = std::make_shared<Object3D>(Vector3{position.x - 4.0f, position.y + 0.15f, position.z + 2.0f}, "src/GUI/assets/Food/pig.obj", "src/GUI/assets/Food/pig.png", foodScale, foodRotationAxis, foodRotationAngle);
     linemate = std::make_shared<Object3D>(Vector3{position.x + 1.9f, position.y + 1.0f, position.z - 0.2f}, "src/GUI/assets/Linemate/Linemate.obj", "src/GUI/assets/Linemate/Linemate.png", linemateScale, rotationAxis, rotationAngle);
     deraumere = std::make_shared<Object3D>(Vector3{position.x - 3.5f, position.y + 0.6f, position.z + 0.3f}, "src/GUI/assets/Deraumere/deraumere.obj", "src/GUI/assets/Deraumere/deraumere.png", deramereScale, deramereRotationAxis, deramereRotationAngle);
     sibur = std::make_shared<Object3D>(Vector3{position.x + 3.5f, position.y + 2.0f, position.z - 0.3f}, "src/GUI/assets/Sibur/Sword.obj", "src/GUI/assets/Sibur/Sword.png", siburScale, siburrotationAxis, siburrotationAngle);
-    mendiane = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
-    phiras = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
+    mendiane = std::make_shared<Object3D>(Vector3{position.x - 0.3f, position.y + 1.3f, position.z + 0.3f}, "src/GUI/assets/Mendiane/mendiane.obj", "src/GUI/assets/Mendiane/mendiane.png", mendianeScale, mendianeRotationAxis, mendianeRotationAngle);
+    phiras = std::make_shared<Object3D>(Vector3{position.x - 1.8f, position.y + 3.10f, position.z}, "src/GUI/assets/Phiras/phiras.obj", "src/GUI/assets/Phiras/phiras.png", phirasScale, phirasRotationAxis, phirasRotationAngle);
     thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
 
     objects.push_back(food);

@@ -11,7 +11,7 @@ Sky::Sky(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight),
       sunPosition({0.0f, 100.0f, 0.0f}), moonPosition({0.0f, -100.0f, 0.0f}),
       lightPosition(sunPosition), lightColor(WHITE),
-      dayDuration(200.0f), currentTime(0.0f) {}
+      dayDuration(10.0f), currentTime(0.0f) {}
 
 Sky::~Sky() {}
 

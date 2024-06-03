@@ -20,6 +20,7 @@
 #include "../Manager/ShaderManager.hpp"
 #include "../Manager/UIManager.hpp"
 #include "../Manager/RayManager.hpp"
+#include "../Particles/ParticleSystem.hpp"
 
 class Game {
 public:

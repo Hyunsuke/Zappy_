@@ -14,6 +14,7 @@ SRCDIRS = 	$(SRCDIR) \
             $(SRCDIR)/Utils \
             $(SRCDIR)/Sky \
             $(SRCDIR)/Manager \
+            $(SRCDIR)/Particles \
 
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 SRC_OBJ = $(SRC_ALL:.cpp=.o)
