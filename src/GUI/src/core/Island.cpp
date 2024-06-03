@@ -28,6 +28,7 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     Vector3 phirasRotationAxis = {0.0f, 1.0f, 0.0f};
     float phirasRotationAngle = -35.0f;
     float thystameScale = 0.00015f;
+    float eggScale = 0.4f;
 
     float playerScale = 0.5f;
 
@@ -38,6 +39,7 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     mendiane = std::make_shared<Object3D>(Vector3{position.x - 0.3f, position.y + 1.3f, position.z + 0.3f}, "src/GUI/assets/Mendiane/mendiane.obj", "src/GUI/assets/Mendiane/mendiane.png", mendianeScale, mendianeRotationAxis, mendianeRotationAngle);
     phiras = std::make_shared<Object3D>(Vector3{position.x - 1.8f, position.y + 3.10f, position.z}, "src/GUI/assets/Phiras/phiras.obj", "src/GUI/assets/Phiras/phiras.png", phirasScale, phirasRotationAxis, phirasRotationAngle);
     thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 5.0f, position.z}, "src/GUI/assets/Thystame/thystame.obj", "src/GUI/assets/Thystame/thystame.png", thystameScale, rotationAxis, rotationAngle);
+    egg = std::make_shared<Object3D>(Vector3{position.x + 3.1f, position.y + 0.8f, position.z + 0.5f}, "src/GUI/assets/Egg/egg.obj", "src/GUI/assets/Egg/egg.png", eggScale, rotationAxis, rotationAngle);
     player = std::make_shared<Object3D>(Vector3{position.x, position.y + 0.5f, position.z}, "src/GUI/assets/Human/gladia.glb", "src/GUI/assets/Human/gladia.png", playerScale, rotationAxis, rotationAngle);
 
     objects.push_back(food);
@@ -47,6 +49,7 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     objects.push_back(mendiane);
     objects.push_back(phiras);
     objects.push_back(thystame);
+    objects.push_back(egg);
     objects.push_back(player);
 }
 
