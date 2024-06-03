@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pdi(struct_t *s)
+int c_pdi(struct_t *s, int id_player)
 {
-    printf("c_pdi\n");
+    dprintf(s->fd_gui, "pdi #%d\n", id_player);
     return 0;
 }
