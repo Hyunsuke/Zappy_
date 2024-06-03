@@ -11,7 +11,6 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     : x(x), y(y), position(position), modelLoader(modelPath), scale(scale), rotationAxis(rotationAxis), rotationAngle(rotationAngle), floatSpeed((rand() % 100) / 50.0f + 1.0f), baseY(position.y) {
     modelLoader.SetTexture(texturePath);
 
-    float objectScale = 0.01f;
     float foodScale = 0.025f;
     Vector3 foodRotationAxis = {0.0f, 1.0f, 0.0f};
     float foodRotationAngle = -50.0f;
@@ -28,6 +27,9 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     float phirasScale = 6.0f;
     Vector3 phirasRotationAxis = {0.0f, 1.0f, 0.0f};
     float phirasRotationAngle = -35.0f;
+    float thystameScale = 0.00015f;
+
+    float playerScale = 0.5f;
 
     food = std::make_shared<Object3D>(Vector3{position.x - 4.0f, position.y + 0.15f, position.z + 2.0f}, "src/GUI/assets/Food/pig.obj", "src/GUI/assets/Food/pig.png", foodScale, foodRotationAxis, foodRotationAngle);
     linemate = std::make_shared<Object3D>(Vector3{position.x + 1.9f, position.y + 1.0f, position.z - 0.2f}, "src/GUI/assets/Linemate/Linemate.obj", "src/GUI/assets/Linemate/Linemate.png", linemateScale, rotationAxis, rotationAngle);
@@ -35,7 +37,8 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     sibur = std::make_shared<Object3D>(Vector3{position.x + 3.5f, position.y + 2.0f, position.z - 0.3f}, "src/GUI/assets/Sibur/Sword.obj", "src/GUI/assets/Sibur/Sword.png", siburScale, siburrotationAxis, siburrotationAngle);
     mendiane = std::make_shared<Object3D>(Vector3{position.x - 0.3f, position.y + 1.3f, position.z + 0.3f}, "src/GUI/assets/Mendiane/mendiane.obj", "src/GUI/assets/Mendiane/mendiane.png", mendianeScale, mendianeRotationAxis, mendianeRotationAngle);
     phiras = std::make_shared<Object3D>(Vector3{position.x - 1.8f, position.y + 3.10f, position.z}, "src/GUI/assets/Phiras/phiras.obj", "src/GUI/assets/Phiras/phiras.png", phirasScale, phirasRotationAxis, phirasRotationAngle);
-    thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/duck/RubberDuck_LOD0.obj", "src/GUI/assets/duck/duck_text.png", objectScale, rotationAxis, rotationAngle);
+    thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 10.0f, position.z}, "src/GUI/assets/Thystame/thystame.obj", "src/GUI/assets/Thystame/thystame.png", thystameScale, rotationAxis, rotationAngle);
+    player = std::make_shared<Object3D>(Vector3{position.x, position.y + 0.5f, position.z}, "src/GUI/assets/Human/gladia.glb", "src/GUI/assets/Human/gladia.png", playerScale, rotationAxis, rotationAngle);
 
     objects.push_back(food);
     objects.push_back(linemate);
@@ -44,6 +47,7 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     objects.push_back(mendiane);
     objects.push_back(phiras);
     objects.push_back(thystame);
+    objects.push_back(player);
 }
 
 Island::~Island() {}
