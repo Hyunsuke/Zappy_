@@ -9,6 +9,6 @@
 
 int c_sbp(struct_t *s)
 {
-    printf("c_sbp\n");
+    dprintf(s->fd_gui, "sbp\n");
     return 0;
 }
