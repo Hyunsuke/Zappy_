@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_seg(struct_t *s)
+int c_seg(struct_t *s, char *name_team)
 {
-    printf("c_seg\n");
+    dprintf(s->fd_gui, "seg %s\n", name_team);
     return 0;
 }
