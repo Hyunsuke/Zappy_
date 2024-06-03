@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_smg(struct_t *s)
+int c_smg(struct_t *s, char *msg)
 {
-    printf("c_smg\n");
+    dprintf(s->fd_gui, "smg %s\n", msg);
     return 0;
 }
