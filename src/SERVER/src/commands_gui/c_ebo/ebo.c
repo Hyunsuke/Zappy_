@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_ebo(struct_t *s)
+int c_ebo(struct_t *s, int nb_egg)
 {
-    printf("c_ebo\n");
+    dprintf(s->fd_gui, "ebo #%d\n", nb_egg);
     return 0;
 }
