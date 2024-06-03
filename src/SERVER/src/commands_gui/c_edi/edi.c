@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_edi(struct_t *s)
+int c_edi(struct_t *s, int nb_egg)
 {
-    printf("c_edi\n");
+    dprintf("edi #%d\n", nb_egg);
     return 0;
 }
