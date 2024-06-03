@@ -7,9 +7,9 @@
 
 #include "all.h"
 
-int add_player_to_team(struct_t *game_struct, int team_id, int player_id)
+int add_player_to_team(struct_t *s, int team_id, int player_id)
 {
-    team_t *team = get_team_by_id(game_struct, team_id);
+    team_t *team = get_team_by_id(s, team_id);
     int player_count = 0;
 
     if (!team)

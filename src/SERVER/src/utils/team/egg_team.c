@@ -7,9 +7,9 @@
 
 #include "all.h"
 
-int add_position_egg_to_team(struct_t *game_struct, int team_id, int x, int y)
+int add_position_egg_to_team(struct_t *s, int team_id, int x, int y)
 {
-    team_t *team = get_team_by_id(game_struct, team_id);
+    team_t *team = get_team_by_id(s, team_id);
     position_t *new_position;
     int pos_count = 0;
 
@@ -30,10 +30,10 @@ int add_position_egg_to_team(struct_t *game_struct, int team_id, int x, int y)
 }
 
 // Function to get and remove the first egg position from a team
-position_t* get_and_remove_first_egg_position(struct_t *game_struct,
+position_t *get_and_remove_first_egg_position(struct_t *s,
     int team_id)
 {
-    team_t *team = get_team_by_id(game_struct, team_id);
+    team_t *team = get_team_by_id(s, team_id);
     position_t *first_position;
     int i = 0;
 

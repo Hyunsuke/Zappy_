@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-team_t* create_team(struct_t *s, const char *name)
+team_t *create_team(struct_t *s, const char *name)
 {
     team_t *new_team = my_malloc(sizeof(team_t));
 
