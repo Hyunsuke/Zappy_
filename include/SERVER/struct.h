@@ -60,11 +60,13 @@
         int map_height;
         int client_nb;
         int time;
+        int *id_teams;
         char **list_names;
         int fd_gui;
         map_element_t **map;
         player_t *head_player;
         int next_id; // For incrementation id_player
     } struct_t;
+
 
 #endif /* !STRUCT_H */

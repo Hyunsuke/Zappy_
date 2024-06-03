@@ -18,8 +18,10 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
     }
     name_count = names_end - names_start;
     s->list_names = my_malloc(name_count * sizeof(char *));
+    s->id_teams = my_malloc(name_count * sizeof(int));
     for (int j = 0; j < name_count; j++) {
         s->list_names[j] = strdup(av[names_start + j]);
+        s->id_teams[j] = j;
     }
     i = names_end - 1;
 }

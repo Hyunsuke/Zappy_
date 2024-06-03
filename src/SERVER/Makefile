@@ -67,6 +67,7 @@ SRC	=	src/main.c	\
 		src/run_commands/run_commands_gui.c \
 
 
+		src/utils/players/get_team.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
