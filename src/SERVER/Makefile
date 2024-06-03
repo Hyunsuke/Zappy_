@@ -39,6 +39,7 @@ SRC	=	src/main.c	\
 		src/utils/players/create_player.c \
 		src/utils/players/display_player.c \
 		src/utils/players/get_player.c \
+		src/utils/players/get_team.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
