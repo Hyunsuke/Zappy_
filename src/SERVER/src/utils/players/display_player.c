@@ -12,7 +12,7 @@ void print_players(struct_t *list)
     player_t *current = list->head_player;
 
     while (current != NULL) {
-        printf("ID: %d, FD: %d, Name: %s\n", current->id_player,
+        printf("ID: %d, FD: %d\n", current->id_player,
             current->fd);
         current = current->next;
     }

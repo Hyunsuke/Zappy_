@@ -55,6 +55,7 @@ typedef struct struct_s {
     int client_nb;
     int time;
     char **list_names;
+    int *id_teams;
     map_element_t **map;
     player_t *head_player;
     int next_id; // For incrementation id_player
