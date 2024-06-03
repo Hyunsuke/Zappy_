@@ -55,6 +55,8 @@ private:
     float floatOffset;
     float floatSpeed;
     float baseY;
+
+    float thystameAngle;
 };
 
 #endif // ISLAND_HPP_
