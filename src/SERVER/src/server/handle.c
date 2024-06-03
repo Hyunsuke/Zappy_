@@ -33,5 +33,6 @@ void handle_new_client(server_t *server)
         if (new_socket > server->last_cli) {
             server->last_cli = new_socket;
         }
+        server->round[new_socket] = 0;
     }
 }

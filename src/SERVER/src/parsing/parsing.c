@@ -17,10 +17,7 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
         names_end++;
     }
     name_count = names_end - names_start;
-    s->list_names = my_malloc(name_count * sizeof(char *));
-    for (int j = 0; j < name_count; j++) {
-        s->list_names[j] = strdup(av[names_start + j]);
-    }
+    create_team(s, strdup(av[names_start + name_count - 1]));
     i = names_end - 1;
 }
 

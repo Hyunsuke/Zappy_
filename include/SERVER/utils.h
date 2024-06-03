@@ -45,6 +45,15 @@ player_t *get_player_by_id(struct_t *list, int id_player);
 void print_players(struct_t *list);
     /////////////////////////////////
 
+    //////////////////////// TEAMS ///
+int add_player_to_team(struct_t *s, int team_id, int player_id);
+team_t *create_team(struct_t *s, const char *name);
+int add_position_egg_to_team(struct_t *s, int team_id, int x, int y);
+position_t* get_and_remove_first_egg_position(struct_t *s, \
+    int team_id);
+team_t *get_team_by_id(struct_t *s, int team_id);
+team_t *get_team_by_name(struct_t *s, const char *name);
+    /////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// STRUCT GORBAGE COLLECTOR //////////////////////////

@@ -9,12 +9,14 @@
 
 static int execute_command_ia(struct_t *s, int fd, char *command)
 {
-    command_struct_t commands[] = {
-        {"Forward", c_forward}, {"Right", c_right}, {"Left", c_left},
-        {"Look", c_look}, {"Inventory", c_inventory},
-        {"Broadcast text", c_broadcast_txt}, {"Connect_nbr", c_connect_nbr},
-        {"Fork", c_fork}, {"Eject", c_eject}, {"Take object", c_take_obj},
-        {"Set object", c_set_obj}, {"Incantation", c_incantation}, {NULL, NULL}
+    command_struct_ia_t commands[] = {
+        {"Forward\r\n", c_forward}, {"Right\r\n", c_right},
+        {"Left\r\n", c_left}, {"Look\r\n", c_look},
+        {"Inventory\r\n", c_inventory}, {"Set object\r\n", c_set_obj},
+        {"Broadcast text\r\n", c_broadcast_txt},
+        {"Connect_nbr\r\n", c_connect_nbr}, {"Fork\r\n", c_fork},
+        {"Eject\r\n", c_eject}, {"Take object\r\n", c_take_obj},
+        {"Incantation\r\n", c_incantation}, {NULL, NULL}
     };
 
     for (int i = 0; commands[i].command != NULL; i++) {

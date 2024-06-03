@@ -16,7 +16,7 @@ typedef struct server_s {
     fd_set fd_tab;
     int last_cli;
     int activity;
-    int round;
+    int *round;
     ssize_t valread;
 } server_t;
 
