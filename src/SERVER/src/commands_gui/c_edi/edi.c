@@ -9,6 +9,6 @@
 
 int c_edi(struct_t *s, int nb_egg)
 {
-    dprintf("edi #%d\n", nb_egg);
+    dprintf(s->fd_gui, "edi #%d\n", nb_egg);
     return 0;
 }
