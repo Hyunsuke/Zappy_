@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pfk(struct_t *s)
+int c_pfk(struct_t *s, int id_player)
 {
-    printf("c_pfk\n");
+    dprintf(s->fd_gui, "pfk %d\n", id_player);
     return 0;
 }

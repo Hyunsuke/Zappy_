@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pex(struct_t *s)
+int c_pex(struct_t *s, int id_player)
 {
-    printf("c_pex\n");
+    dprintf(s->fd_gui, "pex #%d\n", id_player);
     return 0;
 }

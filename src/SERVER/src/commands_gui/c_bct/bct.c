@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-void parse_bct(const char *input, int *x, int *y)
+static void parse_bct(const char *input, int *x, int *y)
 {
     int result;
 

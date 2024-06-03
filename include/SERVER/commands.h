@@ -42,11 +42,11 @@ int c_sgt(struct_t *s, char *buffer);
 int c_sst(struct_t *s, char *buffer);
 
 int c_pnw(struct_t *s);
-int c_pex(struct_t *s);
-int c_pbc(struct_t *s);
+int c_pex(struct_t *s, int id_player);
+int c_pbc(struct_t *s, int id_player, char *name_team);
 int c_pic(struct_t *s);
-int c_pie(struct_t *s);
-int c_pfk(struct_t *s);
+int c_pie(struct_t *s, int x, int y, int incantation_result);
+int c_pfk(struct_t *s, int id_player);
 int c_pdr(struct_t *s);
 int c_pgt(struct_t *s);
 int c_pdi(struct_t *s);
