@@ -9,7 +9,7 @@
 
 static void def_data_tab(server_t *server)
 {
-    server->round = malloc(sizeof(int) * FD_SETSIZE);
+    server->round = my_malloc(sizeof(int) * FD_SETSIZE);
     if (server->round == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
