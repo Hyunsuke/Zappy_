@@ -10,10 +10,11 @@
     #define STRUCT_H
 
 ////////////////////////////////////
-////// PLAYERS ////////////////////
+////// PLAYERS && TEAMS ///////////
 //////////////////////////////////
 
     typedef struct player_s player_t;
+    typedef struct position_s position_t;
 
     typedef struct player_s {
         int food;
@@ -33,6 +34,14 @@
         player_t *next;
     } player_t;
 
+    typedef struct team_s {
+        char name[254];
+        int team_id;
+        int *players_id;
+        position_t **position_egg;
+        struct Team* next;
+    } team_t;
+
 
 ////////////////////////////////////
 ////// MAP ////////////////////////
@@ -49,6 +58,11 @@
         int *id_mob;
     } map_element_t;
 
+    typedef struct position_s {
+        int x;
+        int y;
+    } position_t;
+
 
 ////////////////////////////////////
 ////// ALL ////////////////////////
@@ -60,12 +74,12 @@
         int map_height;
         int client_nb;
         int time;
-        int *id_teams;
-        char **list_names;
         int fd_gui;
         map_element_t **map;
         player_t *head_player;
-        int next_id; // For incrementation id_player
+        int next_id_player; // For incrementation id_player
+        team_t *head_team;
+        int next_id_team; // For incrementation id_team
     } struct_t;
 
 
