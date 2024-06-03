@@ -9,8 +9,12 @@
 
 int c_tna(struct_t *s, char *buffer)
 {
+    team_t *current_team = s->head_team;
+
     (void)buffer;
-    for (int n = 0; s->list_names[n]; n++)
-        dprintf(s->fd_gui, "tna %s\n", s->list_names[n]);
+    while (current_team != NULL) {
+        dprintf(s->fd_gui, "tna %s\n", current_team->name);
+        current_team = current_team->next;
+    }
     return 0;
 }

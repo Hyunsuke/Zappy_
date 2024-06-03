@@ -65,7 +65,10 @@ SRC	=	src/main.c	\
 		src/commands_gui/c_suc/suc.c \
 		src/commands_gui/c_sbp/sbp.c \
 		src/run_commands/run_commands_gui.c \
-		src/utils/players/get_team.c \
+		src/utils/team/add_team.c \
+		src/utils/team/create_team.c \
+		src/utils/team/egg_team.c \
+		src/utils/team/get_team.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
