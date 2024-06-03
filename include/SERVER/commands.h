@@ -49,12 +49,12 @@ int c_pie(struct_t *s, int x, int y, int incantation_result);
 int c_pfk(struct_t *s, int id_player);
 int c_pdr(struct_t *s, int id_player, int nb_rsc);
 int c_pgt(struct_t *s, int id_player, int nb_rsc);
-int c_pdi(struct_t *s);
-int c_enw(struct_t *s);
-int c_ebo(struct_t *s);
-int c_edi(struct_t *s);
-int c_seg(struct_t *s);
-int c_smg(struct_t *s);
+int c_pdi(struct_t *s, int id_player);
+int c_enw(struct_t *s, int nb_egg, int nb_player, int *pos);
+int c_ebo(struct_t *s, int nb_egg);
+int c_edi(struct_t *s, int nb_egg);
+int c_seg(struct_t *s, char *name_team);
+int c_smg(struct_t *s, char *msg);
 int c_suc(struct_t *s);
 int c_sbp(struct_t *s);
 
