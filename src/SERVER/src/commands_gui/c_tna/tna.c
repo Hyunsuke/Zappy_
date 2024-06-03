@@ -10,6 +10,7 @@
 int c_tna(struct_t *s, char *buffer)
 {
     (void)buffer;
-    printf("c_tna\n");
+    for (int n = 0; s->list_names[n]; n++)
+        dprintf(s->fd_gui, "tna %s\n", s->list_names[n]);
     return 0;
 }
