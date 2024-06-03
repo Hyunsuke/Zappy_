@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pbc(struct_t *s)
+int c_pbc(struct_t *s, int id_player, char *name_team)
 {
-    printf("c_pbc\n");
+    dprintf(s->fd_gui, "pbc: #%d %s\n", id_player, name_team);
     return 0;
 }
