@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pdr(struct_t *s)
+int c_pdr(struct_t *s, int id_player, int nb_rsc)
 {
-    printf("c_pdr\n");
+    dprintf(s->fd_gui, "pdr #%d %d\n", id_player, nb_rsc);
     return 0;
 }
