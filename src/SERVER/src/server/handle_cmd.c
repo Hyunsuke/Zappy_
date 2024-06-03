@@ -19,6 +19,9 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
         if (strcmp(buffer, s->list_names[i]) == 0) {
             printf("It's AI\n");
             print_response("Server: You're an AI\n", client_fd);
+            add_player(s, client_fd, s->id_teams[i]);
+            print_players(s);
+            server->round[client_fd]++;
             return;
         }
     }
@@ -27,10 +30,11 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
 
 void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
 {
-    if (server->round == 0) {
+    if (server->round[client_fd] == 0) {
         if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
             printf("It's GUI\n");
             print_response("Server: You're a GUI\n", client_fd);
+            server->round[client_fd]++;
         } else {
             gestion_team_name(server, s, buffer, client_fd);
         }
@@ -52,7 +56,6 @@ int receive_cmd(server_t *server, struct_t *s, char *buffer, int i)
         printf("-> %s", buffer);
         gestion_cmd(server, s, buffer, i);
         printf("\n");
-        server->round++;
         return i;
     }
 }
