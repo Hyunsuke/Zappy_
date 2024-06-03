@@ -7,6 +7,16 @@
 
 #include "all.h"
 
+void gestion_function(server_t *server, struct_t *s, char *buffer,
+    int client_fd)
+{
+    if (get_player_by_fd(s, client_fd) != NULL) {
+        run_commands_ia(s, client_fd, buffer);
+    } else if (s->fd_gui != -1) {
+        run_commands_gui(s, client_fd, buffer);
+    }
+}
+
 void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
@@ -34,6 +44,7 @@ void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
         if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
             printf("It's GUI\n");
             print_response("Server: You're a GUI\n", client_fd);
+            s->fd_gui = client_fd;
             server->round[client_fd]++;
         } else {
             gestion_team_name(server, s, buffer, client_fd);

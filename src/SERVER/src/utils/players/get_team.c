@@ -9,7 +9,7 @@
 
 char *get_team_by_id(struct_t *s, int id)
 {
-    for (int i = 0; s->id_teams[i] != NULL; i++) {
+    for (int i = 0; s->id_teams[i]; i++) {
         if (s->id_teams[i] == id) {
             return s->list_names[i];
         }

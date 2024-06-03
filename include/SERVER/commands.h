@@ -58,6 +58,9 @@ int c_smg(struct_t *s);
 int c_suc(struct_t *s);
 int c_sbp(struct_t *s);
 
+int run_commands_gui(struct_t *s, int fd, char *buffer);
+int run_commands_ia(struct_t *s, int fd, char *buffer);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////// STRUCT ///////////////////////////////////////////////
