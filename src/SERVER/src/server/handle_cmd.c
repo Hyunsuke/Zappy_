@@ -17,19 +17,19 @@ void gestion_function(server_t *server, struct_t *s, char *buffer,
     }
 }
 
-void gestion_team_name(server_t *server, struct_t *s, char *buffer,
-    int client_fd)
+void gestion_team_name(server_t *server, struct_t *s, char *buffer, int client_fd)
 {
     size_t len = strlen(buffer);
     team_t *team;
     char *team_name;
 
-    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
+    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {
         buffer[len - 2] = '\0';
+    }
     team_name = strtok(buffer, "\r\n");
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
-        printf("Name team unknow\n");
+        printf("Name team unknown\n");
         return;
     }
     printf("It's AI\n");
@@ -37,8 +37,6 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     add_player(s, client_fd, team->team_id);
     print_players(s);
     server->round[client_fd]++;
-    return;
-    print_response("Team name that you gave don't exist\n", client_fd);
 }
 
 void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
