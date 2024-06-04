@@ -9,7 +9,6 @@
 
 int c_forward(struct_t *s, int fd)
 {
-    printf("LUIGIIIIIIIIIIII\n");
     printf("c_forward\n");
     return 0;
 }
