@@ -14,8 +14,6 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
         sky(screenWidth, screenHeight),
         uiManager(screenWidth, screenHeight) {
 
-    InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
-    SetTargetFPS(60);
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -30,9 +28,7 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
     InitializeMap(mapWidth, mapHeight);
 }
 
-Game::~Game() {
-    CloseWindow();
-}
+Game::~Game() {}
 
 void Game::InitializeMap(int width, int height) {
     float spacing = 15.0f;

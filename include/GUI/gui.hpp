@@ -36,4 +36,9 @@
 #include "Particles/Particle.hpp"
 #include "Particles/ParticleSystem.hpp"
 
+
+//////////////////
+
+#include "Menu/menu.hpp"
+
 #endif /* !GUI_HPP_ */
