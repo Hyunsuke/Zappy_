@@ -11,13 +11,15 @@ static int execute_command_gui(struct_t *s, char *command, char *buffer)
 {
     command_struct_gui_t commands[] = {
         {"msz", c_msz}, {"bct", c_bct}, {"mct", c_mct},
-        {"tna", c_tna}, {"ppo", c_ppo}, {"plv", c_plv}, {"pin", c_pin},
-        {"sgt", c_sgt}, {"sst", c_sst}, {NULL, NULL}
+        {"tna", c_tna}, {"ppo", c_ppo}, {"plv", c_plv},
+        {"pin", c_pin}, {"sgt", c_sgt},
+        {"sst", c_sst}, {NULL, NULL}
     };
 
     for (int i = 0; commands[i].command != NULL; i++) {
-        if (strcmp(commands[i].command, command) == 0)
+        if (strcmp(commands[i].command, command) == 0) {
             return commands[i].func(s, buffer);
+        }
     }
     printf("Run_commands_GUI -> Unknown command: %s\n", command);
     c_suc(s);
@@ -32,7 +34,7 @@ int run_commands_gui(struct_t *s, int fd, char *buffer)
         printf("Error FD GUI not good\n");
         return -1;
     }
-    command = strtok(buffer, "\n");
+    command = strtok(buffer, "\r\n");
     if (command == NULL) {
         printf("Command not found -> run_commands_GUI\n");
         return -1;

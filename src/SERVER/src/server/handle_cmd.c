@@ -10,10 +10,10 @@
 void gestion_function(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
-    if (get_player_by_fd(s, client_fd) != NULL) {
-        run_commands_ia(s, client_fd, buffer);
-    } else if (s->fd_gui != -1) {
+    if (client_fd == s->fd_gui && s->fd_gui != -1) {
         run_commands_gui(s, client_fd, buffer);
+    } else {
+        run_commands_ia(s, client_fd, buffer);
     }
 }
 
@@ -22,10 +22,12 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
 {
     size_t len = strlen(buffer);
     team_t *team;
+    char *team_name;
 
     if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
         buffer[len - 2] = '\0';
-    team = get_team_by_name(s, buffer);
+    team_name = strtok(buffer, "\r\n");
+    team = get_team_by_name(s, team_name);
     if (team == NULL) {
         printf("Name team unknow\n");
         return;
@@ -53,6 +55,7 @@ void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
     } else {
         print_response("Command: ", client_fd);
         print_response(buffer, client_fd);
+        gestion_function(server, s, buffer, client_fd);
     }
 }
 

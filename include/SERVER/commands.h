@@ -69,8 +69,9 @@ int run_commands_ia(struct_t *s, int fd, char *buffer);
 typedef struct {
     char *command;
     int (*func)(struct_t *s, char *buffer);
-    } command_struct_gui_t;
-    typedef struct {
+} command_struct_gui_t;
+
+typedef struct {
     char *command;
     int (*func)(struct_t *s, int fd);
 } command_struct_ia_t;

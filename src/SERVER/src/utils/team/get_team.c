@@ -24,8 +24,9 @@ team_t *get_team_by_name(struct_t *s, const char *name)
     team_t *current_team = s->head_team;
 
     while (current_team) {
-        if (strncmp(current_team->name, name, 254) == 0)
+        if (strcmp(current_team->name, name) == 0) {
             return current_team;
+        }
         current_team = current_team->next;
     }
     return NULL;
