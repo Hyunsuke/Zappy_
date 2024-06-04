@@ -69,6 +69,7 @@ SRC	=	src/main.c	\
 		src/utils/team/create_team.c \
 		src/utils/team/egg_team.c \
 		src/utils/team/get_team.c \
+		src/utils/map.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
