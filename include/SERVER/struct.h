@@ -14,6 +14,7 @@
 
 typedef struct player_s player_t;
 typedef struct position_s position_t;
+typedef struct team_s team_t;
 
 typedef struct player_s {
     int food;
@@ -38,7 +39,7 @@ typedef struct team_s {
     int team_id;
     int *players_id;
     position_t **position_egg;
-    struct Team* next;
+    team_t *next;
 } team_t;
 
 
