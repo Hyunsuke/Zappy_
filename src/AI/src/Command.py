@@ -4,6 +4,8 @@ from sys import stdout
 import sys
 import socket
 from InventoryManager import InventoryManager
+import threading
+import os
 
 
 class Command:
@@ -11,19 +13,54 @@ class Command:
         self.team_name = team_name
         self.socket = socket
         self.current_inventory = current_inventory
+        self.data_received = ""
+        self.commandWaitingRoom = 0
+        self.commandList = []
+        thread_reception = threading.Thread(target=self.reception_loop)
+        thread_reception.start()
+        thread_send = threading.Thread(target=self.sendArrayCmd)
+        thread_send.start()
+
+
+    def sendArrayCmd(self):
+        while True:
+            try:
+                if (self.commandWaitingRoom < 0):
+                    print("Debuggingggggggggggggggggggggggg")
+                if (self.commandWaitingRoom < 10):
+                    if (len(self.commandList) != 0):
+                        self.socket.sendall(f"{self.commandList[0]}\n".encode())
+                        self.commandWaitingRoom += 1
+                        self.commandList.pop(0)
+            except socket.error as e:
+                print(f"Error sending command '{self.commandList[0]}': {e}")
+                # return None
+                sys.exit(84)
+
 
     def send_command(self, command):
-        try:
-            self.socket.sendall(f"{command}\n".encode())
-            response = self.socket.recv(1024).decode().strip()
-            print(response)
-            if response == "dead":
-                print("Dead")
-                sys.exit(1)
-            return response
-        except socket.error as e:
-            print(f"Error sending command '{command}': {e}")
-            return None
+        self.commandList.append(command)
+
+    def reception_loop(self):
+        while True:
+            try:
+                # Recevoir des données depuis le socket
+                data = self.socket.recv(1024).decode().strip()
+                if not data:
+                    # Gérer la déconnexion ou la fin de la communication
+                    print("Déconnexion du serveur")
+                    break
+                if data == "dead":
+                    print("Dead then exit")
+                    os._exit(0)
+                self.data_received = data
+                if (data != "ko"): # Et aussi différent d'un broadcast, faut voir.
+                    self.commandWaitingRoom -= 1
+                # Imprimer les données reçues
+                print("Données reçues :", data)
+            except socket.error as e:
+                print(f"Erreur lors de la réception des données : {e}")
+                break
 
     def move_forward(self, needPrint=False):
         response = self.send_command("Forward")
