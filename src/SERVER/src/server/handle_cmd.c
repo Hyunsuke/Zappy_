@@ -17,7 +17,8 @@ void gestion_function(server_t *server, struct_t *s, char *buffer,
     }
 }
 
-void gestion_team_name(server_t *server, struct_t *s, char *buffer, int client_fd)
+void gestion_team_name(server_t *server, struct_t *s, char *buffer,
+    int client_fd)
 {
     size_t len = strlen(buffer);
     team_t *team;

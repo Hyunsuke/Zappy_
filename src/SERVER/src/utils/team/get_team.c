@@ -10,6 +10,7 @@
 team_t *get_team_by_id(struct_t *s, int team_id)
 {
     team_t *current_team = s->head_team;
+
     while (current_team) {
         if (current_team->team_id == team_id)
             return current_team;
@@ -21,6 +22,7 @@ team_t *get_team_by_id(struct_t *s, int team_id)
 team_t *get_team_by_name(struct_t *s, const char *name)
 {
     team_t *current_team = s->head_team;
+
     while (current_team) {
         if (strcmp(current_team->name, name) == 0) {
             return current_team;
