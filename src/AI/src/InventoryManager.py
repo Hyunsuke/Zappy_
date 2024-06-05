@@ -33,7 +33,7 @@ class InventoryManager:
 
     def update_inventory(self, inventory_string, p=False):
         if inventory_string is None or inventory_string.startswith("[ food") == False:
-            print("Error: Inventory string is None")
+            # print("Error: Inventory string is None")
             return
         print("Update Inventory " +  inventory_string)
         # Nettoyer et séparer la chaîne de caractères

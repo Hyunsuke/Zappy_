@@ -6,6 +6,7 @@ from sys import argv, exit, stdout
 from InventoryManager import InventoryManager
 from Command import Command
 import time
+import os
 
 
 class ZappyClient:
@@ -16,15 +17,16 @@ class ZappyClient:
             self.socket.connect((self.host, self.port))
             self.buffer = ""
             self.level = 1
+            # self.actualizedInventory = False
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
-            self.current_inventory.update_inventory(self.cmd.inventory())
+            self.updateInfos()
+            self.cmd.sendArrayCmd()
             self.main_loop()
         except socket.error as e:
             print(f"Socket error: {e}")
-            sys.exit(1)
-
+            os._exit(1)
 
     def parse_arguments(self):
         for i in argv:
@@ -64,16 +66,27 @@ class ZappyClient:
         ("thystame", 12)
     ]
 
+    def blockingBuffer(self):
+        while self.cmd.getWaitingRoom() > 0:
+            continue
+
+    def updateInfos(self):
+        self.current_inventory.update_inventory(self.cmd.inventory())
+        self.cmd.look()
+
     def main_loop(self):
         try:
             while True:
-                self.current_inventory.update_inventory(self.cmd.inventory())
-                self.cmd.move_forward()
-                # self.cmd.broadcast("I'm_moving_forward")
-                if self.current_inventory.current_inventory['food'] < 2:
-                    self.eat_nearest_ressource("food", False)
+                self.blockingBuffer()
+                # print("Blocking buffered passsed.")
+                if self.current_inventory.current_inventory['food'] < 3:
+                    self.eat_nearest_ressource("food", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
                 else:
                     self.look_for_rarest_stone()
+                self.cmd.move_forward()
+                # self.cmd.broadcast("I'm_moving_forward")
+                self.updateInfos()
+                self.cmd.sendArrayCmd()
 
         except KeyboardInterrupt:
             print("Terminating AI client.")
@@ -81,9 +94,14 @@ class ZappyClient:
             self.socket.close()
 
     def eat_nearest_ressource(self, ressource, needPrint=False):
-        response = self.cmd.look()
+        # print("Eat nearest resource")
+        if (self.cmd.actualizedInventory == False):
+            return
+        # print("We managed to get a look string. Let's eat")
+        response = self.cmd.lookString
         if response is None:
             return
+        self.cmd.actualizedInventory = False
         a = 0
         objects = response.split(",")
         for object in objects:
@@ -116,7 +134,6 @@ class ZappyClient:
             exit(1)
 
     def move_to_tile(self, target_tile, needPrint=False):
-        self.cmd.look(needPrint)
         if target_tile == 0:
             return
         a = 0
@@ -149,7 +166,6 @@ class ZappyClient:
             while c != target_tile:
                 self.cmd.move_forward(needPrint)
                 c += 1
-        self.cmd.look(needPrint)
 
 if __name__ == "__main__":
     client = ZappyClient()
