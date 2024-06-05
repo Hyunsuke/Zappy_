@@ -11,7 +11,6 @@ void init_struct(struct_t *s)
 {
     s->head_player = NULL;
     s->next_id_player = 0;
-    s->next_id_team = 0;
     s->fd_gui = -1;
     generator_map(s);
 }
