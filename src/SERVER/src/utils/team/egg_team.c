@@ -26,7 +26,7 @@ int add_position_egg_to_team(struct_t *s, int team_id, int x, int y)
         sizeof(position_t *) * (pos_count + 2));
     team->position_egg[pos_count] = new_position;
     team->position_egg[pos_count + 1] = NULL;
-    return 0;
+    return pos_count;
 }
 
 // Function to get and remove the first egg position from a team
