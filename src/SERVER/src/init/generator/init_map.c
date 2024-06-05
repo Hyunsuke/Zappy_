@@ -18,11 +18,11 @@ static void init_map_element(map_element_t *element, int client_nb)
     element->mendiane = false;
     element->phiras = false;
     element->thystame = false;
-    element->id_mob = my_malloc(client_nb * sizeof(int));
+    element->id_mob = my_malloc(client_nb * sizeof(int) + 1);
     if (element->id_mob == NULL)
         return;
     for (int i = 0; i < client_nb; i++)
-        element->id_mob[i] = -1;
+        element->id_mob[i] = NULL;
 }
 
 void init_map(struct_t *s)

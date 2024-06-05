@@ -13,16 +13,19 @@ void add_id_to_map_element(map_element_t *map_element, int id_player)
     int *new_id_mob;
 
     if (map_element->id_mob == NULL) {
-        map_element->id_mob = my_malloc(sizeof(int));
+        map_element->id_mob = my_malloc(sizeof(int) * 2);
         map_element->id_mob[0] = id_player;
+        map_element->id_mob[1] = NULL;
     } else {
-        while (map_element->id_mob[count] != 0)
+        while (map_element->id_mob[count] != NULL) {
+            printf("%d: %d\n", count, map_element->id_mob[count]);
             count++;
+        }
         new_id_mob = my_realloc(map_element->id_mob,
             (count + 2) * sizeof(int));
         map_element->id_mob = new_id_mob;
         map_element->id_mob[count] = id_player;
-        map_element->id_mob[count + 1] = 0;
+        map_element->id_mob[count + 1] = NULL;
     }
 }
 
