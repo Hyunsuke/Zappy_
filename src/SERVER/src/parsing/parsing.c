@@ -13,6 +13,7 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
     int names_end = names_start;
     int name_count = 0;
 
+    s->head_team = NULL;
     while (names_end < ac && av[names_end][0] != '-') {
         create_team(s, strdup(av[names_start + name_count]));
         name_count++;
