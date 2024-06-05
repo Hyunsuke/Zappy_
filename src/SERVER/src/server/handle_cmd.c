@@ -21,7 +21,7 @@ void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     size_t len = strlen(buffer);
-    team_t *team;
+    team_t *team = NULL;
     char *team_name;
 
     if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {

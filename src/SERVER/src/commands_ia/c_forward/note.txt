@@ -1,3 +1,0 @@
-- get pos x et y du mob ;;
-- regarder dans quelle direction il est
-- changer les pos du mob dans la struct mob et dans la map
