@@ -12,7 +12,8 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
         screenHeight(screenHeight),
         gameMap(mapWidth,mapHeight),
         sky(screenWidth, screenHeight),
-        uiManager(screenWidth, screenHeight) {
+        uiManager(screenWidth, screenHeight),
+        settings(screenWidth, screenHeight) {
 
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");

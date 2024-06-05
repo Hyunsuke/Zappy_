@@ -9,14 +9,14 @@
 
 Menu::Menu(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight), host("localhost"), port(4242),
-      startGame(false), openSettings(false), hostActive(false), portActive(false),
-      hostBackspaceTime(0.0f), portBackspaceTime(0.0f) {
+      startGame(false), hostActive(false), portActive(false),
+      hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight) {
     std::strcpy(hostBuffer, host.c_str());
     std::sprintf(portBuffer, "%d", port);
 }
 
 void Menu::Run() {
-    while (!WindowShouldClose() && !startGame && !openSettings) {
+    while (!WindowShouldClose() && !startGame) {
         HandleInput();
         Draw();
     }
@@ -32,10 +32,6 @@ int Menu::GetPort() const {
 
 bool Menu::ShouldStartGame() const {
     return startGame;
-}
-
-bool Menu::ShouldOpenSettings() const {
-    return openSettings;
 }
 
 bool Menu::IsMouseOverButton(Rectangle button) {
@@ -68,10 +64,6 @@ void Menu::HandleBackspace(char* buffer, bool& isActive, float& backspaceTime) {
 void Menu::HandleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
         startGame = true;
-    }
-
-    if (IsKeyPressed(KEY_TAB)) {
-        openSettings = true;
     }
 
     // Handle text input for host
@@ -120,7 +112,7 @@ void Menu::HandleInput() {
         } else if (IsMouseOverButton(connectButton)) {
             startGame = true;
         } else if (IsMouseOverButton(settingsButton)) {
-            openSettings = true;
+            settings.Open();
         } else {
             hostActive = false;
             portActive = false;
@@ -130,6 +122,13 @@ void Menu::HandleInput() {
     // Update host and port values
     host = std::string(hostBuffer);
     port = std::atoi(portBuffer);
+
+    if (settings.IsOpen()) {
+        settings.Update();
+        if (!settings.IsOpen()) {
+            UpdateWindowSize(settings.GetScreenWidth(), settings.GetScreenHeight());
+        }
+    }
 }
 
 void Menu::Draw() {
@@ -152,5 +151,14 @@ void Menu::Draw() {
     DrawRectangle(screenWidth / 2 - 50, screenHeight - 80, 100, 40, LIGHTGRAY);
     DrawText("Settings", screenWidth / 2 - MeasureText("Settings", 20) / 2, screenHeight - 70, 20, BLACK);
 
+    settings.Draw();
+
     EndDrawing();
+}
+
+void Menu::UpdateWindowSize(int width, int height) {
+    screenWidth = width;
+    screenHeight = height;
+    SetWindowSize(screenWidth, screenHeight);
+    settings.UpdateLayout(screenWidth, screenHeight);
 }

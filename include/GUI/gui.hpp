@@ -41,4 +41,6 @@
 
 #include "Menu/menu.hpp"
 
+#include "Settings/settings.hpp"
+
 #endif /* !GUI_HPP_ */

@@ -18,11 +18,11 @@ public:
     std::string GetHost() const;
     int GetPort() const;
     bool ShouldStartGame() const;
-    bool ShouldOpenSettings() const;
 
 private:
     void Draw();
     void HandleInput();
+    void UpdateWindowSize(int width, int height);
     bool IsMouseOverButton(Rectangle button);
     bool IsMouseOverTextBox(Rectangle textBox);
     void HandleBackspace(char* buffer, bool& isActive, float& backspaceTime);
@@ -32,13 +32,14 @@ private:
     std::string host;
     int port;
     bool startGame;
-    bool openSettings;
     char hostBuffer[256];
     char portBuffer[6];
     bool hostActive;
     bool portActive;
     float hostBackspaceTime;
     float portBackspaceTime;
+
+    Settings settings;
 };
 
 #endif // MENU_HPP_

@@ -21,6 +21,7 @@
 #include "../Manager/UIManager.hpp"
 #include "../Manager/RayManager.hpp"
 #include "../Particles/ParticleSystem.hpp"
+#include "../Settings/settings.hpp"
 
 class Game {
 public:
@@ -42,6 +43,7 @@ private:
     std::unique_ptr<ShaderManager> shaderManager;
     UIManager uiManager;
     RayManager rayManager;
+    Settings settings;
 
     std::shared_ptr<Island> selectedIsland;
 };

@@ -21,9 +21,7 @@ int main() {
         Menu menu(screenWidth, screenHeight);
         menu.Run();
 
-        if (menu.ShouldOpenSettings()) {
-            // Open settings menu (not implemented here, but you can add it similarly)
-        } else if (menu.ShouldStartGame()) {
+        if (menu.ShouldStartGame()) {
             std::string host = menu.GetHost();
             int port = menu.GetPort();
             Game game(screenWidth, screenHeight, 10, 10); // Pass host and port to the Game
