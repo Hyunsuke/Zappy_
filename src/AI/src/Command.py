@@ -18,7 +18,9 @@ class Command:
         self.dataIndex = 0
         self.debug = 0
         self.lookString = ""
-        self.actualizedInventory = False
+        self.isLookUpdated = False
+        self.inventoryString = ""
+        self.isInventoryUpdated = False
         self.commandList = []
         self.responseList = []
         thread_reception = threading.Thread(target=self.reception_loop)
@@ -98,7 +100,10 @@ class Command:
             self.adjustEject()
         if self.responseList[0].startswith("Look"):
             self.lookString = self.data_received
-            self.actualizedInventory = True
+            self.isLookUpdated = True
+        if self.responseList[0].startswith("Inventory"):
+            self.inventoryString = self.data_received
+            self.isInventoryUpdated = True
 
 
     def adjustEject(self):
@@ -130,55 +135,47 @@ class Command:
                 self.current_inventory.shared_inventory[objectTaken] += 1
 
     def move_forward(self, needPrint=False):
-        response = self.send_command("Forward")
+        self.send_command("Forward")
         if needPrint:
-            print("Move forward : " + response)
-        return response
+            print("Move forward")
 
     def turn_right(self, needPrint=False):
-        response = self.send_command("Right")
+        self.send_command("Right")
         if needPrint:
-            print("Turn right : " + response)
-        return response
+            print("Turn right")
 
     def turn_left(self, needPrint=False):
-        response = self.send_command("Left")
+        self.send_command("Left")
         if needPrint:
-            print("Turn left : " + response)
-        return response
+            print("Turn left")
 
     def look(self, needPrint=False):
-        response = self.send_command("Look")
+        self.send_command("Look")
         if needPrint:
-            print("Look : " + response)
-        return response
+            print("Look : ")
 
     def inventory(self, needPrint=False):
-        response = self.send_command("Inventory")
+        self.send_command("Inventory")
         if needPrint:
-            print("Inventory : " + response)
-        return response
+            print("Inventory : ")
 
     def broadcast(self, message):
         return self.send_command(f"Broadcast {message}")
 
     def connect_nbr(self, needPrint=False):
-        response = self.send_command("Connect_nbr")
+        self.send_command("Connect_nbr")
         if needPrint:
-            print("Connect_nbr : " + response)
-        return response
+            print("Connect_nbr : ")
 
     def fork(self, needPrint=False):
-        response = self.send_command("Fork")
+        self.send_command("Fork")
         if needPrint:
-            print("Fork : " + response)
-        return response
+            print("Fork : ")
 
     def eject(self, needPrint=False):
-        response = self.send_command("Eject")
+        self.send_command("Eject")
         if needPrint:
-            print("Eject : " + response)
-        return response
+            print("Eject : ")
 
     def take_object(self, object):
         # print("Take object : " + object)
@@ -199,10 +196,9 @@ class Command:
 
 
     def incantation(self, needPrint=False):
-        response = self.send_command("Incantation")
+        self.send_command("Incantation")
         if needPrint:
-            print("Incantation : " + response)
-        return response
+            print("Incantation : ")
 
     def getBroadcastMessage(self, response):
         if (response == "ok" or response == "ko"):

@@ -17,7 +17,6 @@ class ZappyClient:
             self.socket.connect((self.host, self.port))
             self.buffer = ""
             self.level = 1
-            # self.actualizedInventory = False
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
@@ -71,15 +70,16 @@ class ZappyClient:
             continue
 
     def updateInfos(self):
-        self.current_inventory.update_inventory(self.cmd.inventory())
+        self.cmd.inventory()
         self.cmd.look()
 
     def main_loop(self):
         try:
             while True:
                 self.blockingBuffer()
+                self.update_inventory()
                 # print("Blocking buffered passsed.")
-                if self.current_inventory.current_inventory['food'] < 3:
+                if self.current_inventory.current_inventory['food'] < 5:
                     self.eat_nearest_ressource("food", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
                 else:
                     self.look_for_rarest_stone()
@@ -93,15 +93,36 @@ class ZappyClient:
         finally:
             self.socket.close()
 
+    def update_inventory(self, p=False):
+        if (self.cmd.isInventoryUpdated == False):
+            return
+        inventory_string = self.cmd.inventoryString
+        if inventory_string is None or inventory_string.startswith("[ food") == False:
+            # print("Error: Inventory string is None")
+            return
+        # Nettoyer et séparer la chaîne de caractères
+        inventory_string = inventory_string.strip('[] ')
+        items = inventory_string.split(', ')
+
+        # Parcourir les éléments et mettre à jour le dictionnaire
+        for item in items:
+            # if (item == "ok" or "ko"): # Gestion d'erreur du broadcast
+            #     print("Broadcast response: ", item)
+            #     return
+            key, value = item.split()
+            self.current_inventory.current_inventory[key] = int(value)
+        if (p == True):
+            print("Inventory updated: ", self.current_inventory.current_inventory)
+
     def eat_nearest_ressource(self, ressource, needPrint=False):
         # print("Eat nearest resource")
-        if (self.cmd.actualizedInventory == False):
+        if (self.cmd.isLookUpdated == False):
             return
         # print("We managed to get a look string. Let's eat")
         response = self.cmd.lookString
         if response is None:
             return
-        self.cmd.actualizedInventory = False
+        self.cmd.isLookUpdated = False
         a = 0
         objects = response.split(",")
         for object in objects:
@@ -109,14 +130,16 @@ class ZappyClient:
             for obj in object:
                 if obj.startswith(ressource):
                     print("Moving to tile: ", a)
-                    self.move_to_tile(a, needPrint)
+                    self.move_to_tile(a)
                     self.cmd.take_object(ressource)
                     return
             a += 1
 
     def look_for_rarest_stone(self):
         print("Looking for rarest stone")
-        response = self.cmd.look()
+        if (self.cmd.isInventoryUpdated == False):
+            return
+        response = self.cmd.inventoryString
         total_value = 0
         # print(response)
         for key, value in self.current_inventory.objective_inventory.items():
