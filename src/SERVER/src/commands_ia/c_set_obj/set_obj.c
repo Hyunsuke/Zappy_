@@ -7,25 +7,6 @@
 
 #include "all.h"
 
-static int get_resource_code(const char *obj)
-{
-    if (strcmp(obj, "food") == 0)
-        return 0;
-    if (strcmp(obj, "linemate") == 0)
-        return 1;
-    if (strcmp(obj, "deraumere") == 0)
-        return 2;
-    if (strcmp(obj, "sibur") == 0)
-        return 3;
-    if (strcmp(obj, "mendiane") == 0)
-        return 4;
-    if (strcmp(obj, "phiras") == 0)
-        return 5;
-    if (strcmp(obj, "thystame") == 0)
-        return 6;
-    return -1;
-}
-
 static int remove_obj_from_player(player_t *player, int id_obj)
 {
     if (id_obj == 0 && player->food > 0) {
@@ -101,7 +82,7 @@ int c_set_obj(struct_t *s, int fd)
 
     if (remove_obj_from_player(player, id_obj) == 84) {
         print_response("ko\n", fd);
-        return;
+        return -1;
     }
     add_obj_to_map(s, player, id_obj);
     return 0;

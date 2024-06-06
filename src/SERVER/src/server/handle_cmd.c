@@ -39,7 +39,8 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     server->round[client_fd]++;
 }
 
-static void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
+static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
+    int client_fd)
 {
     if (server->round[client_fd] == 0) {
         if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
