@@ -72,6 +72,7 @@ SRC	=	src/main.c	\
 		src/utils/team/get_team.c \
 		src/utils/map.c \
 		src/utils/init.c \
+		src/utils/get_rsc_code.c \
 
 INCLUDEDIR = ../../include/SERVER/
 

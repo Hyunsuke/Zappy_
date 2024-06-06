@@ -55,7 +55,6 @@ void add_player(struct_t *s, int fd, int id_team)
     new_player->view_direction = 0;
     s->next_id_player++;
     new_player->id_player = s->next_id_player;
-    printf("---> %d\n", id_team);
     new_player->id_team = id_team;
     new_player->x = 0;
     new_player->y = 0;

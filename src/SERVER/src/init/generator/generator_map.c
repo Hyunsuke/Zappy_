@@ -7,44 +7,44 @@
 
 #include "all.h"
 
-static void add_resource_to_map(struct_t *s, int quantity, bool *resource_ptr)
+static void add_resource_to_map(struct_t *s, int quantity, int *resource_ptr)
 {
     int remaining = quantity;
     int x = 0;
     int y = 0;
-    bool *resource;
+    int *resource;
     map_element_t *element;
 
     while (remaining > 0) {
         x = rand() % s->map_width;
         y = rand() % s->map_height;
         element = &(s->map[y][x]);
-        resource = (bool *)((char *)element +
+        resource = (int *)((char *)element +
             ((char *)resource_ptr - (char *)&s->map[0][0].food));
-        if (!*resource) {
-            *resource = true;
+        if (*resource == 0) {
+            (*resource)++;
             remaining--;
         }
     }
 }
 
 static bool is_resource_in_row(map_element_t *row, int map_width,
-    bool *resource_ptr, bool *resource_base)
+    int *resource_ptr, int *resource_base)
 {
     map_element_t *element;
-    bool *ressource;
+    int *resource;
 
     for (int x = 0; x < map_width; x++) {
         element = &(row[x]);
-        ressource = (bool *)((char *)element +
+        resource = (int *)((char *)element +
             ((char *)resource_ptr - (char *)resource_base));
-        if (*ressource)
+        if (*resource > 0)
             return true;
     }
     return false;
 }
 
-static bool is_resource_present(struct_t *s, bool *resource_ptr)
+static bool is_resource_present(struct_t *s, int *resource_ptr)
 {
     for (int y = 0; y < s->map_height; y++) {
         if (is_resource_in_row(s->map[y], s->map_width, resource_ptr,
@@ -55,10 +55,10 @@ static bool is_resource_present(struct_t *s, bool *resource_ptr)
     return false;
 }
 
-static void ensure_minimum_resources(struct_t *s, bool **resources)
+static void ensure_minimum_resources(struct_t *s, int **resources)
 {
     map_element_t *element;
-    bool *resource;
+    int *resource;
     int x;
     int y;
 
@@ -67,9 +67,9 @@ static void ensure_minimum_resources(struct_t *s, bool **resources)
             x = rand() % s->map_width;
             y = rand() % s->map_height;
             element = &(s->map[y][x]);
-            resource = (bool *)((char *)element +
+            resource = (int *)((char *)element +
                 ((char *)resources[i] - (char *)&s->map[0][0].food));
-            *resource = true;
+            (*resource)++;
         }
     }
 }
@@ -78,7 +78,7 @@ void add_resources(struct_t *s)
 {
     int quantities[7];
     float densities[] = {0.5, 0.3, 0.15, 0.1, 0.1, 0.08, 0.05};
-    bool *resources[] = {
+    int *resources[] = {
         &s->map[0][0].food,
         &s->map[0][0].linemate,
         &s->map[0][0].deraumere,
