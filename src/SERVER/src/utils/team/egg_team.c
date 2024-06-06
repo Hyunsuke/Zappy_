@@ -46,3 +46,37 @@ position_t *get_and_remove_first_egg_position(struct_t *s,
     }
     return first_position;
 }
+
+static void remove_egg_in_position(team_t *team, int i, int j,
+    position_t position)
+{
+    while (team->position_egg[i] != NULL) {
+        if (team->position_egg[i]->x == position.x &&
+            team->position_egg[i]->y == position.x) {
+            my_free(team->position_egg[i]);
+        } else {
+            j++;
+            team->position_egg[j] = team->position_egg[i];
+        }
+        i++;
+    }
+    team->position_egg[j] = NULL;
+}
+
+/// @brief Function for removing all egg in position x and y
+/// @param s stuct all
+/// @param x position egg x
+/// @param y position egg y
+void remove_all_eggs_at_position_for_all_teams(struct_t *s, int x, int y)
+{
+    team_t *team = s->head_team;
+    position_t position = { x = x, y = y };
+    int i = 0;
+    int j = 0;
+
+    while (team != NULL) {
+        if (team->position_egg)
+            remove_egg_in_position(team, i, j, position);
+        team = team->next;
+    }
+}
