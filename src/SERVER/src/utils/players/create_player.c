@@ -10,9 +10,9 @@
 static void add_random_position_player(struct_t *s, player_t *new_player)
 {
     srand(time(NULL));
-    new_player->x = rand() % (s->map_width + 1);
-    new_player->y = rand() % (s->map_height + 1);
-    add_id_to_map_element(&s->map[new_player->x][new_player->y],
+    new_player->x = rand() % (s->map_width);
+    new_player->y = rand() % (s->map_height);
+    add_id_to_map_element(&s->map[new_player->y][new_player->x],
         new_player->id_player);
 }
 
@@ -55,7 +55,6 @@ void add_player(struct_t *s, int fd, int id_team)
     new_player->view_direction = 0;
     s->next_id_player++;
     new_player->id_player = s->next_id_player;
-    printf("---> %d\n", id_team);
     new_player->id_team = id_team;
     new_player->x = 0;
     new_player->y = 0;

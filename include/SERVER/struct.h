@@ -48,13 +48,13 @@ typedef struct team_s {
 //////////////////////////////////
 
 typedef struct map_element_s {
-    bool food;
-    bool linemate;
-    bool deraumere;
-    bool sibur;
-    bool mendiane;
-    bool phiras;
-    bool thystame;
+    int food;
+    int linemate;
+    int deraumere;
+    int sibur;
+    int mendiane;
+    int phiras;
+    int thystame;
     int *id_mob;
 } map_element_t;
 

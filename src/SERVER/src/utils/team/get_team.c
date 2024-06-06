@@ -12,9 +12,6 @@ team_t *get_team_by_id(struct_t *s, int team_id)
     team_t *current_team = s->head_team;
 
     while (current_team != NULL) {
-        printf(".%s.\n", current_team->name);
-        printf("%d\n", current_team->team_id);
-        printf("%d\n", team_id);
         if (current_team->team_id == team_id)
             return current_team;
         current_team = current_team->next;
