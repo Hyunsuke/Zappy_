@@ -14,6 +14,10 @@
 /////////////////////////// COMMANDS IA ///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 int c_forward(struct_t *s, int fd);
+void moove_left(struct_t *s, player_t *mob, int x, int y);
+void moove_right(struct_t *s, player_t *mob, int x, int y);
+void moove_bottom(struct_t *s, player_t *mob, int x, int y);
+void moove_top(struct_t *s, player_t *mob, int x, int y);
 int c_right(struct_t *s, int fd);
 int c_left(struct_t *s, int fd);
 int c_look(struct_t *s, int fd);
