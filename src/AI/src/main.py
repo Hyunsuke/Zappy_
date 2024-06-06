@@ -84,7 +84,6 @@ class ZappyClient:
                 else:
                     self.look_for_rarest_stone()
                 self.cmd.move_forward()
-                # self.cmd.broadcast("I'm_moving_forward")
                 self.updateInfos()
                 self.cmd.sendArrayCmd()
 
@@ -154,7 +153,7 @@ class ZappyClient:
             #     self.lookForTile(key)
         if total_value == 0:
             print("All stones have been found")
-            exit(1)
+            os._exit(1)
 
     def move_to_tile(self, target_tile, needPrint=False):
         if target_tile == 0:

@@ -67,6 +67,7 @@ class Command:
             os._exit(0)
         if data.startswith("message"):
             print("Le recv reçu est un broadcast")
+            self.adjustBroadcast()
         else:
             # print("Données > " + data)
             print("We received " + data + " for command " + self.responseList[0])
@@ -105,6 +106,30 @@ class Command:
             self.inventoryString = self.data_received
             self.isInventoryUpdated = True
 
+    def adjustBroadcast(self):
+        # print("Données reçu : " + self.data_received)
+        broadcastMessage = self.skip_to_first_comma(self.data_received)
+        print(broadcastMessage)
+        team_name, object, fct = self.getBroadcastMessage(broadcastMessage)
+        print("Name : " + team_name + " object : " + object + " fct : " + fct)
+        if team_name == self.team_name:
+            if fct == "Take":
+                if object in self.current_inventory.shared_inventory:
+                    self.current_inventory.shared_inventory[object] += 1
+                    # Check si current inventory + shared inventory >= objective inventory
+            if fct == "OK":
+                if object in self.current_inventory.shared_inventory:
+                    print("Il faut pop l'objet du shared inventory")
+                # Check si on a atteint l'objectif
+        # if (self.data_received)
+
+    def skip_to_first_comma(self, string):
+        pos = string.find(',')
+        if pos != -1:
+            return string[pos + 2:]  # Récupère la sous-chaîne après la première virgule et l'espace
+        else:
+            # Si aucune virgule n'est trouvée, retourne la chaîne originale
+            return string
 
     def adjustEject(self):
         return
@@ -118,7 +143,7 @@ class Command:
         cmd, object = self.responseList[0]
         if self.data_received == "ko":
             return
-        if object in self.current_inventory.current_inventory:
+        if object in self.current_inventory.shared_inventory:
             if self.current_inventory.shared_inventory[object] > 0:
                 self.current_inventory.shared_inventory[object] -= 1
 
@@ -130,7 +155,8 @@ class Command:
         # Check si c'est ok
         if self.data_received == "ko":
             return
-        if response[1] in self.current_inventory.shared_inventory:
+        if objectTaken in self.current_inventory.shared_inventory:
+            self.broadcastMaterial(objectTaken, "Take")
             if self.current_inventory.shared_inventory[objectTaken] > 0:
                 self.current_inventory.shared_inventory[objectTaken] += 1
 
@@ -180,20 +206,10 @@ class Command:
     def take_object(self, object):
         # print("Take object : " + object)
         self.send_command("Take " + object)
-        # if object in self.current_inventory.current_inventory:
-        #     if object != "food":
-        #         # self.broadcastMaterial(object)
-        #         self.current_inventory.shared_inventory[object] += 1
 
     def set_object_down(self, object):
         # print("Set object : " + object)
         self.send_command("Set " + object)
-        # if object in self.current_inventory.current_inventory:
-        #     if self.current_inventory.current_inventory[object] > 0:
-        #         if object != "food":
-        #             # self.broadcastMaterial(object)
-        #             self.current_inventory.shared_inventory[object] -= 1
-
 
     def incantation(self, needPrint=False):
         self.send_command("Incantation")
@@ -201,26 +217,25 @@ class Command:
             print("Incantation : ")
 
     def getBroadcastMessage(self, response):
-        if (response == "ok" or response == "ko"):
-            return response
-        parts = response('_')
-        if len(parts) != 2:
-            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object'")
+        parts = response.split('_')
+        if len(parts) != 3:
+            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object_fct'")
         # On récupère le nom de l'équipe et l'objet
         team_name = parts[0]
         object_name = parts[1]
-        return team_name, object_name
+        fct = parts[2]
+        return team_name, object_name, fct
 
-    def broadcastMaterial(self, material):
+    def broadcastMaterial(self, material, fct):
         if (material == "linemate"):
-            return self.broadcast(f"[{self.team_name}]_linemate")
+            return self.broadcast(f"{self.team_name}_linemate_{fct}")
         elif (material == "deraumere"):
-            return self.broadcast(f"[{self.team_name}]_deraumere")
+            return self.broadcast(f"{self.team_name}_deraumere_{fct}")
         elif (material == "sibur"):
-            return self.broadcast(f"[{self.team_name}]_sibur")
+            return self.broadcast(f"{self.team_name}_sibur_{fct}")
         elif (material == "mendiane"):
-            return self.broadcast(f"[{self.team_name}]_mendiane")
+            return self.broadcast(f"{self.team_name}_mendiane_{fct}")
         elif (material == "phiras"):
-            return self.broadcast(f"[{self.team_name}]_phiras")
+            return self.broadcast(f"{self.team_name}_phiras_{fct}")
         elif (material == "thystame"):
-            return self.broadcast(f"[{self.team_name}]_thystame")
+            return self.broadcast(f"{self.team_name}_thystame_{fct}")
