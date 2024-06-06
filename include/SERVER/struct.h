@@ -75,6 +75,7 @@ typedef struct struct_s {
     int client_nb;
     int time;
     int fd_gui;
+    char *buffer_cmd_ia;
     map_element_t **map;
     player_t *head_player;
     int next_id_player; // For incrementation id_player
