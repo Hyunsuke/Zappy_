@@ -39,10 +39,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
     //////////////////////// PLAYERS ///
-void add_player(struct_t *list, int fd, int id_team);
-player_t *get_player_by_fd(struct_t *list, int fd);
-player_t *get_player_by_id(struct_t *list, int id_player);
-void print_players(struct_t *list);
+void add_player(struct_t *s, int fd, int id_team);
+player_t *get_player_by_fd(struct_t *s, int fd);
+player_t *get_player_by_id(struct_t *s, int id_player);
+void print_players(struct_t *s);
     /////////////////////////////////
 
     //////////////////////// TEAMS ///
@@ -60,6 +60,7 @@ void remove_id_from_map_element(map_element_t *map_element, int id_player);
     /////////////////////////////////
 
 void init_struct(struct_t *s);
+void remove_all_eggs_at_position_for_all_teams(struct_t *s, int x, int y);
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// STRUCT GORBAGE COLLECTOR //////////////////////////

@@ -7,17 +7,7 @@
 
 #include "all.h"
 
-player_t *get_mob(struct_t *s, int fd)
-{
-    while (s->head_player != NULL) {
-        if (s->head_player->fd == fd) {
-            return s->head_player;
-        }
-        s->head_player = s->head_player->next;
-    }
-}
-
-void moove_top(struct_t *s, player_t *mob, int x, int y)
+static void moove_top(struct_t *s, player_t *mob, int x, int y)
 {
     if (mob->view_direction == 0) {
         printf("top\n");
@@ -31,7 +21,7 @@ void moove_top(struct_t *s, player_t *mob, int x, int y)
     }
 }
 
-void moove_bottom(struct_t *s, player_t *mob, int x, int y)
+static void moove_bottom(struct_t *s, player_t *mob, int x, int y)
 {
     if (mob->view_direction == 2) {
         printf("bottom\n");
@@ -44,7 +34,7 @@ void moove_bottom(struct_t *s, player_t *mob, int x, int y)
     }
 }
 
-void moove_right(struct_t *s, player_t *mob, int x, int y)
+static void moove_right(struct_t *s, player_t *mob, int x, int y)
 {
     if (mob->view_direction == 1) {
         printf("right\n");
@@ -58,7 +48,7 @@ void moove_right(struct_t *s, player_t *mob, int x, int y)
     }
 }
 
-void moove_left(struct_t *s, player_t *mob, int x, int y)
+static void moove_left(struct_t *s, player_t *mob, int x, int y)
 {
     if (mob->view_direction == 3) {
         printf("left\n");
@@ -73,10 +63,9 @@ void moove_left(struct_t *s, player_t *mob, int x, int y)
 
 int c_forward(struct_t *s, int fd)
 {
-    player_t *mob = get_mob(s, fd);
+    player_t *mob = get_player_by_fd(s, fd);
     int x = 0;
     int y = 0;
-    int top = 0;
 
     printf("c_forward\n");
     if (mob == NULL)
