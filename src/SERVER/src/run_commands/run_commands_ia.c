@@ -41,6 +41,7 @@ static int execute_command_ia(struct_t *s, int fd, char *command)
         {"Eject", c_eject}, {"Take object", c_take_obj},
         {"Incantation", c_incantation}, {NULL, NULL}
     };
+
     if (strncmp(command, "Set ", 4) == 0 ||
         strncmp(command, "Broadcast ", 10) == 0 ||
         strncmp(command, "Take ", 5) == 0) {
