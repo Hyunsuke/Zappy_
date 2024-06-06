@@ -24,7 +24,26 @@ static void config_obj(struct_t *s, char *command)
         count++;
     }
     s->obj[count] = '\0';
-    printf("OBJ: %s\n", s->obj);
+}
+
+static void check_cmd_with_obj(struct_t *s, char *command)
+{
+    if (strncmp(command, "Set ", 4) == 0 ||
+        strncmp(command, "Broadcast ", 10) == 0 ||
+        strncmp(command, "Take ", 5) == 0) {
+        config_obj(s, command);
+    }
+}
+
+static int check_function(struct_t *s, int fd, char *command,
+    command_struct_ia_t commands[])
+{
+    for (int i = 0; commands[i].command != NULL; i++) {
+        if (strcmp(commands[i].command, command) == 0)
+            return commands[i].func(s, fd);
+    }
+    printf("Run_commands_IA -> Unknown command: %s\n", command);
+    return -1;
 }
 
 static int execute_command_ia(struct_t *s, int fd, char *command)
@@ -36,24 +55,17 @@ static int execute_command_ia(struct_t *s, int fd, char *command)
         {"Set linemate", c_set_obj}, {"Set deraumere", c_set_obj},
         {"Set sibur", c_set_obj}, {"Set mendiane", c_set_obj},
         {"Set phiras", c_set_obj}, {"Set thystame", c_set_obj},
-        {"Broadcast text", c_broadcast_txt},
-        {"Connect_nbr", c_connect_nbr}, {"Fork", c_fork},
-        {"Eject", c_eject}, {"Take object", c_take_obj},
-        {"Incantation", c_incantation}, {NULL, NULL}
+        {"Broadcast text", c_broadcast_txt}, {"Fork", c_fork},
+        {"Connect_nbr", c_connect_nbr}, {"Eject", c_eject},
+        {"Take food", c_take_obj}, {"Take linemate", c_take_obj},
+        {"Take deraumere", c_take_obj}, {"Take sibur", c_take_obj},
+        {"Take mendiane", c_take_obj}, {"Take phiras", c_take_obj},
+        {"Take thystame", c_take_obj}, {"Incantation", c_incantation},
+        {NULL, NULL}
     };
 
-    if (strncmp(command, "Set ", 4) == 0 ||
-        strncmp(command, "Broadcast ", 10) == 0 ||
-        strncmp(command, "Take ", 5) == 0) {
-        printf("CONFIG\n");
-        config_obj(s, command);
-    }
-    for (int i = 0; commands[i].command != NULL; i++) {
-        if (strcmp(commands[i].command, command) == 0)
-            return commands[i].func(s, fd);
-    }
-    printf("Run_commands_IA -> Unknown command: %s\n", command);
-    return -1;
+    check_cmd_with_obj(s, command);
+    return check_function(s, fd, command, commands);
 }
 
 int run_commands_ia(struct_t *s, int fd, char *buffer)

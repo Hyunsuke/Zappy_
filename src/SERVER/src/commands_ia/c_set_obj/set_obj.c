@@ -7,6 +7,23 @@
 
 #include "all.h"
 
+static int remove_one_obj(player_t *player, int id_obj)
+{
+    if (id_obj == 4 && player->mendiane > 0) {
+        player->mendiane--;
+        return 0;
+    }
+    if (id_obj == 5 && player->phiras > 0) {
+        player->phiras--;
+        return 0;
+    }
+    if (id_obj == 6 && player->thystame > 0) {
+        player->thystame--;
+        return 0;
+    }
+    return 84;
+}
+
 static int remove_obj_from_player(player_t *player, int id_obj)
 {
     if (id_obj == 0 && player->food > 0) {
@@ -25,19 +42,26 @@ static int remove_obj_from_player(player_t *player, int id_obj)
         player->sibur--;
         return 0;
     }
-    if (id_obj == 4 && player->mendiane > 0) {
-        player->mendiane--;
+    if (remove_one_obj(player, id_obj) == 84)
+        return 84;
+    else
         return 0;
+}
+
+static void add_one_obj(struct_t *s, int id_obj, int x, int y)
+{
+    if (id_obj == 4 && s->map[y][x].mendiane > 0) {
+        s->map[y][x].mendiane++;
+        return;
     }
-    if (id_obj == 5 && player->phiras > 0) {
-        player->phiras--;
-        return 0;
+    if (id_obj == 5 && s->map[y][x].phiras > 0) {
+        s->map[y][x].phiras++;
+        return;
     }
-    if (id_obj == 6 && player->thystame > 0) {
-        player->thystame--;
-        return 0;
+    if (id_obj == 6 && s->map[y][x].thystame > 0) {
+        s->map[y][x].thystame++;
+        return;
     }
-    return 84;
 }
 
 static void add_obj_to_map(struct_t *s, player_t *player, int id_obj)
@@ -61,18 +85,7 @@ static void add_obj_to_map(struct_t *s, player_t *player, int id_obj)
         s->map[y][x].sibur++;
         return;
     }
-    if (id_obj == 4 && s->map[y][x].mendiane > 0) {
-        s->map[y][x].mendiane++;
-        return;
-    }
-    if (id_obj == 5 && s->map[y][x].phiras > 0) {
-        s->map[y][x].phiras++;
-        return;
-    }
-    if (id_obj == 6 && s->map[y][x].thystame > 0) {
-        s->map[y][x].thystame++;
-        return;
-    }
+    add_one_obj(s, id_obj, x, y);
 }
 
 int c_set_obj(struct_t *s, int fd)
