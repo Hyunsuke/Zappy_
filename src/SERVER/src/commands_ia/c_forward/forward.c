@@ -7,16 +7,6 @@
 
 #include "all.h"
 
-player_t *get_mob(struct_t *s, int fd)
-{
-    while (s->head_player != NULL) {
-        if (s->head_player->fd == fd) {
-            return s->head_player;
-        }
-        s->head_player = s->head_player->next;
-    }
-}
-
 int c_forward(struct_t *s, int fd)
 {
     player_t *mob = get_player_by_fd(s, fd);
