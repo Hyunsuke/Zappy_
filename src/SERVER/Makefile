@@ -28,6 +28,7 @@ SRC	=	src/main.c	\
 		src/commands_ia/c_eject/eject.c \
 		src/commands_ia/c_fork/fork.c \
 		src/commands_ia/c_forward/forward.c \
+		src/commands_ia/c_forward/moove.c \
 		src/commands_ia/c_incantation/incantation.c \
 		src/commands_ia/c_inventory/inventory.c \
 		src/commands_ia/c_left/left.c \
