@@ -23,6 +23,6 @@ int add_player_to_team(struct_t *s, int team_id, int player_id)
     if (!team->players_id)
         return -1;
     team->players_id[player_count] = player_id;
-    team->players_id[player_count + 1] = 0;
+    team->players_id[player_count + 1] = -1;
     return 0;
 }
