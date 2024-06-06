@@ -9,6 +9,23 @@
 
 int c_connect_nbr(struct_t *s, int fd)
 {
-    printf("c_connect_nbr\n");
+    player_t *player = get_player_by_fd(s, fd);
+    int *list_id_player;
+    int nb_player = 0;
+    team_t *team = get_team_by_id(s, player->id_team);
+
+    if (team == NULL) {
+        dprintf(fd, "ko\n");
+        return -1;
+    } else {
+        list_id_player = team->players_id;
+    }
+    if (list_id_player == NULL) {
+        dprintf(fd, "%d\n", s->client_nb);
+        return 0;
+    }
+    for (int n = 0; list_id_player[n] != -1; n++)
+        nb_player++;
+    dprintf(fd, "%d\n", (s->client_nb - nb_player));
     return 0;
 }
