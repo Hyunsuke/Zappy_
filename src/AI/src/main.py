@@ -17,6 +17,7 @@ class ZappyClient:
             self.socket.connect((self.host, self.port))
             self.buffer = ""
             self.level = 1
+            self.priorityList = ["food", "thystame", "linemate"]
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
@@ -122,17 +123,22 @@ class ZappyClient:
         if response is None:
             return
         self.cmd.isLookUpdated = False
-        a = 0
+        destinationTile = 0
+        currentTile = 0
         objects = response.split(",")
         for object in objects:
             object = object.split(" ")
             for obj in object:
                 if obj.startswith(ressource):
-                    print("Moving to tile: ", a)
-                    self.move_to_tile(a)
+                    print("Moving to tile: ", destinationTile)
+                    x, y = self.get_coordinates(destinationTile)
+                    current_x, current_y = self.get_coordinates(currentTile)
+                    print("x: ", x, "y: ", y)
+                    self.move_to_tile(x, y, current_x, current_y)
+                    currentTile = destinationTile
                     self.cmd.take_object(ressource)
                     return
-            a += 1
+            destinationTile += 1
 
     def look_for_rarest_stone(self):
         print("Looking for rarest stone")
@@ -155,13 +161,45 @@ class ZappyClient:
             print("All stones have been found")
             os._exit(1)
 
-    def move_to_tile(self, target_tile, needPrint=False):
+    def move_to_tile(self, target_x, target_y, current_x, current_y, needPrint=False):
+        # Move in the X direction
+        while current_x != target_x:
+            if current_x < target_x:
+                self.cmd.turn_right(needPrint) if current_x == 0 else None
+                while current_x < target_x:
+                    self.cmd.move_forward(needPrint)
+                    current_x += 1
+                self.cmd.turn_left(needPrint)
+            elif current_x > target_x:
+                self.cmd.turn_left(needPrint) if current_x == 0 else None
+                while current_x > target_x:
+                    self.cmd.move_forward(needPrint)
+                    current_x -= 1
+                self.cmd.turn_right(needPrint)
+
+        # Move in the Y direction
+        while current_y != target_y:
+            if current_y < target_y:
+                while current_y < target_y:
+                    self.cmd.move_forward(needPrint)
+                    current_y += 1
+            elif current_y > target_y:
+                self.cmd.turn_left(needPrint)
+                self.cmd.turn_left(needPrint)
+                while current_y > target_y:
+                    self.cmd.move_forward(needPrint)
+                    current_y -= 1
+                self.cmd.turn_left(needPrint)
+                self.cmd.turn_left(needPrint)
+
+    def get_coordinates(self, target_tile):
         if target_tile == 0:
-            return
+            return (0, 0)
+
         a = 0
         b = 0
         tab = []
-        for i in range(9): ## max level + 1
+        for i in range(9):  # max level + 1
             tab.append([])
             b = (i * 2) + 1
             a += b
@@ -169,25 +207,30 @@ class ZappyClient:
             while b < a:
                 tab[i].append(b)
                 b += 1
+
         c = 0
+        x = 0
+        y = 0
         for i in tab:
             tmp = i
             if c != 0:
-                self.cmd.move_forward(needPrint)
+                y += 1
             if target_tile <= i[-1]:
                 break
             c += 1
         c = tmp[-1] -c
         if target_tile < c:
-            self.cmd.turn_left(needPrint)
+            # self.cmd.turn_left(needPrint)
             while c != target_tile:
-                self.cmd.move_forward(needPrint)
+                x -= 1
                 c -= 1
         elif target_tile > c:
-            self.cmd.turn_right(needPrint)
+            # self.cmd.turn_right(needPrint)
             while c != target_tile:
-                self.cmd.move_forward(needPrint)
+                x += 1
                 c += 1
+        return x, y  # If tile not found (which shouldn't happen in this context)
+
 
 if __name__ == "__main__":
     client = ZappyClient()
