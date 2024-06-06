@@ -7,18 +7,46 @@
 
 #include "all.h"
 
+static void config_obj(struct_t *s, char *command)
+{
+    char *part = strchr(command, ' ');
+    int len = 0;
+    int count = 0;
+
+    if (part == NULL)
+        return;
+    for (int i = 1; part[i] != '\r'; i++) {
+        len++;
+    }
+    s->obj = my_malloc(sizeof(char) * len + 1);
+    for (int i = 1; part[i] != '\r'; i++) {
+        s->obj[count] = part[i];
+        count++;
+    }
+    s->obj[count] = '\0';
+    printf("OBJ: %s\n", s->obj);
+}
+
 static int execute_command_ia(struct_t *s, int fd, char *command)
 {
     command_struct_ia_t commands[] = {
         {"Forward", c_forward}, {"Right", c_right},
         {"Left", c_left}, {"Look", c_look},
-        {"Inventory", c_inventory}, {"Set object", c_set_obj},
+        {"Inventory", c_inventory}, {"Set food", c_set_obj},
+        {"Set linemate", c_set_obj}, {"Set deraumere", c_set_obj},
+        {"Set sibur", c_set_obj}, {"Set mendiane", c_set_obj},
+        {"Set phiras", c_set_obj}, {"Set thystame", c_set_obj},
         {"Broadcast text", c_broadcast_txt},
         {"Connect_nbr", c_connect_nbr}, {"Fork", c_fork},
         {"Eject", c_eject}, {"Take object", c_take_obj},
         {"Incantation", c_incantation}, {NULL, NULL}
     };
-
+    if (strncmp(command, "Set ", 4) == 0 ||
+        strncmp(command, "Broadcast ", 10) == 0 ||
+        strncmp(command, "Take ", 5) == 0) {
+        printf("CONFIG\n");
+        config_obj(s, command);
+    }
     for (int i = 0; commands[i].command != NULL; i++) {
         if (strcmp(commands[i].command, command) == 0)
             return commands[i].func(s, fd);
@@ -33,7 +61,7 @@ int run_commands_ia(struct_t *s, int fd, char *buffer)
 
     command = strtok(buffer, "\r\n");
     if (command == NULL) {
-        printf("Command not found -> run_commands_IA\n");
+        printf("ko\n");
         return -1;
     }
     return execute_command_ia(s, fd, command);

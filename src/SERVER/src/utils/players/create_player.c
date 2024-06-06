@@ -10,9 +10,9 @@
 static void add_random_position_player(struct_t *s, player_t *new_player)
 {
     srand(time(NULL));
-    new_player->x = rand() % (s->map_width + 1);
-    new_player->y = rand() % (s->map_height + 1);
-    add_id_to_map_element(&s->map[new_player->x][new_player->y],
+    new_player->x = rand() % (s->map_width);
+    new_player->y = rand() % (s->map_height);
+    add_id_to_map_element(&s->map[new_player->y][new_player->x],
         new_player->id_player);
 }
 
