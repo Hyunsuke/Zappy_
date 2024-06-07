@@ -68,6 +68,8 @@ typedef struct position_s {
 ////// ALL ////////////////////////
 //////////////////////////////////
 
+typedef struct elevation_s elevation_t;
+
 typedef struct struct_s {
     int port;
     int map_width;
@@ -81,6 +83,7 @@ typedef struct struct_s {
     int next_id_player; // For incrementation id_player
     team_t *head_team;
     int next_id_team; // For incrementation id_team
+    elevation_t *head_elevation; // Information about incantation of player
 } struct_t;
 
 

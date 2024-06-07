@@ -73,6 +73,10 @@ SRC	=	src/main.c	\
 		src/utils/map.c \
 		src/utils/init.c \
 		src/utils/get_rsc_code.c \
+		src/utils/elevation/add_elevation.c \
+		src/utils/elevation/get_elevation.c \
+		src/utils/elevation/init_elevation.c \
+		src/utils/elevation/print_elevation.c \
 
 INCLUDEDIR = ../../include/SERVER/
 
