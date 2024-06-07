@@ -16,6 +16,23 @@ static void gestion_function(struct_t *s, char *buffer, int client_fd)
     }
 }
 
+static void list_actions(server_t *server, struct_t *s, int client_fd,
+    team_t *team)
+{
+    player_t *mob;
+
+    add_player(s, client_fd, team->team_id);
+    mob = get_player_by_fd(s, client_fd);
+    if (add_player_to_team(s, team->team_id, mob->id_player,
+        client_fd) != -1) {
+        print_players(s);
+        server->round[client_fd]++;
+        return;
+    }
+    //remove le player de la liste player
+    printf("Error not enough slot in the requested team\n");
+}
+
 static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
@@ -32,11 +49,7 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
         printf("Name team unknown\n");
         return;
     }
-    printf("It's AI\n");
-    print_response("Server: You're an AI\n", client_fd);
-    add_player(s, client_fd, team->team_id);
-    print_players(s);
-    server->round[client_fd]++;
+    list_actions(server, s, client_fd, team);
 }
 
 static void gestion_cmd(server_t *server, struct_t *s, char *buffer,

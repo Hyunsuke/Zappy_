@@ -46,7 +46,7 @@ void print_players(struct_t *s);
     /////////////////////////////////
 
     //////////////////////// TEAMS ///
-int add_player_to_team(struct_t *s, int team_id, int player_id);
+int add_player_to_team(struct_t *s, int team_id, int player_id, int fd);
 team_t *create_team(struct_t *s, const char *name);
 int add_position_egg_to_team(struct_t *s, int team_id, int x, int y);
 position_t *get_and_remove_first_egg_position(struct_t *s, int team_id);
