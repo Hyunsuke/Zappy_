@@ -80,7 +80,7 @@ class ZappyClient:
                 self.blockingBuffer()
                 self.update_inventory()
                 # print("Blocking buffered passsed.")
-                if self.current_inventory.current_inventory['food'] < 5:
+                if self.current_inventory.current_inventory['food'] < 9:
                     self.eat_nearest_ressource("food", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
                 else:
                     self.look_for_rarest_stone()
@@ -111,6 +111,7 @@ class ZappyClient:
             #     return
             key, value = item.split()
             self.current_inventory.current_inventory[key] = int(value)
+            self.cmd.current_inventory.current_inventory[key] = int(value)
         if (p == True):
             print("Inventory updated: ", self.current_inventory.current_inventory)
 
@@ -153,13 +154,13 @@ class ZappyClient:
             if key in response and self.current_inventory.objective_inventory[key] > 0:
                 print("Found ", key)
                 self.eat_nearest_ressource(key, True)
-                self.current_inventory.objective_inventory[key] -= 1
+                # self.current_inventory.objective_inventory[key] -= 1
                 return
             # if self.current_inventory.current_inventory[key] < value:
             #     self.lookForTile(key)
-        if total_value == 0:
-            print("All stones have been found")
-            os._exit(1)
+        # if total_value == 0:
+        #     print("All stones have been found")
+        #     os._exit(1)
 
     def move_to_tile(self, target_x, target_y, current_x, current_y, needPrint=False):
         # Move in the X direction

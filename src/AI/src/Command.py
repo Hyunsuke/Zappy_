@@ -117,11 +117,22 @@ class Command:
                 if object in self.current_inventory.shared_inventory:
                     self.current_inventory.shared_inventory[object] += 1
                     # Check si current inventory + shared inventory >= objective inventory
-            if fct == "OK":
+                    self.validateInventory(object)
+            elif fct == "OK":
                 if object in self.current_inventory.shared_inventory:
-                    print("Il faut pop l'objet du shared inventory")
-                # Check si on a atteint l'objectif
-        # if (self.data_received)
+                    print("Il faut pop l'objet du objective inventory")
+                    self.pop_item(object)
+                    self.validateInventory(object)
+                    # Check si on a atteint l'objectif
+            elif fct == "END":
+                print("Je vais rejoindre l'émetteur du message")
+                os._exit(0) # A supprimer
+                # On a trouvé tous les items, il faut passer lvl8
+            elif fct == "SET":
+                # Check si l'appel au lvl 8 a été fait pour savoir si on fait la fonction ou pas
+                # if object in self.current_inventory.shared_inventory:
+                #     self.current_inventory.shared_inventory[object] -= 1
+                return
 
     def skip_to_first_comma(self, string):
         pos = string.find(',')
@@ -143,9 +154,19 @@ class Command:
         cmd, object = self.responseList[0]
         if self.data_received == "ko":
             return
-        if object in self.current_inventory.shared_inventory:
-            if self.current_inventory.shared_inventory[object] > 0:
-                self.current_inventory.shared_inventory[object] -= 1
+
+    def validateInventory(self, objectTaken):
+        if self.check_inventory() == True:
+            print("Tous les items ont été trouvés. Go faire le passage lvl8")
+            self.broadcastMaterial(objectTaken, "END")
+            self.pop_item(objectTaken)
+            os._exit(0) # à supprimer
+            return True
+        if self.check_item(objectTaken) == True:
+            self.broadcastMaterial(objectTaken, "OK")
+            self.pop_item(objectTaken)
+            return True
+        return False
 
     def adjustTake(self):
         # Augmenter le shared inventory de 1
@@ -155,10 +176,9 @@ class Command:
         # Check si c'est ok
         if self.data_received == "ko":
             return
-        if objectTaken in self.current_inventory.shared_inventory:
-            self.broadcastMaterial(objectTaken, "Take")
-            if self.current_inventory.shared_inventory[objectTaken] > 0:
-                self.current_inventory.shared_inventory[objectTaken] += 1
+        if self.validateInventory(objectTaken) == True:
+            return
+        self.broadcastMaterial(objectTaken, "Take")
 
     def move_forward(self, needPrint=False):
         self.send_command("Forward")
@@ -239,3 +259,29 @@ class Command:
             return self.broadcast(f"{self.team_name}_phiras_{fct}")
         elif (material == "thystame"):
             return self.broadcast(f"{self.team_name}_thystame_{fct}")
+
+    def check_inventory(self):
+        for item, required_amount in self.current_inventory.objective_inventory.items():
+            total_amount = self.current_inventory.current_inventory.get(item, 0) + self.current_inventory.shared_inventory.get(item, 0)
+            if total_amount < required_amount:
+                return False
+        return True
+
+    def check_item(self, item):
+        if item in self.current_inventory.objective_inventory:
+            total_amount = self.current_inventory.current_inventory.get(item, 0) + self.current_inventory.shared_inventory.get(item, 0)
+            print("Total amount: ", total_amount, " of item: ", item)
+            print("Current inventory: ", self.current_inventory.current_inventory.get(item, 0), "Shared inventory: ", self.current_inventory.shared_inventory.get(item, 0))
+            return total_amount >= self.current_inventory.objective_inventory[item]
+        else:
+            return False
+
+    def pop_item(self, item, from_inventory='objective'):
+        if from_inventory == 'current':
+            return self.current_inventory.current_inventory.pop(item, None)
+        elif from_inventory == 'shared':
+            return self.current_inventory.shared_inventory.pop(item, None)
+        elif from_inventory == 'objective':
+            return self.current_inventory.objective_inventory.pop(item, None)
+        else:
+            raise ValueError("from_inventory must be either 'current' or 'shared' or 'objective'")
