@@ -55,6 +55,7 @@ typedef struct map_element_s {
     int mendiane;
     int phiras;
     int thystame;
+    int nb_mob;
     int *id_mob;
 } map_element_t;
 

@@ -12,8 +12,8 @@ static void add_random_position_player(struct_t *s, player_t *new_player)
     srand(time(NULL));
     new_player->x = rand() % (s->map_width);
     new_player->y = rand() % (s->map_height);
-    add_id_to_map_element(&s->map[new_player->y][new_player->x],
-        new_player->id_player);
+    add_id_to_map_element(&s->map[new_player->y][new_player->x].id_mob,
+        &s->map[new_player->y][new_player->x].nb_mob, new_player->id_player);
 }
 
 static void add_position_egg_player(struct_t *s, player_t *new_player)
@@ -22,8 +22,8 @@ static void add_position_egg_player(struct_t *s, player_t *new_player)
         new_player->id_team);
 
     if (position != NULL) {
-        add_id_to_map_element(&s->map[position->x][position->y],
-            new_player->id_player);
+        add_id_to_map_element(&s->map[position->x][position->y].id_mob,
+            &s->map[position->x][position->y].nb_mob, new_player->id_player);
     } else {
         add_random_position_player(s, new_player);
     }
