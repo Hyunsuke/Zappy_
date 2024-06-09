@@ -270,8 +270,6 @@ class Command:
     def check_item(self, item):
         if item in self.current_inventory.objective_inventory:
             total_amount = self.current_inventory.current_inventory.get(item, 0) + self.current_inventory.shared_inventory.get(item, 0)
-            print("Total amount: ", total_amount, " of item: ", item)
-            print("Current inventory: ", self.current_inventory.current_inventory.get(item, 0), "Shared inventory: ", self.current_inventory.shared_inventory.get(item, 0))
             return total_amount >= self.current_inventory.objective_inventory[item]
         else:
             return False

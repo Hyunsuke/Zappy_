@@ -7,6 +7,7 @@ from InventoryManager import InventoryManager
 from Command import Command
 import time
 import os
+import random
 
 
 class ZappyClient:
@@ -74,6 +75,18 @@ class ZappyClient:
         self.cmd.inventory()
         self.cmd.look()
 
+    def random_nb(self):
+        return random.choice([0, 1, 2])
+
+    def rotatePlayer(self):
+        nb = self.random_nb()
+        if nb == 0:
+            return
+        elif nb == 1:
+            self.cmd.turn_left()
+        elif nb == 2:
+            self.cmd.turn_right()
+
     def main_loop(self):
         try:
             while True:
@@ -84,6 +97,8 @@ class ZappyClient:
                     self.eat_nearest_ressource("food", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
                 else:
                     self.look_for_rarest_stone()
+                self.rotatePlayer()
+                self.cmd.move_forward()
                 self.cmd.move_forward()
                 self.updateInfos()
                 self.cmd.sendArrayCmd()
