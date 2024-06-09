@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-void add_id_to_map_element(int** id_mob, int* size, int id_player)
+void add_id_to_map_element(int **id_mob, int *size, int id_player)
 {
     (*size)++;
     *id_mob = realloc(*id_mob, (*size) * sizeof(int));
@@ -18,7 +18,7 @@ void add_id_to_map_element(int** id_mob, int* size, int id_player)
     (*id_mob)[*size - 1] = id_player;
 }
 
-void remove_id_from_map_element(int** id_mob, int* size, int id_player)
+void remove_id_from_map_element(int **id_mob, int *size, int id_player)
 {
     int index = -1;
 
