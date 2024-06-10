@@ -7,23 +7,36 @@
 
 #include "all.h"
 
+static void define_obj(struct_t *s, char *command, int inter, int len)
+{
+    int j = 0;
+
+    s->obj = my_malloc(sizeof(char) * (len + 1));
+    if (!s->obj) {
+        perror("malloc");
+        return;
+    }
+    for (j = 0; j < len; j++)
+        s->obj[j] = command[inter + j];
+    s->obj[len] = '\0';
+}
+
 static void config_obj(struct_t *s, char *command)
 {
-    char *part = strchr(command, ' ');
+    int i = 0;
     int len = 0;
-    int count = 0;
+    int inter = 0;
 
-    if (part == NULL)
+    for (; command[i] != ' ' && command[i] != '\0'; i++);
+    if (command[i] == '\0')
         return;
-    for (int i = 1; part[i] != '\r'; i++) {
+    i++;
+    inter = i;
+    while (command[i] != '\r' && command[i] != '\0') {
         len++;
+        i++;
     }
-    s->obj = my_malloc(sizeof(char) * len + 1);
-    for (int i = 1; part[i] != '\r'; i++) {
-        s->obj[count] = part[i];
-        count++;
-    }
-    s->obj[count] = '\0';
+    define_obj(s, command, inter, len);
 }
 
 static void check_cmd_with_obj(struct_t *s, char *command)

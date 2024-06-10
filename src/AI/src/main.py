@@ -7,6 +7,7 @@ from InventoryManager import InventoryManager
 from Command import Command
 import time
 import os
+import random
 
 
 class ZappyClient:
@@ -16,13 +17,14 @@ class ZappyClient:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
             self.buffer = ""
-            self.level = 1
             self.priorityList = ["food", "thystame", "linemate"]
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
             self.updateInfos()
+            self.cmd.fork()
             self.cmd.sendArrayCmd()
+            self.fastLvl2()
             self.main_loop()
         except socket.error as e:
             print(f"Socket error: {e}")
@@ -74,16 +76,50 @@ class ZappyClient:
         self.cmd.inventory()
         self.cmd.look()
 
+    def random_nb(self):
+        return random.choice([0, 1, 2])
+
+    def rotatePlayer(self):
+        nb = self.random_nb()
+        if nb == 0:
+            return
+        elif nb == 1:
+            self.cmd.turn_left()
+        elif nb == 2:
+            self.cmd.turn_right()
+
+    def fastLvl2(self):
+        i = 0
+        try:
+            while True:
+                self.blockingBuffer()
+                self.update_inventory()
+                if self.current_inventory.current_inventory['food'] >= 10 and self.current_inventory.current_inventory['linemate'] >= 1:
+                    self.cmd.set_object_down("linemate")
+                    self.cmd.incantation()
+                    self.cmd.responseList.append("Current level")
+                    self.cmd.fork()
+                    self.updateInfos()
+                    self.cmd.sendArrayCmd()
+                    break
+                self.eat_nearest_ressource("linemate", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
+                self.rotatePlayer()
+                self.cmd.move_forward()
+                self.updateInfos()
+                self.cmd.sendArrayCmd()
+        except KeyboardInterrupt:
+            print("Terminating AI client.")
+
     def main_loop(self):
         try:
             while True:
                 self.blockingBuffer()
                 self.update_inventory()
-                # print("Blocking buffered passsed.")
-                if self.current_inventory.current_inventory['food'] < 5:
-                    self.eat_nearest_ressource("food", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
+                if self.current_inventory.current_inventory['food'] < 15:
+                    self.eat_nearest_ressource("food", False)
                 else:
                     self.look_for_rarest_stone()
+                self.rotatePlayer()
                 self.cmd.move_forward()
                 self.updateInfos()
                 self.cmd.sendArrayCmd()
@@ -111,6 +147,7 @@ class ZappyClient:
             #     return
             key, value = item.split()
             self.current_inventory.current_inventory[key] = int(value)
+            self.cmd.current_inventory.current_inventory[key] = int(value)
         if (p == True):
             print("Inventory updated: ", self.current_inventory.current_inventory)
 
@@ -123,21 +160,26 @@ class ZappyClient:
         if response is None:
             return
         self.cmd.isLookUpdated = False
+        # tiles_with_resource = []
         destinationTile = 0
         currentTile = 0
         objects = response.split(",")
         for object in objects:
             object = object.split(" ")
             for obj in object:
-                if obj.startswith(ressource):
+                if obj.startswith(ressource) or obj.startswith("food"):
+                    # tiles_with_resource.append(destinationTile)
                     print("Moving to tile: ", destinationTile)
                     x, y = self.get_coordinates(destinationTile)
                     current_x, current_y = self.get_coordinates(currentTile)
                     print("x: ", x, "y: ", y)
                     self.move_to_tile(x, y, current_x, current_y)
                     currentTile = destinationTile
-                    self.cmd.take_object(ressource)
-                    return
+                    if obj.startswith("food"):
+                        self.cmd.take_object("food")
+                    else :
+                        self.cmd.take_object(ressource)
+                    # return
             destinationTile += 1
 
     def look_for_rarest_stone(self):
@@ -151,27 +193,27 @@ class ZappyClient:
             total_value += value
             # print(key, value)
             if key in response and self.current_inventory.objective_inventory[key] > 0:
-                print("Found ", key)
+                # print("Found ", key)
                 self.eat_nearest_ressource(key, True)
-                self.current_inventory.objective_inventory[key] -= 1
+                # self.current_inventory.objective_inventory[key] -= 1
                 return
             # if self.current_inventory.current_inventory[key] < value:
             #     self.lookForTile(key)
-        if total_value == 0:
-            print("All stones have been found")
-            os._exit(1)
+        # if total_value == 0:
+        #     print("All stones have been found")
+        #     os._exit(1)
 
     def move_to_tile(self, target_x, target_y, current_x, current_y, needPrint=False):
         # Move in the X direction
         while current_x != target_x:
             if current_x < target_x:
-                self.cmd.turn_right(needPrint) if current_x == 0 else None
+                self.cmd.turn_right(needPrint)
                 while current_x < target_x:
                     self.cmd.move_forward(needPrint)
                     current_x += 1
                 self.cmd.turn_left(needPrint)
             elif current_x > target_x:
-                self.cmd.turn_left(needPrint) if current_x == 0 else None
+                self.cmd.turn_left(needPrint)
                 while current_x > target_x:
                     self.cmd.move_forward(needPrint)
                     current_x -= 1

@@ -29,7 +29,7 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         server->round[client_fd]++;
         return;
     }
-    //remove le player de la liste player
+    // Remove le player de la liste player
     printf("Error not enough slot in the requested team\n");
 }
 

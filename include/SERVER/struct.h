@@ -12,9 +12,16 @@
 ////// PLAYERS && TEAMS ///////////
 //////////////////////////////////
 
+#define MAX_COMMANDS 10
+
 typedef struct player_s player_t;
 typedef struct position_s position_t;
 typedef struct team_s team_t;
+
+typedef struct command_s {
+    char *command;
+    int tick;
+} command_t;
 
 typedef struct player_s {
     int food;
@@ -32,6 +39,10 @@ typedef struct player_s {
     int x;
     int y;
     player_t *next;
+    command_t commands[MAX_COMMANDS];
+    int command_count;
+    int command_start;
+    int command_end;
 } player_t;
 
 typedef struct team_s {
@@ -55,6 +66,7 @@ typedef struct map_element_s {
     int mendiane;
     int phiras;
     int thystame;
+    int nb_mob;
     int *id_mob;
 } map_element_t;
 
@@ -84,6 +96,7 @@ typedef struct struct_s {
     team_t *head_team;
     int next_id_team; // For incrementation id_team
     elevation_t *head_elevation; // Information about incantation of player
+    clock_t clock;  // Time for runner commands
 } struct_t;
 
 

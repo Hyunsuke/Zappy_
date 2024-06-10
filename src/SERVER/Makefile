@@ -77,6 +77,12 @@ SRC	=	src/main.c	\
 		src/utils/elevation/get_elevation.c \
 		src/utils/elevation/init_elevation.c \
 		src/utils/elevation/print_elevation.c \
+		src/utils/commands/get_command.c \
+		src/utils/commands/add_command.c \
+		src/utils/commands/print_command.c \
+		src/utils/commands/remove_command.c \
+		src/utils/tick.c \
+
 
 INCLUDEDIR = ../../include/SERVER/
 

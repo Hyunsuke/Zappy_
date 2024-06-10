@@ -9,21 +9,17 @@
 #include <stdbool.h>
 #include "all.h"
 
-static void init_map_element(map_element_t *element, int client_nb)
+static void init_map_element(map_element_t *element)
 {
-    element->food = false;
-    element->linemate = false;
-    element->deraumere = false;
-    element->sibur = false;
-    element->mendiane = false;
-    element->phiras = false;
-    element->thystame = false;
-    element->id_mob = my_malloc(client_nb * sizeof(int) + 2);
-    if (element->id_mob == NULL)
-        return;
-    for (int i = 0; i < client_nb; i++) {
-        element->id_mob[i] = -1;
-    }
+    element->food = 0;
+    element->linemate = 0;
+    element->deraumere = 0;
+    element->sibur = 0;
+    element->mendiane = 0;
+    element->phiras = 0;
+    element->thystame = 0;
+    element->nb_mob = 0;
+    element->id_mob = NULL;
 }
 
 void init_map(struct_t *s)
@@ -34,6 +30,6 @@ void init_map(struct_t *s)
     for (int i = 0; i < s->map_height; i++) {
         s->map[i] = my_malloc(s->map_width * sizeof(map_element_t) + 2);
         for (int j = 0; j < s->map_width; j++)
-            init_map_element(&(s->map[i][j]), s->client_nb);
+            init_map_element(&(s->map[i][j]));
     }
 }
