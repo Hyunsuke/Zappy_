@@ -40,7 +40,7 @@ private:
     float scale;
     Vector3 rotationAxis;
     float rotationAngle;
-    int quantity = rand() % 2;
+    int quantity = 0;
 };
 
 #endif // OBJECT3D_HPP_

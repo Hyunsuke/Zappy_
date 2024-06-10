@@ -43,4 +43,6 @@
 
 #include "Settings/settings.hpp"
 
+#include "Socket/SocketManager.hpp"
+
 #endif /* !GUI_HPP_ */

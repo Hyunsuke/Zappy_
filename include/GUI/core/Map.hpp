@@ -14,6 +14,7 @@
 
 class Map {
 public:
+    Map();
     Map(int width, int height);
     ~Map();
 

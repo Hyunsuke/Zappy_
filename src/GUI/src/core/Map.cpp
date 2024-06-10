@@ -7,6 +7,8 @@
 
 #include "gui.hpp"
 
+Map::Map() : width(0), height(0) {}
+
 Map::Map(int width, int height) : width(width), height(height) {}
 
 Map::~Map() {}

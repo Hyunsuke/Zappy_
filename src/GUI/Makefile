@@ -17,6 +17,7 @@ SRCDIRS = 	$(SRCDIR) \
             $(SRCDIR)/Particles \
             $(SRCDIR)/Menu \
             $(SRCDIR)/Settings \
+            $(SRCDIR)/Socket \
 
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 SRC_OBJ = $(SRC_ALL:.cpp=.o)

@@ -53,7 +53,7 @@ void Menu::HandleBackspace(char* buffer, bool& isActive, float& backspaceTime) {
             backspaceTime += GetFrameTime();
             if (backspaceTime >= 0.1f) {
                 buffer[std::strlen(buffer) - 1] = '\0';
-                backspaceTime = 0.05f; // Set a shorter interval for continuous deletion
+                backspaceTime = 0.05f;
             }
         } else {
             backspaceTime = 0.0f;
@@ -66,7 +66,6 @@ void Menu::HandleInput() {
         startGame = true;
     }
 
-    // Handle text input for host
     if (hostActive) {
         int key = GetCharPressed();
         while (key > 0) {
@@ -81,7 +80,6 @@ void Menu::HandleInput() {
         HandleBackspace(hostBuffer, hostActive, hostBackspaceTime);
     }
 
-    // Handle text input for port
     if (portActive) {
         int key = GetCharPressed();
         while (key > 0) {
@@ -96,7 +94,6 @@ void Menu::HandleInput() {
         HandleBackspace(portBuffer, portActive, portBackspaceTime);
     }
 
-    // Handle mouse clicks for text boxes and buttons
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         Rectangle hostBox = {(float)(screenWidth / 4 + 100), (float)(screenHeight / 2 - 60), 200.0f, 30.0f};
         Rectangle portBox = {(float)(screenWidth / 4 + 100), (float)(screenHeight / 2), 200.0f, 30.0f};
@@ -119,7 +116,6 @@ void Menu::HandleInput() {
         }
     }
 
-    // Update host and port values
     host = std::string(hostBuffer);
     port = std::atoi(portBuffer);
 
