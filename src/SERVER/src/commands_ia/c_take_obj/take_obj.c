@@ -7,45 +7,45 @@
 
 #include "all.h"
 
-static int remove_take_obj(map_element_t *map_element, int id_obj)
+static bool remove_take_obj(map_element_t *map_element, int id_obj)
 {
-    if (id_obj == 4) {
+    if (id_obj == 4 && map_element->mendiane > 0) {
         map_element->mendiane--;
-        return 0;
+        return true;
     }
-    if (id_obj == 5) {
+    if (id_obj == 5 && map_element->phiras > 0) {
         map_element->phiras--;
-        return 0;
+        return true;
     }
-    if (id_obj == 6) {
+    if (id_obj == 6 && map_element->thystame > 0) {
         map_element->thystame--;
-        return 0;
+        return true;
     }
-    return 84;
+    return false;
 }
 
-static int remove_obj_map(map_element_t *map_element, int id_obj)
+static bool remove_obj_map(map_element_t *map_element, int id_obj)
 {
-    if (id_obj == 0) {
+    if (id_obj == 0 && map_element->food > 0) {
         map_element->food--;
-        return 0;
+        return true;
     }
-    if (id_obj == 1) {
+    if (id_obj == 1 && map_element->linemate > 0) {
         map_element->linemate--;
-        return 0;
+        return true;
     }
-    if (id_obj == 2) {
+    if (id_obj == 2 && map_element->deraumere > 0) {
         map_element->deraumere--;
-        return 0;
+        return true;
     }
-    if (id_obj == 3) {
+    if (id_obj == 3 && map_element->sibur > 0) {
         map_element->sibur--;
         return 0;
     }
-    if (remove_take_obj(map_element, id_obj) == 84)
-        return 84;
+    if (remove_take_obj(map_element, id_obj) == false)
+        return false;
     else
-        return 0;
+        return true;
 }
 
 static void take_one_obj(player_t *player, int id_obj)
@@ -90,7 +90,7 @@ int c_take_obj(struct_t *s, int fd)
     player_t *player = get_player_by_fd(s, fd);
     int id_obj = get_resource_code(s->obj);
 
-    if (remove_obj_map(&s->map[player->y][player->x], id_obj) == 84) {
+    if (remove_obj_map(&s->map[player->y][player->x], id_obj) == false) {
         print_response("ko\n", fd);
         return -1;
     }
