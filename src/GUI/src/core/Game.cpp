@@ -102,24 +102,3 @@ void Game::Draw() {
     uiManager.DrawUI(selectedIsland, GetFPS());
     EndDrawing();
 }
-
-void Game::ToggleObjectActive(int x, int y, const std::string& objectType, int value) {
-    auto island = gameMap.GetIslandByXY(x, y);
-    if (island) {
-        if (objectType == "food") {
-            island->food->SetQuantity(island->food->GetQuantity() + value);
-        } else if (objectType == "linemate") {
-            island->linemate->SetQuantity(island->linemate->GetQuantity() + value);
-        } else if (objectType == "deraumere") {
-            island->deraumere->SetQuantity(island->deraumere->GetQuantity() + value);
-        } else if (objectType == "sibur") {
-            island->sibur->SetQuantity(island->sibur->GetQuantity() + value);
-        } else if (objectType == "mendiane") {
-            island->mendiane->SetQuantity(island->mendiane->GetQuantity() + value);
-        } else if (objectType == "phiras") {
-            island->phiras->SetQuantity(island->phiras->GetQuantity() + value);
-        } else if (objectType == "thystame") {
-            island->thystame->SetQuantity(island->thystame->GetQuantity() + value);
-        }
-    }
-}

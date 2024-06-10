@@ -31,7 +31,6 @@ public:
     Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs);
     ~Game();
     void Run();
-    void ToggleObjectActive(int x, int y, const std::string& objectType, int value);
     void SetSocketManager(std::unique_ptr<SocketManager> socketManager);
 
     void RequestMapSize();
@@ -48,7 +47,12 @@ private:
     void Update();
     void Draw();
     void InitializeMap(const std::string& mapSize, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs);
+
+    ///////
     void HandleServerMessage(const std::string& message);
+
+    void UpdateIslandResources(int x, int y, int q0, int q1, int q2, int q3, int q4, int q5, int q6);
+    ///////
 
     int screenWidth;
     int screenHeight;

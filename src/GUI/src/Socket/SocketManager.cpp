@@ -43,7 +43,7 @@ void SocketManager::Connect() {
 
     running = true;
     receiveThread = std::thread(&SocketManager::ReceiveMessages, this);
-    SendMessage("GRAPHIC\n"); // Authenticate as a graphical client
+    SendMessage("GRAPHIC\n");
 }
 
 bool SocketManager::IsRunning() const {

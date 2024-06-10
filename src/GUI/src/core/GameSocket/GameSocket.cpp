@@ -20,7 +20,7 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "bct") {
         int x, y, q0, q1, q2, q3, q4, q5, q6;
         iss >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
-        // Handle content of a tile
+        UpdateIslandResources(x, y, q0, q1, q2, q3, q4, q5, q6);
     } else if (command == "tna") {
         std::string teamName;
         iss >> teamName;
@@ -122,8 +122,6 @@ void Game::SetSocketManager(std::unique_ptr<SocketManager> socketManager) {
         HandleServerMessage(message);
     });
 }
-
-// Implement command methods to send specific requests to the server
 
 void Game::RequestMapSize() {
     std::string response = socketManager->SendCommand("msz\n");
