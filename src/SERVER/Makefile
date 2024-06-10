@@ -73,6 +73,12 @@ SRC	=	src/main.c	\
 		src/utils/map.c \
 		src/utils/init.c \
 		src/utils/get_rsc_code.c \
+		src/utils/commands/get_command.c \
+		src/utils/commands/add_command.c \
+		src/utils/commands/print_command.c \
+		src/utils/commands/remove_command.c \
+		src/utils/tick.c \
+
 
 INCLUDEDIR = ../../include/SERVER/
 
