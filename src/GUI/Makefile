@@ -18,6 +18,7 @@ SRCDIRS = 	$(SRCDIR) \
             $(SRCDIR)/Menu \
             $(SRCDIR)/Settings \
             $(SRCDIR)/Socket \
+            $(SRCDIR)/core/GameSocket \
 
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 SRC_OBJ = $(SRC_ALL:.cpp=.o)

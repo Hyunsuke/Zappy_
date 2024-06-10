@@ -1,0 +1,176 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** GameSocket
+*/
+
+#include "gui.hpp"
+
+void Game::HandleServerMessage(const std::string& message) {
+    // std::cout << "Received message: " << message << std::endl;
+    std::istringstream iss(message);
+    std::string command;
+    iss >> command;
+
+    if (command == "msz") {
+        int x, y;
+        iss >> x >> y;
+        // Handle map size
+    } else if (command == "bct") {
+        int x, y, q0, q1, q2, q3, q4, q5, q6;
+        iss >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+        // Handle content of a tile
+    } else if (command == "tna") {
+        std::string teamName;
+        iss >> teamName;
+        // Handle team name
+    } else if (command == "pnw") {
+        int n, x, y, o, l;
+        std::string teamName;
+        iss >> n >> x >> y >> o >> l >> teamName;
+        // Handle new player connection
+    } else if (command == "ppo") {
+        int n, x, y, o;
+        iss >> n >> x >> y >> o;
+        // Handle player position
+    } else if (command == "plv") {
+        int n, l;
+        iss >> n >> l;
+        // Handle player level
+    } else if (command == "pin") {
+        int n, x, y, q0, q1, q2, q3, q4, q5, q6;
+        iss >> n >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+        // Handle player inventory
+    } else if (command == "pex") {
+        int n;
+        iss >> n;
+        // Handle player expulsion
+    } else if (command == "pbc") {
+        int n;
+        std::string message;
+        iss >> n >> message;
+        // Handle broadcast message
+    } else if (command == "pic") {
+        int x, y, l;
+        std::vector<int> players;
+        iss >> x >> y >> l;
+        int player;
+        while (iss >> player) {
+            players.push_back(player);
+        }
+        // Handle start of an incantation
+    } else if (command == "pie") {
+        int x, y;
+        char r;
+        iss >> x >> y >> r;
+        // Handle end of an incantation
+    } else if (command == "pfk") {
+        int n;
+        iss >> n;
+        // Handle egg laying by the player
+    } else if (command == "pdr") {
+        int n, i;
+        iss >> n >> i;
+        // Handle resource dropping
+    } else if (command == "pgt") {
+        int n, i;
+        iss >> n >> i;
+        // Handle resource collecting
+    } else if (command == "pdi") {
+        int n;
+        iss >> n;
+        // Handle player death
+    } else if (command == "enw") {
+        int e, n, x, y;
+        iss >> e >> n >> x >> y;
+        // Handle egg was laid by a player
+    } else if (command == "ebo") {
+        int e;
+        iss >> e;
+        // Handle player connection for an egg
+    } else if (command == "edi") {
+        int e;
+        iss >> e;
+        // Handle death of an egg
+    } else if (command == "sgt") {
+        int t;
+        iss >> t;
+        // Handle time unit request
+    } else if (command == "sst") {
+        int t;
+        iss >> t;
+        // Handle time unit modification
+    } else if (command == "seg") {
+        std::string teamName;
+        iss >> teamName;
+        // Handle end of game
+    } else if (command == "smg") {
+        std::string message;
+        iss >> message;
+        // Handle message from the server
+    } else if (command == "suc") {
+        // Handle unknown command
+    } else if (command == "sbp") {
+        // Handle command parameter
+    }
+}
+
+void Game::SetSocketManager(std::unique_ptr<SocketManager> socketManager) {
+    this->socketManager = std::move(socketManager);
+    this->socketManager->SetMessageHandler([this](const std::string& message) {
+        HandleServerMessage(message);
+    });
+}
+
+// Implement command methods to send specific requests to the server
+
+void Game::RequestMapSize() {
+    std::string response = socketManager->SendCommand("msz\n");
+    HandleServerMessage(response);
+}
+
+void Game::RequestTileContent(int x, int y) {
+    std::string command = "bct " + std::to_string(x) + " " + std::to_string(y) + "\n";
+    std::string response = socketManager->SendCommand(command);
+    HandleServerMessage(response);
+}
+
+void Game::RequestMapContent() {
+    std::string response = socketManager->SendCommand("mct\n");
+    HandleServerMessage(response);
+}
+
+void Game::RequestTeamNames() {
+    std::string response = socketManager->SendCommand("tna\n");
+    HandleServerMessage(response);
+}
+
+void Game::RequestPlayerPosition(int playerNumber) {
+    std::string command = "ppo #" + std::to_string(playerNumber) + "\n";
+    std::string response = socketManager->SendCommand(command);
+    HandleServerMessage(response);
+}
+
+void Game::RequestPlayerLevel(int playerNumber) {
+    std::string command = "plv #" + std::to_string(playerNumber) + "\n";
+    std::string response = socketManager->SendCommand(command);
+    HandleServerMessage(response);
+}
+
+void Game::RequestPlayerInventory(int playerNumber) {
+    std::string command = "pin #" + std::to_string(playerNumber) + "\n";
+    std::string response = socketManager->SendCommand(command);
+    HandleServerMessage(response);
+}
+
+void Game::RequestTimeUnit() {
+    std::string response = socketManager->SendCommand("sgt\n");
+    HandleServerMessage(response);
+}
+
+void Game::SetTimeUnit(int timeUnit) {
+    std::string command = "sst " + std::to_string(timeUnit) + "\n";
+    std::string response = socketManager->SendCommand(command);
+    HandleServerMessage(response);
+}
