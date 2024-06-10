@@ -37,6 +37,7 @@ int c_eject(struct_t *s, int fd);
 int c_take_obj(struct_t *s, int fd);
 int c_set_obj(struct_t *s, int fd);
 int c_incantation(struct_t *s, int fd);
+void c_incantation_checker(struct_t *s, char *buffer, player_t *player);
 
 ////// Command functions ////
 void print_all_commands(player_t *player);

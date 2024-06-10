@@ -24,11 +24,13 @@ static void new_tick_for_player(struct_t *s, player_t *current_player)
 {
     command_t *command = get_oldest_command(current_player);
 
-    if (command != NULL && command->tick <= 0) {
+    if (command == NULL)
+        return;
+    if (command->tick <= 0) {
         run_commands_ia(s, current_player->fd, command->command);
         remove_oldest_command(current_player);
     }
-    // Check if the command incantation (add checker incantation)
+    c_incantation_checker(s, command, current_player);
 }
 
 void new_tick(struct_t *s)

@@ -52,9 +52,14 @@ int c_incantation(struct_t *s, int fd)
         printf("KO\n");
         return -1;
     }
-    // Ajouter function pour compter le temps de l'incantation
+    // Modify level incantation for all players
     printf("OK\n");
     return 0;
 }
 
 // Ajouter function pour pour venir checker si l'incantation est tjr possible
+void c_incantation_checker(struct_t *s, char *buffer, player_t *player)
+{
+    // Check if good command
+    return;
+}
