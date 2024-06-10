@@ -56,3 +56,5 @@ int c_incantation(struct_t *s, int fd)
     printf("OK\n");
     return 0;
 }
+
+// Ajouter function pour pour venir checker si l'incantation est tjr possible
