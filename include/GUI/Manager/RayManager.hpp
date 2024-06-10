@@ -20,6 +20,7 @@ public:
     std::shared_ptr<Island> GetIslandUnderMouse(const std::vector<std::shared_ptr<Island>>& islands);
 
 private:
+    bool CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform);
     Ray ray;
 };
 

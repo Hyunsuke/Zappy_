@@ -84,7 +84,9 @@ void Game::Update() {
     shaderManager->SetShaderValue("lightColor", &lightCol, SHADER_UNIFORM_VEC3);
 
     rayManager.UpdateRay(cameraController.GetCamera());
-    selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+    }
 }
 
 void Game::Draw() {
