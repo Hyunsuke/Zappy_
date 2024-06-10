@@ -24,6 +24,7 @@ public:
     void Update();
     std::shared_ptr<Island> GetIslandByXY(int x, int y);
     std::vector<std::shared_ptr<Island>> GetIslands() const;
+    std::string GetMapSize() const;
 
 private:
     std::vector<std::shared_ptr<Island>> islands;

@@ -18,6 +18,8 @@ public:
     std::string GetHost() const;
     int GetPort() const;
     bool ShouldStartGame() const;
+    int GetScreenWidth() const;
+    int GetScreenHeight() const;
 
 private:
     void Draw();

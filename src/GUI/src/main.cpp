@@ -12,12 +12,14 @@ void init_Window(int screenWidth, int screenHeight, const char* title) {
     SetTargetFPS(60);
 }
 
-bool runMenu(int screenWidth, int screenHeight, std::string& host, int& port) {
+bool runMenu(int& screenWidth, int& screenHeight, std::string& host, int& port) {
     Menu menu(screenWidth, screenHeight);
     menu.Run();
     if (menu.ShouldStartGame()) {
         host = menu.GetHost();
         port = menu.GetPort();
+        screenHeight = menu.GetScreenHeight();
+        screenWidth = menu.GetScreenWidth();
         return true;
     }
     return false;
@@ -33,8 +35,17 @@ bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketMa
     return true;
 }
 
-bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs) {
+bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 5) {
+    auto start = std::chrono::steady_clock::now();
+
     while (true) {
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+        if (elapsed > timeoutSeconds) {
+            throw GameException("Timeout waiting for initial server messages");
+            return false;
+        }
+
         std::string message = socketManager.ReceiveMessage();
         std::istringstream iss(message);
         std::string command;
@@ -54,9 +65,13 @@ bool processInitialServerMessages(SocketManager& socketManager, std::string& map
             eggs.push_back(message);
         }
 
-        if (!mapSize.empty() && timeUnit > 0 && !teamNames.empty() && !mapContent.empty()) {
+        if (!mapSize.empty() && timeUnit > 0 && !teamNames.empty() && !mapContent.empty() && elapsed > 1) {
+            Utils::removeDuplicates(mapContent);
+            Utils::removeDuplicates(eggs);
+            Utils::removeDuplicates(teamNames);
             break;
         }
+
     }
     return true;
 }

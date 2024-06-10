@@ -56,3 +56,7 @@ std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
 std::vector<std::shared_ptr<Island>> Map::GetIslands() const {
     return islands;
 }
+
+std::string Map::GetMapSize() const {
+    return std::to_string(width) + "x" + std::to_string(height);
+}

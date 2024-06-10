@@ -30,6 +30,14 @@ int Menu::GetPort() const {
     return port;
 }
 
+int Menu::GetScreenWidth() const {
+    return screenWidth;
+}
+
+int Menu::GetScreenHeight() const {
+    return screenHeight;
+}
+
 bool Menu::ShouldStartGame() const {
     return startGame;
 }

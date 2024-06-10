@@ -101,6 +101,6 @@ void Game::Draw() {
     gameMap.DrawIslandWires(selectedIsland);
 
     EndMode3D();
-    uiManager.DrawUI(selectedIsland, GetFPS());
+    uiManager.DrawUI(selectedIsland, teamNames.size(), -1 , timeUnit, gameMap.GetMapSize(), GetFPS());
     EndDrawing();
 }

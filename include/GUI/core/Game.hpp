@@ -25,6 +25,8 @@
 #include <cstring>
 #include <GL/gl.h>
 #include <sstream>
+#include <set>
+#include <algorithm>
 
 class Game {
 public:
