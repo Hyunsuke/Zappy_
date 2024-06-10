@@ -13,6 +13,7 @@ class Command:
         self.team_name = team_name
         self.socket = socket
         self.current_inventory = current_inventory
+        self.level = 1
         self.data_received = ""
         self.commandWaitingRoom = 0
         self.dataIndex = 0
@@ -37,8 +38,6 @@ class Command:
                         self.socket.sendall(f"{self.commandList[0]}\n".encode())
                         self.commandList.pop(0)
                         self.commandWaitingRoom += 1
-                else:
-                    break
             except socket.error as e:
                 print(f"Error sending command '{self.commandList[0]}': {e}")
                 # return None
@@ -147,12 +146,22 @@ class Command:
 
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
-        return
+        if self.data_received == "ko":
+            self.responseList.pop(1)
+            return
+        self.level += 1
+        if self.level == 8:
+            print("Niveau 8 atteint !")
+        print("Level up")
+        # os._exit(0)
 
     def adjustSet(self):
         # Baisser le shared inventory de 1
-        cmd, object = self.responseList[0]
+        response = self.responseList[0].split(' ')
+        objectTaken = response[1]
         if self.data_received == "ko":
+            return
+        if self.level == 1:
             return
 
     def validateInventory(self, objectTaken):
@@ -175,6 +184,8 @@ class Command:
         objectTaken = response[1]
         # Check si c'est ok
         if self.data_received == "ko":
+            return
+        if self.level == 1:
             return
         if self.validateInventory(objectTaken) == True:
             return
@@ -224,7 +235,7 @@ class Command:
             print("Eject : ")
 
     def take_object(self, object):
-        # print("Take object : " + object)
+        print("Take object : " + object)
         self.send_command("Take " + object)
 
     def set_object_down(self, object):
