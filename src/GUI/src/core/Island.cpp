@@ -30,8 +30,6 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     float thystameScale = 0.00015f;
     float eggScale = 0.4f;
 
-    float playerScale = 0.5f;
-
     food = std::make_shared<Object3D>(Vector3{position.x - 4.0f, position.y + 0.15f, position.z + 2.0f}, "src/GUI/assets/Food/pig.obj", "src/GUI/assets/Food/pig.png", foodScale, foodRotationAxis, foodRotationAngle);
     linemate = std::make_shared<Object3D>(Vector3{position.x + 1.9f, position.y + 1.0f, position.z - 0.2f}, "src/GUI/assets/Linemate/Linemate.obj", "src/GUI/assets/Linemate/Linemate.png", linemateScale, rotationAxis, rotationAngle);
     deraumere = std::make_shared<Object3D>(Vector3{position.x - 3.5f, position.y + 0.6f, position.z + 0.3f}, "src/GUI/assets/Deraumere/deraumere.obj", "src/GUI/assets/Deraumere/deraumere.png", deramereScale, deramereRotationAxis, deramereRotationAngle);
@@ -40,7 +38,6 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     phiras = std::make_shared<Object3D>(Vector3{position.x - 1.8f, position.y + 3.10f, position.z}, "src/GUI/assets/Phiras/phiras.obj", "src/GUI/assets/Phiras/phiras.png", phirasScale, phirasRotationAxis, phirasRotationAngle);
     thystame = std::make_shared<Object3D>(Vector3{position.x, position.y + 5.0f, position.z}, "src/GUI/assets/Thystame/thystame.obj", "src/GUI/assets/Thystame/thystame.png", thystameScale, rotationAxis, rotationAngle);
     egg = std::make_shared<Object3D>(Vector3{position.x + 3.1f, position.y + 0.8f, position.z + 0.5f}, "src/GUI/assets/Egg/egg.obj", "src/GUI/assets/Egg/egg.png", eggScale, rotationAxis, rotationAngle);
-    player = std::make_shared<Object3D>(Vector3{position.x, position.y + 0.5f, position.z}, "src/GUI/assets/Human/gladia.glb", "src/GUI/assets/Human/gladia.png", playerScale, rotationAxis, rotationAngle);
 
     objects.push_back(food);
     objects.push_back(linemate);
@@ -50,7 +47,6 @@ Island::Island(int x, int y, const Vector3& position, const std::string& modelPa
     objects.push_back(phiras);
     objects.push_back(thystame);
     objects.push_back(egg);
-    objects.push_back(player);
 }
 
 Island::~Island() {}

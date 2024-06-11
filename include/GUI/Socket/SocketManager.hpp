@@ -40,7 +40,6 @@ public:
 
 private:
     void ReceiveMessages();
-    void ProcessMessage(const std::string& message);
 
     std::string host;
     int port;

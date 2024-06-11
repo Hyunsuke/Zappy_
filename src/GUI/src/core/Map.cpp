@@ -9,7 +9,10 @@
 
 Map::Map() : width(0), height(0) {}
 
-Map::Map(int width, int height) : width(width), height(height) {}
+Map::Map(int width, int height) :
+    width(width),
+    height(height)
+{}
 
 Map::~Map() {}
 
@@ -17,9 +20,17 @@ void Map::AddIsland(std::shared_ptr<Island> island) {
     islands.push_back(island);
 }
 
+void Map::AddPlayer(std::shared_ptr<Player> player) {
+    players.push_back(player);
+}
+
+
 void Map::Draw() {
     for (auto& island : islands) {
         island->Draw();
+    }
+    for (auto& player : players) {
+        player->Draw();
     }
 }
 
@@ -41,6 +52,10 @@ void Map::Update() {
         position.y = offset;
         island->Move(position);
     }
+    // for (auto& player : players) {
+    //     player->UpdateAnimation();
+    //     player->UpdatePosition();
+    // }
 }
 
 
@@ -55,6 +70,10 @@ std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
 
 std::vector<std::shared_ptr<Island>> Map::GetIslands() const {
     return islands;
+}
+
+int Map::GetPlayerCount() const {
+    return players.size();
 }
 
 std::string Map::GetMapSize() const {

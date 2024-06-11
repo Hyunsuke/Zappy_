@@ -15,9 +15,11 @@
 #include "core/Island.hpp"
 #include "core/Map.hpp"
 #include "core/GameException.hpp"
+#include "core/Player/Player.hpp"
 
 #include "Collector/ModelCollector.hpp"
 #include "Collector/TextureCollector.hpp"
+#include "Collector/AnimationCollector.hpp"
 
 #include "Utils/utils.hpp"
 

@@ -29,7 +29,13 @@ void Game::HandleServerMessage(const std::string& message) {
         int n, x, y, o, l;
         std::string teamName;
         iss >> n >> x >> y >> o >> l >> teamName;
-        // Handle new player connection
+        auto island = gameMap.GetIslandByXY(x, y);
+        if (island) {
+            std::cout << "Player created x: " << x << " y: " << y << std::endl;
+            std::cout << "Player number: " << n << " team name: " << teamName << " orientation: " << o << " level: " << l << std::endl;
+            auto player = std::make_shared<Player>(n, teamName, x, y, o, l, "src/GUI/assets/Player/robot.glb", island);
+            gameMap.AddPlayer(player);
+        }
     } else if (command == "ppo") {
         int n, x, y, o;
         iss >> n >> x >> y >> o;

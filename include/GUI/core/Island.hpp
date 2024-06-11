@@ -42,7 +42,6 @@ public:
     std::shared_ptr<Object3D> phiras;
     std::shared_ptr<Object3D> thystame;
     std::shared_ptr<Object3D> egg;
-    std::shared_ptr<Object3D> player;
 
 private:
     int x, y;

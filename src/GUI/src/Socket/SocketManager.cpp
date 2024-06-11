@@ -112,7 +112,3 @@ void SocketManager::ReceiveMessages() {
         }
     }
 }
-
-void SocketManager::ProcessMessage(const std::string& message) {
-    // Process the message based on the protocol
-}
