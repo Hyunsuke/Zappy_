@@ -56,7 +56,6 @@ void Player::DrawWires() {
     glLineWidth(5.0f);
     model = modelLoader.GetModel();
     DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
-    std::cout << "Player DrawWires" << std::endl;
     glLineWidth(1.0f);
 }
 
@@ -159,10 +158,12 @@ void Player::JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float
         t = (currentTime - startTime) / (endTime - startTime);
         Vector3 newPos = Vector3Lerp(startPos, endPos, t);
         SetPosition(newPos);
-        UpdateAnimation();
-        Draw();
+        // UpdateAnimation();
+        // Draw();
         // Ensure this loop allows rendering the rest of the scene, not blocking
     }
+    this->x = newIsland->GetX();
+    this->y = newIsland->GetY();
     SetIsland(newIsland);
 }
 

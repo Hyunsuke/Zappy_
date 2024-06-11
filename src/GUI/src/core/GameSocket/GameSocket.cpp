@@ -45,7 +45,7 @@ void Game::HandleServerMessage(const std::string& message) {
             player->SetAnimation(Player::Animation::Jump);
             auto newIsland = gameMap.GetIslandByXY(x, y);
             if (newIsland) {
-                // player->JumpTo(x, y, newIsland, timeUnit * (41.0f / GetFPS())); // Assuming 41 frames at 60 FPS
+                player->JumpTo(x, y, newIsland, timeUnit * (41.0f / GetFPS())); // Assuming 41 frames at 60 FPS
             }
         }
     } else if (command == "plv") {
