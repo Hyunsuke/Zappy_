@@ -11,41 +11,41 @@ static int remove_one_obj(player_t *player, int id_obj)
 {
     if (id_obj == 4 && player->mendiane > 0) {
         player->mendiane--;
-        return 0;
+        return true;
     }
     if (id_obj == 5 && player->phiras > 0) {
         player->phiras--;
-        return 0;
+        return true;
     }
     if (id_obj == 6 && player->thystame > 0) {
         player->thystame--;
-        return 0;
+        return true;
     }
-    return 84;
+    return false;
 }
 
 static int remove_obj_from_player(player_t *player, int id_obj)
 {
     if (id_obj == 0 && player->food > 0) {
         player->food--;
-        return 0;
+        return true;
     }
     if (id_obj == 1 && player->linemate > 0) {
         player->linemate--;
-        return 0;
+        return true;
     }
     if (id_obj == 2 && player->deraumere > 0) {
         player->deraumere--;
-        return 0;
+        return true;
     }
     if (id_obj == 3 && player->sibur > 0) {
         player->sibur--;
-        return 0;
+        return true;
     }
-    if (remove_one_obj(player, id_obj) == 84)
-        return 84;
+    if (remove_one_obj(player, id_obj) == false)
+        return false;
     else
-        return 0;
+        return true;
 }
 
 static void add_one_obj(struct_t *s, int id_obj, int x, int y)
@@ -93,7 +93,7 @@ int c_set_obj(struct_t *s, int fd)
     player_t *player = get_player_by_fd(s, fd);
     int id_obj = get_resource_code(s->obj);
 
-    if (remove_obj_from_player(player, id_obj) == 84) {
+    if (remove_obj_from_player(player, id_obj) == false) {
         print_response("ko\n", fd);
         return -1;
     }

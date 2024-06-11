@@ -40,10 +40,8 @@ static void add_position_player(struct_t *s, player_t *new_player)
     }
 }
 
-void add_player(struct_t *s, int fd, int id_team)
+static void init_ressource_player(player_t *new_player)
 {
-    player_t *new_player = my_malloc(sizeof(player_t));
-
     new_player->food = 0;
     new_player->linemate = 0;
     new_player->deraumere = 0;
@@ -51,6 +49,25 @@ void add_player(struct_t *s, int fd, int id_team)
     new_player->mendiane = 0;
     new_player->phiras = 0;
     new_player->thystame = 0;
+}
+
+static void init_command_player(player_t *new_player)
+{
+    new_player->command_count = 0;
+    new_player->command_start = 0;
+    new_player->command_end = 0;
+    for (int i = 0; i < MAX_COMMANDS; i++) {
+        new_player->commands[i].command = NULL;
+        new_player->commands[i].tick = 0;
+    }
+}
+
+void add_player(struct_t *s, int fd, int id_team)
+{
+    player_t *new_player = my_malloc(sizeof(player_t));
+
+    init_ressource_player(new_player);
+    init_command_player(new_player);
     new_player->fd = fd;
     new_player->view_direction = 0;
     s->next_id_player++;
