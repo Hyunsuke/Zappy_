@@ -24,6 +24,8 @@ class Command:
         self.isInventoryUpdated = False
         self.commandList = []
         self.responseList = []
+        self.leaderIsChosen = -1 # -1 signifie qu'il n'y a pas encore de leader attribué, 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
+        # Il faut aussi que lorsque le leader est chosen il envoi en boucle son message et dans cette fonciton il faut mettre leaderIsChosen == 0
         thread_reception = threading.Thread(target=self.reception_loop)
         thread_reception.start()
         # thread_send = threading.Thread(target=self.sendArrayCmd)
@@ -102,6 +104,10 @@ class Command:
         elif self.responseList[0].startswith("Eject"):
             # print("C'est la réponse du Eject")
             self.adjustEject()
+        elif self.responseList[0].startswith("Broadcast"):
+            if self.responseList[0].endswith("END"):
+                if self.leaderIsChosen == -1:
+                    self.leaderIsChosen = 1
         if self.responseList[0].startswith("Look"):
             self.lookString = self.data_received
             self.isLookUpdated = True
@@ -128,6 +134,10 @@ class Command:
                     self.validateInventory(object)
                     # Check si on a atteint l'objectif
             elif fct == "END":
+                if self.leaderIsChosen != -1:
+                    return
+                self.leaderIsChosen = 0 # 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
+                # Prendre les coordonées du boug
                 print("Je vais rejoindre l'émetteur du message")
                 os._exit(0) # A supprimer
                 # On a trouvé tous les items, il faut passer lvl8
@@ -171,10 +181,8 @@ class Command:
     def validateInventory(self, objectTaken):
         if self.check_inventory() == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
-            print("Je suis l'émetteur")
             self.broadcastMaterial(objectTaken, "END")
             self.pop_item(objectTaken)
-            os._exit(0) # à supprimer
             return True
         if self.check_item(objectTaken) == True:
             self.broadcastMaterial(objectTaken, "OK")
