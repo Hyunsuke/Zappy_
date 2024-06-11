@@ -44,6 +44,16 @@ void Map::DrawIslandWires(const std::shared_ptr<Island>& selectedIsland) {
     }
 }
 
+void Map::DrawPlayerWires(const std::shared_ptr<Player>& selectedPlayer) {
+    if (!selectedPlayer)
+        return;
+    for (auto& player : players) {
+        if (player == selectedPlayer) {
+            player->DrawWires();
+        }
+    }
+}
+
 void Map::Update() {
     float time = GetTime();
     for (auto& island : islands) {
@@ -68,8 +78,21 @@ std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
     return nullptr;
 }
 
+std::shared_ptr<Player> Map::GetPlayerByNumber(int playerNumber) {
+    for (auto& player : players) {
+        if (player->GetPlayerNumber() == playerNumber) {
+            return player;
+        }
+    }
+    return nullptr;
+}
+
 std::vector<std::shared_ptr<Island>> Map::GetIslands() const {
     return islands;
+}
+
+std::vector<std::shared_ptr<Player>> Map::GetPlayers() const {
+    return players;
 }
 
 int Map::GetPlayerCount() const {

@@ -25,6 +25,7 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
 
     animIndex = 0;
     animCurrentFrame = 0;
+    rotationAxis = {0.0f, 1.0f, 0.0f};
     position = {island->GetPosition().x, island->GetPosition().y, island->GetPosition().z };
 
     animationMap[Animation::Dance] = 0;
@@ -41,31 +42,22 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
 
     UpdateScaleBasedOnLevel();
     SetAnimation(Animation::Idle);
+    UpdateRotationAngle();
 }
 
 Player::~Player() {}
 
 void Player::Draw() {
-    Vector3 orientationVector;
-    switch (orientation) {
-        case 1: // North
-            orientationVector = {0.0f, 1.0f, 0.0f};
-            break;
-        case 2: // East
-            orientationVector = {1.0f, 0.0f, 0.0f};
-            break;
-        case 3: // South
-            orientationVector = {0.0f, -1.0f, 0.0f};
-            break;
-        case 4: // West
-            orientationVector = {-1.0f, 0.0f, 0.0f};
-            break;
-        default:
-            orientationVector = {0.0f, 1.0f, 0.0f};
-            break;
-    }
     model = modelLoader.GetModel();
-    DrawModelEx(*model, position, orientationVector, rotationAngle, scale, WHITE);
+    DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+}
+
+void Player::DrawWires() {
+    glLineWidth(5.0f);
+    model = modelLoader.GetModel();
+    DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
+    std::cout << "Player DrawWires" << std::endl;
+    glLineWidth(1.0f);
 }
 
 void Player::UpdateAnimation() {
@@ -95,6 +87,10 @@ void Player::SetScale(const Vector3& newScale) {
     scale = newScale;
 }
 
+std::shared_ptr<Model> Player::GetModel() const {
+    return model;
+}
+
 void Player::SetRotation(const Vector3& axis, float angleDegrees) {
     rotationAxis = axis;
     rotationAngle = angleDegrees;
@@ -111,4 +107,101 @@ void Player::UpdateScaleBasedOnLevel() {
     float baseScale = 1.0f;
     float scaleFactor = 0.5f + 0.1f * level;
     scale = {baseScale * scaleFactor, baseScale * scaleFactor, baseScale * scaleFactor};
+}
+
+void Player::SetOrientation(int orientation) {
+    this->orientation = orientation;
+    UpdateRotationAngle();
+}
+
+void Player::UpdateRotationAngle() {
+    switch (orientation) {
+        case 1: // North
+            rotationAngle = 0.0f;
+            break;
+        case 2: // East
+            rotationAngle = 90.0f;
+            break;
+        case 3: // South
+            rotationAngle = 180.0f;
+            break;
+        case 4: // West
+            rotationAngle = -90.0f;
+            break;
+        default:
+            rotationAngle = 0.0f;
+            break;
+    }
+}
+
+void Player::SetIsland(std::shared_ptr<Island> newIsland) {
+    island = newIsland;
+}
+
+int Player::GetPlayerNumber() const {
+    return playerNumber;
+}
+
+void Player::JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration) {
+    Vector3 startPos = position;
+    Vector3 endPos = {newX * 15.0f, position.y, newY * 15.0f};
+
+    SetAnimation(Animation::Jump);
+    int totalFrames = animations[animIndex]->frameCount;
+    float frameDuration = duration / totalFrames;
+
+    float startTime = GetTime();
+    float endTime = startTime + duration;
+    float t = 0.0f;
+
+    while (t < 1.0f) {
+        float currentTime = GetTime();
+        t = (currentTime - startTime) / (endTime - startTime);
+        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
+        SetPosition(newPos);
+        UpdateAnimation();
+        Draw();
+        // Ensure this loop allows rendering the rest of the scene, not blocking
+    }
+    SetIsland(newIsland);
+}
+
+int Player::getOBJquantity(std::string objName)
+{
+    if (objName == "food")
+        return food;
+    if (objName == "linemate")
+        return linemate;
+    if (objName == "deraumere")
+        return deraumere;
+    if (objName == "sibur")
+        return sibur;
+    if (objName == "mendiane")
+        return mendiane;
+    if (objName == "phiras")
+        return phiras;
+    if (objName == "thystame")
+        return thystame;
+    return 0;
+}
+
+int Player::getX() const
+{
+    return x;
+}
+
+int Player::getY() const
+{
+    return y;
+}
+
+int Player::GetLevel() const
+{
+    return level;
+}
+
+
+std::string Player::GetTeam() const
+{
+    return teamName;
 }

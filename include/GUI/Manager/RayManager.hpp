@@ -18,6 +18,7 @@ public:
     RayManager();
     void UpdateRay(Camera camera);
     std::shared_ptr<Island> GetIslandUnderMouse(const std::vector<std::shared_ptr<Island>>& islands);
+    std::shared_ptr<Player> GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players);
 
 private:
     bool CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform);

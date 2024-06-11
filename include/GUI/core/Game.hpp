@@ -70,6 +70,7 @@ private:
     std::unique_ptr<SocketManager> socketManager;
 
     std::shared_ptr<Island> selectedIsland;
+    std::shared_ptr<Player> selectedPlayer;
 };
 
 #endif /* !GAME_HPP_ */

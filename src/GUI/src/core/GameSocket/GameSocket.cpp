@@ -39,7 +39,15 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "ppo") {
         int n, x, y, o;
         iss >> n >> x >> y >> o;
-        // Handle player position
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetOrientation(o);
+            player->SetAnimation(Player::Animation::Jump);
+            auto newIsland = gameMap.GetIslandByXY(x, y);
+            if (newIsland) {
+                // player->JumpTo(x, y, newIsland, timeUnit * (41.0f / GetFPS())); // Assuming 41 frames at 60 FPS
+            }
+        }
     } else if (command == "plv") {
         int n, l;
         iss >> n >> l;

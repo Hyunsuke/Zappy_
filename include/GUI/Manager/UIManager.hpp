@@ -17,8 +17,8 @@ class UIManager {
 public:
     UIManager(int screenWidth, int screenHeight);
 
-    void DrawUI(const std::shared_ptr<Island>& selectedIsland, int teamCount, int playerCount, int timeUnit, const std::string& mapSize, int fps);
-    void DrawIslandInfo(const std::shared_ptr<Island>& selectedIsland, int fps);
+    void DrawUI(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int teamCount, int playerCount, int timeUnit, const std::string& mapSize, int fps);
+    void DrawIslandInfoOrPlayer(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int fps);
     void DrawAdditionalInfo(int teamCount, int playerCount, int timeUnit, const std::string& mapSize);
 
 

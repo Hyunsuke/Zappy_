@@ -14,6 +14,7 @@
 #include <vector>
 #include "raylib.h"
 #include "../Island.hpp"
+#include <GL/gl.h>
 
 class Player {
 public:
@@ -35,6 +36,7 @@ public:
     ~Player();
 
     void Draw();
+    void DrawWires();
     void UpdateAnimation();
     void UpdatePosition();
     void SetPosition(Vector3 position);
@@ -42,6 +44,16 @@ public:
     void SetScale(const Vector3& scale);
     void SetRotation(const Vector3& axis, float angleDegrees);
     void SetAnimation(Animation animation);
+    void JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration);
+    void SetIsland(std::shared_ptr<Island> newIsland);
+    int GetPlayerNumber() const;
+    std::shared_ptr<Model> GetModel() const;
+    void SetOrientation(int orientation);
+    int getOBJquantity(std::string objName);
+    int getX() const;
+    int getY() const;
+    int GetLevel() const;
+    std::string GetTeam() const;
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -62,11 +74,20 @@ private:
     int level;
     Camera PlayerCam;
 
+    int food = 0;
+    int linemate = 0;
+    int deraumere = 0;
+    int sibur = 0;
+    int mendiane = 0;
+    int phiras = 0;
+    int thystame = 0;
+
     std::shared_ptr<Island> island;
     std::shared_ptr<Model> model;
     ModelLoader modelLoader;
 
     void UpdateScaleBasedOnLevel();
+    void UpdateRotationAngle();
 };
 
 #endif // PLAYER_HPP

@@ -87,7 +87,15 @@ void Game::Update() {
 
     rayManager.UpdateRay(cameraController.GetCamera());
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+        selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
+        if (selectedPlayer) {
+            selectedIsland = nullptr;
+        } else {
+            selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+            if (selectedIsland) {
+                selectedPlayer = nullptr;
+            }
+        }
     }
 }
 
@@ -101,8 +109,9 @@ void Game::Draw() {
     sky.DrawSunAndMoon();
     gameMap.Draw();
     gameMap.DrawIslandWires(selectedIsland);
+    gameMap.DrawPlayerWires(selectedPlayer);
 
     EndMode3D();
-    uiManager.DrawUI(selectedIsland, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
+    uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
     EndDrawing();
 }

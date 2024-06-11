@@ -23,6 +23,16 @@ std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::s
     return nullptr;
 }
 
+std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players) {
+    for (auto& player : players) {
+        Matrix transform = MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
+        if (CheckRayCollisionModel(ray, *player->GetModel(), transform)) {
+            return player;
+        }
+    }
+    return nullptr;
+}
+
 bool CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint) {
     Vector3 edge1 = Vector3Subtract(p2, p1);
     Vector3 edge2 = Vector3Subtract(p3, p1);
