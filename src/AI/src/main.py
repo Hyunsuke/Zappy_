@@ -115,11 +115,13 @@ class ZappyClient:
             while True:
                 self.blockingBuffer()
                 self.update_inventory()
+                print("---------------------------")
                 if self.current_inventory.current_inventory['food'] < 15:
                     self.eat_nearest_ressource("food", False)
                 else:
                     self.look_for_rarest_stone()
                 self.rotatePlayer()
+                self.cmd.move_forward()
                 self.cmd.move_forward()
                 self.updateInfos()
                 self.cmd.sendArrayCmd()

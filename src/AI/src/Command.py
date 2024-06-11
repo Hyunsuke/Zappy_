@@ -71,8 +71,12 @@ class Command:
             # print("Données > " + data)
             print("We received " + data + " for command " + self.responseList[0])
             self.adjustData()
+            if self.responseList[0] != "Incantation":
+                self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
+            # else:
+            #     if self.data_received == "ko":
+            #         self.commandWaitingRoom -= 1
             self.responseList.pop(0)
-            self.commandWaitingRoom -= 1
 
     def reception_loop(self):
         while True:
@@ -167,6 +171,7 @@ class Command:
     def validateInventory(self, objectTaken):
         if self.check_inventory() == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
+            print("Je suis l'émetteur")
             self.broadcastMaterial(objectTaken, "END")
             self.pop_item(objectTaken)
             os._exit(0) # à supprimer
