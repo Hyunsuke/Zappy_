@@ -19,7 +19,7 @@ std::shared_ptr<ModelAnimation> AnimationCollector::LoadAnimation(const std::str
         throw GameException("Failed to load animations: " + filePath);
     }
 
-    std::shared_ptr<ModelAnimation> animations = std::shared_ptr<ModelAnimation>(rawAnimations, [animCount](ModelAnimation* anims) {
+    std::shared_ptr<ModelAnimation> animations(rawAnimations, [animCount](ModelAnimation* anims) {
         ::UnloadModelAnimations(anims, *animCount);
     });
 
@@ -30,9 +30,6 @@ std::shared_ptr<ModelAnimation> AnimationCollector::LoadAnimation(const std::str
 }
 
 void AnimationCollector::UnloadAllAnimations() {
-    for (auto& entry : animationCache) {
-        ::UnloadModelAnimations(entry.second.get(), animCountCache[entry.first]);
-    }
     animationCache.clear();
     animCountCache.clear();
 }

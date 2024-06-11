@@ -52,10 +52,10 @@ void Map::Update() {
         position.y = offset;
         island->Move(position);
     }
-    // for (auto& player : players) {
-    //     player->UpdateAnimation();
-    //     player->UpdatePosition();
-    // }
+    for (auto& player : players) {
+        player->UpdateAnimation();
+        player->UpdatePosition();
+    }
 }
 
 

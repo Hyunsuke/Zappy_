@@ -44,7 +44,6 @@ public:
     void SetAnimation(Animation animation);
 
 private:
-    std::shared_ptr<Model> model;
     std::vector<std::shared_ptr<ModelAnimation>> animations;
     int animCount;
     unsigned int animIndex;
@@ -52,7 +51,7 @@ private:
     Vector3 position;
     Vector3 scale;
     Vector3 rotationAxis;
-    float rotationAngle;
+    float rotationAngle = 0.0f;
     std::unordered_map<Animation, unsigned int> animationMap;
 
     int playerNumber;
@@ -64,6 +63,8 @@ private:
     Camera PlayerCam;
 
     std::shared_ptr<Island> island;
+    std::shared_ptr<Model> model;
+    ModelLoader modelLoader;
 
     void UpdateScaleBasedOnLevel();
 };

@@ -26,6 +26,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
     shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
     shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
 
+    ModelCollector::GetInstance().LoadModel("src/GUI/assets/Player/robot.glb");
+
     InitializeMap(mapSize, mapContent, eggs);
 }
 
