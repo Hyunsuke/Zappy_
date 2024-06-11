@@ -6,25 +6,24 @@
 */
 
 #include "all.h"
-
 void server_usage(server_t *server, struct_t *s)
 {
-    double tick_interval = CLOCKS_PER_SEC / s->time;
-    clock_t start_time = s->clock;
+    double tick_interval = 1.0 / s->time;
+    clock_t start_time = clock();
+    clock_t current_time;
     double elapsed_time;
 
-    s->clock = clock();
     server->addrlen = sizeof(server->serv_adr);
     while (1) {
-        s->clock = clock();
-        elapsed_time = (double)(s->clock - start_time) / CLOCKS_PER_SEC;
+        current_time = clock();
+        elapsed_time = (double)(current_time - start_time) / CLOCKS_PER_SEC;
         server->tmp_fdtab = server->fd_tab;
         handle_activity(server);
-        handle_new_client(server);
+        handle_new_client(server->server_fd);
         handling_cmd(server, s);
         if (elapsed_time >= tick_interval) {
             new_tick(s);
-            start_time = s->clock;
+            start_time = current_time;
         }
     }
 }

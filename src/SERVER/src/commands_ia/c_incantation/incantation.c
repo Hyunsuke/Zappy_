@@ -40,26 +40,70 @@ static bool check_items_for_incantation(struct_t *s, elevation_t *elevation,
     return true;
 }
 
+static bool check_level_player(struct_t *s, elevation_t *elevation,
+    position_t position)
+{
+    player_t *current_player = s->head_player;
+    int count = 0;
+
+    while (current_player != NULL) {
+        if (current_player->x == position.x && current_player->y == position.y
+            && current_player->level_player == elevation->level_from)
+            count++;
+        current_player = current_player->next;
+    }
+    if (count < elevation->nb_players)
+        return false;
+    else
+        return true;
+}
+
+static void change_level_elevation(struct_t *s, elevation_t *elevation,
+    position_t position)
+{
+    player_t *current_player = s->head_player;
+
+    while (current_player != NULL) {
+        if (current_player->x == position.x && current_player->y == position.y
+            && current_player->level_player == elevation->level_from)
+            current_player->level_player++;
+        current_player = current_player->next;
+    }
+}
+
 int c_incantation(struct_t *s, int fd)
 {
-    elevation_t *elevation = get_elevation_by_level_to(s, 1);
     player_t *player = get_player_by_fd(s, fd);
+    elevation_t *elevation = get_elevation_by_level_to(s,
+        (player->level_player + 1));
     position_t player_position = { .x = player->x, .y = player->y };
 
-    if (check_items_for_incantation(s, elevation, &player_position) == false ||
+    if (elevation == NULL ||
+        check_items_for_incantation(s, elevation, &player_position) == false ||
         get_number_of_players_on_case(s, player_position.x, player_position.y)
-            < elevation->nb_players) {
+            != elevation->nb_players
+            || check_level_player(s, elevation, player_position) == false) {
         printf("KO\n");
         return -1;
     }
-    // Modify level incantation for all players
+    change_level_elevation(s, elevation, player_position);
     printf("OK\n");
     return 0;
 }
 
-// Ajouter function pour pour venir checker si l'incantation est tjr possible
-void c_incantation_checker(struct_t *s, char *buffer, player_t *player)
+bool c_incantation_checker(struct_t *s, player_t *player)
 {
-    // Check if good command
-    return;
+    elevation_t *elevation = get_elevation_by_level_to(s,
+        (player->level_player + 1));
+    position_t player_position = { .x = player->x, .y = player->y };
+
+    if (elevation == NULL ||
+        check_items_for_incantation(s, elevation, &player_position) == false ||
+        get_number_of_players_on_case(s, player_position.x, player_position.y)
+            != elevation->nb_players
+            || check_level_player(s, elevation, player_position) == false) {
+        return false;
+    }
+    printf("OK\n");
+    return true;
 }
