@@ -5,3 +5,5 @@ zappy_ai
 zappy_gui
 .idea/*
 vgcore*
+coding-style-reports.log
+zappy_ref/*

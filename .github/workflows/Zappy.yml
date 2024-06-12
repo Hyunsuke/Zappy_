@@ -1,0 +1,80 @@
+name: zappy-checker
+
+on:
+  push:
+    branches-ignore:
+    - "ga-ignore-*"
+  pull_request:
+    branches-ignore:
+    - "ga-ignore-*"
+
+jobs:
+  # Verif cleanliness:
+  check_repository_cleanliness:
+    name: "🧹 Check repository is clean 🧹"
+    runs-on: ubuntu-latest
+    steps :
+      - uses : actions/checkout@v3
+      - run : |
+          find -name "*.o" -exec echo "::error file={}:: {}" \;
+          find -name "*.a" -exec echo "::error file={}:: {}" \;
+          find -name "*.gcno" -exec echo "::error file={}:: {}" \;
+          find -name "*.gcda" -exec echo "::error file={}:: {}" \;
+          find -name "*.gcov" -exec echo "::error file={}:: {}" \;
+          find -path "*/tmp/*" -exec echo "::error file={}:: {}" \;
+          find -name "#*#" -o -name "*.o" -o -name "*.a" -o -name "*~" -o -name "*pain_au_chocolat*" -o -name "*.so" -o -name "*.gcno" -o -name "*.gcda" -o -name "*.gcov" -o -path "*/tmp/*"| grep -q . && exit 1 || exit 0
+
+  # Verif Coding-Style:
+  check_coding_style:
+    name: "🕵️‍♀️ Check the Coding_Style 🕵️"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3.4.0
+      - name: Check coding style
+        run: |
+          check.sh $(pwd) $(pwd) 2>&1 | tee coding_style_errors.log
+      - name: Display contents of coding-style-reports.log
+        run: |
+          if [ -f coding-style-reports.log ]; then
+            cat coding-style-reports.log
+          else
+            echo "File coding-style-reports.log not found."
+          fi
+      - name: Display errors as annotations with links
+        if: always()
+        run: |
+          if [ -f coding-style-reports.log ]; then
+            while IFS= read -r line; do
+              file="$(echo "$line" | cut -d ':' -f 1)"
+              line_number="$(echo "$line" | cut -d ':' -f 2)"
+              error_type="$(echo "$line" | cut -d ':' -f 3)"
+              annotation="${error_type} coding style error"
+              description="$(echo "$line" | cut -d ':' -f 4)"
+              file_url="${{ github.server_url }}/${{ github.repository }}/${{ github.ref }}/$(echo "${file}" | sed 's|/|@|g')?${{ github.action }}-${{ github.run_id }}"
+              echo "::error title=${annotation},file=${file},line=${line_number},${file_url}::${description}"
+            done < coding-style-reports.log
+          fi
+      - name: Fail if there are errors
+        run: |
+          if [ -s coding-style-reports.log ]
+          then
+            echo "Errors found"
+            exit 1
+          fi
+        shell: bash
+
+  # Verif compilation:
+  check_program_compilation:
+      name: "🔨 Check program compilation 🔨"
+      runs-on: ubuntu-latest
+      container:
+        image: epitechcontent/epitest-docker:latest
+      steps:
+        - uses: actions/checkout@v3
+        - id: check_compil
+          run: make
+          timeout-minutes: 2
+        - run: make clean

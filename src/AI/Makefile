@@ -1,37 +1,24 @@
 ##
-## EPITECH PROJECT, 2023
+## EPITECH PROJECT, 2024
 ## zappy
 ## File description:
 ## Makefile
 ##
 
-# SRCDIR = src
+NAME = ../../zappy_ai
 
-# SRCDIRS = $(SRCDIR) $(SRCDIR)/core $(SRCDIR)/Interfaces
-# SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
-# SRC_OBJ = $(SRC_ALL:.cpp=.o)
+all: $(NAME)
 
-# CPPFLAGS = -W -Wall -Wextra -Iinclude -Iinclude/core -Iinclude/Interfaces -lconfig++ -g -pthread -std=c++20
+$(NAME): src/main.py
+	@echo '#!/bin/bash' > $(NAME)
+	@echo '' >> $(NAME)
+	@echo 'python3 src/AI/src/main.py "$$@"' >> $(NAME)
+	@chmod +x $(NAME)
 
-# CC = g++ -g
+clean:
+	echo "Nothing to clean in Python"
 
-# NAME = zappy_ai
+fclean: clean
+	@rm -f $(NAME)
 
-# all: $(NAME)
-
-# $(NAME): $(SRC_OBJ)
-# 	$(CC) -o $@ $^ $(CPPFLAGS)
-
-# clean:
-# 	rm -f $(SRC_OBJ)
-# 	rm -f /tmp/pizzeria_*
-# 	rm -f socket/kitchen_socket*
-
-
-# fclean: clean
-# 	rm -f $(NAME)
-
-
-# re: fclean all
-
-# .PHONY: all clean fclean re
+re: fclean all
