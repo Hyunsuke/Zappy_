@@ -7,39 +7,53 @@
 
 #include "all.h"
 
-void gestion_function(server_t *server, struct_t *s, char *buffer,
-    int client_fd)
+static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
-    if (get_player_by_fd(s, client_fd) != NULL) {
-        run_commands_ia(s, client_fd, buffer);
-    } else if (s->fd_gui != -1) {
+    if (client_fd == s->fd_gui && s->fd_gui != -1) {
         run_commands_gui(s, client_fd, buffer);
+    } else {
+        run_commands_ia(s, client_fd, buffer);
     }
 }
 
-void gestion_team_name(server_t *server, struct_t *s, char *buffer,
+static void list_actions(server_t *server, struct_t *s, int client_fd,
+    team_t *team)
+{
+    player_t *mob;
+
+    add_player(s, client_fd, team->team_id);
+    mob = get_player_by_fd(s, client_fd);
+    if (add_player_to_team(s, team->team_id, mob->id_player,
+        client_fd) != -1) {
+        print_players(s);
+        server->round[client_fd]++;
+        return;
+    }
+    // Remove le player de la liste player
+    printf("Error not enough slot in the requested team\n");
+}
+
+static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     size_t len = strlen(buffer);
-    team_t *team;
+    team_t *team = NULL;
+    char *team_name;
 
-    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
+    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {
         buffer[len - 2] = '\0';
-    team = get_team_by_name(s, buffer);
+    }
+    team_name = strtok(buffer, "\r\n");
+    team = get_team_by_name(s, team_name);
     if (team == NULL) {
-        printf("Name team unknow\n");
+        printf("Name team unknown\n");
         return;
     }
-    printf("It's AI\n");
-    print_response("Server: You're an AI\n", client_fd);
-    add_player(s, client_fd, team->team_id);
-    print_players(s);
-    server->round[client_fd]++;
-    return;
-    print_response("Team name that you gave don't exist\n", client_fd);
+    list_actions(server, s, client_fd, team);
 }
 
-void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
+static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
+    int client_fd)
 {
     if (server->round[client_fd] == 0) {
         if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
@@ -53,10 +67,11 @@ void gestion_cmd(server_t *server, struct_t *s, char *buffer, int client_fd)
     } else {
         print_response("Command: ", client_fd);
         print_response(buffer, client_fd);
+        gestion_function(s, buffer, client_fd);
     }
 }
 
-int receive_cmd(server_t *server, struct_t *s, char *buffer, int i)
+static int receive_cmd(server_t *server, struct_t *s, char *buffer, int i)
 {
     server->valread = read(i, buffer, 1024 - 1);
     if (server->valread == 0) {

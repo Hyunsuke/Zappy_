@@ -11,9 +11,21 @@
     #include "struct.h"
 
 ///////////////////////////////////////////////////////////////////////////////
+/////////////////////////// TICK //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+void new_tick(struct_t *s);
+
+
+///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// COMMANDS IA ///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
 int c_forward(struct_t *s, int fd);
+void moove_left(struct_t *s, player_t *mob, int x, int y);
+void moove_right(struct_t *s, player_t *mob, int x, int y);
+void moove_bottom(struct_t *s, player_t *mob, int x, int y);
+void moove_top(struct_t *s, player_t *mob, int x, int y);
 int c_right(struct_t *s, int fd);
 int c_left(struct_t *s, int fd);
 int c_look(struct_t *s, int fd);
@@ -25,6 +37,13 @@ int c_eject(struct_t *s, int fd);
 int c_take_obj(struct_t *s, int fd);
 int c_set_obj(struct_t *s, int fd);
 int c_incantation(struct_t *s, int fd);
+
+////// Command functions ////
+void print_all_commands(player_t *player);
+int add_command(player_t *player, char *command, int tick);
+command_t *get_oldest_command(player_t *player);
+int get_command_count(player_t *player);
+int remove_oldest_command(player_t *player);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,7 +63,8 @@ int c_sst(struct_t *s, char *buffer);
 int c_pnw(struct_t *s, int id_player, int *position, int incantation_level);
 int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
-int c_pic(struct_t *s);
+// int c_pic(struct_t *s); Fix Makefile
+int c_pic(struct_t *s, position_t position, int level, int *player);
 int c_pie(struct_t *s, int x, int y, int incantation_result);
 int c_pfk(struct_t *s, int id_player);
 int c_pdr(struct_t *s, int id_player, int nb_rsc);
@@ -69,8 +89,9 @@ int run_commands_ia(struct_t *s, int fd, char *buffer);
 typedef struct {
     char *command;
     int (*func)(struct_t *s, char *buffer);
-    } command_struct_gui_t;
-    typedef struct {
+} command_struct_gui_t;
+
+typedef struct {
     char *command;
     int (*func)(struct_t *s, int fd);
 } command_struct_ia_t;

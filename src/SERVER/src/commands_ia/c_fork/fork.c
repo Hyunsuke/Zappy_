@@ -9,6 +9,12 @@
 
 int c_fork(struct_t *s, int fd)
 {
-    printf("c_fork\n");
+    player_t *player = get_player_by_fd(s, fd);
+    int nb_egg =
+        add_position_egg_to_team(s, player->id_team, player->x, player->y);
+    int position[2] = {player->x, player->y};
+
+    c_enw(s, nb_egg, player->id_player, position);
+    print_response("ok\n", fd);
     return 0;
 }

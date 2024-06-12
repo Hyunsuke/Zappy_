@@ -16,7 +16,7 @@ $(NAME): src/main.py
 	@chmod +x $(NAME)
 
 clean:
-	echo "Nothing to clean in Python"
+	@rm -rf $src/__pycache__/
 
 fclean: clean
 	@rm -f $(NAME)

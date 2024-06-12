@@ -28,6 +28,7 @@ SRC	=	src/main.c	\
 		src/commands_ia/c_eject/eject.c \
 		src/commands_ia/c_fork/fork.c \
 		src/commands_ia/c_forward/forward.c \
+		src/commands_ia/c_forward/moove.c \
 		src/commands_ia/c_incantation/incantation.c \
 		src/commands_ia/c_inventory/inventory.c \
 		src/commands_ia/c_left/left.c \
@@ -69,6 +70,15 @@ SRC	=	src/main.c	\
 		src/utils/team/create_team.c \
 		src/utils/team/egg_team.c \
 		src/utils/team/get_team.c \
+		src/utils/map.c \
+		src/utils/init.c \
+		src/utils/get_rsc_code.c \
+		src/utils/commands/get_command.c \
+		src/utils/commands/add_command.c \
+		src/utils/commands/print_command.c \
+		src/utils/commands/remove_command.c \
+		src/utils/tick.c \
+
 
 INCLUDEDIR = ../../include/SERVER/
 

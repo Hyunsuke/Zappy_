@@ -6,6 +6,8 @@ from sys import argv, exit, stdout
 from InventoryManager import InventoryManager
 from Command import Command
 import time
+import os
+import random
 
 
 class ZappyClient:
@@ -15,16 +17,18 @@ class ZappyClient:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
             self.buffer = ""
-            self.level = 1
+            self.priorityList = ["food", "thystame", "linemate"]
             self.initial_handshake()
-            self.cmd = Command(self.socket)
             self.current_inventory = InventoryManager()
-            self.current_inventory.update_inventory(self.cmd.inventory())
+            self.cmd = Command(self.socket, self.current_inventory, self.team_name)
+            self.updateInfos()
+            self.cmd.fork()
+            self.cmd.sendArrayCmd()
+            self.fastLvl2()
             self.main_loop()
         except socket.error as e:
             print(f"Socket error: {e}")
-            sys.exit(1)
-
+            os._exit(1)
 
     def parse_arguments(self):
         for i in argv:
@@ -55,8 +59,7 @@ class ZappyClient:
             sys.exit(1)
 
 
-    # List de ce qu'on doit avoir entre le niveau 2 & 10. L'algo doit prendre ça en compte à partir du lvl2
-    finalObjectiveList = [
+    level_2_objectives = [
         ("linemate", 10),
         ("deraumere", 5),
         ("sibur", 20),
@@ -65,67 +68,182 @@ class ZappyClient:
         ("thystame", 12)
     ]
 
-    def getBroadcastMessage(self, response):
-        if (response == "ok" or response == "ko"):
-            return response
-        parts = response('_')
-        if len(parts) != 2:
-            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object'")
-        # On récupère le nom de l'équipe et l'objet
-        team_name = parts[0]
-        object_name = parts[1]
-        return team_name, object_name
+    def blockingBuffer(self):
+        while self.cmd.getWaitingRoom() > 0:
+            continue
 
-    def broadcastMaterial(self, material):
-        if (material == "linemate"):
-            self.broadcast("[teamname]_linemate")
-        elif (material == "deraumere"):
-            self.broadcast("[teamname]_deraumere")
-        elif (material == "sibur"):
-            self.broadcast("[teamname]_sibur")
-        elif (material == "mendiane"):
-            self.broadcast("[teamname]_mendiane")
-        elif (material == "phiras"):
-            self.broadcast("[teamname]_phiras")
-        elif (material == "thystame"):
-            self.broadcast("[teamname]_thystame")
+    def updateInfos(self):
+        self.cmd.inventory()
+        self.cmd.look()
+
+    def random_nb(self):
+        return random.choice([0, 1, 2])
+
+    def rotatePlayer(self):
+        nb = self.random_nb()
+        if nb == 0:
+            return
+        elif nb == 1:
+            self.cmd.turn_left()
+        elif nb == 2:
+            self.cmd.turn_right()
+
+    def fastLvl2(self):
+        i = 0
+        try:
+            while True:
+                self.blockingBuffer()
+                self.update_inventory()
+                if self.current_inventory.current_inventory['food'] >= 10 and self.current_inventory.current_inventory['linemate'] >= 1:
+                    self.cmd.set_object_down("linemate")
+                    self.cmd.incantation()
+                    self.cmd.responseList.append("Current level")
+                    self.cmd.fork()
+                    self.updateInfos()
+                    self.cmd.sendArrayCmd()
+                    break
+                self.eat_nearest_ressource("linemate", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
+                self.rotatePlayer()
+                self.cmd.move_forward()
+                self.updateInfos()
+                self.cmd.sendArrayCmd()
+        except KeyboardInterrupt:
+            print("Terminating AI client.")
 
     def main_loop(self):
         try:
             while True:
-                self.current_inventory.update_inventory(self.cmd.inventory())
+                self.blockingBuffer()
+                self.update_inventory()
+                print("---------------------------")
+                if self.current_inventory.current_inventory['food'] < 15:
+                    self.eat_nearest_ressource("food", False)
+                else:
+                    self.look_for_rarest_stone()
+                self.rotatePlayer()
                 self.cmd.move_forward()
-                if self.current_inventory.current_inventory['food'] < 5:
-                    self.eat_nearest_food(True)
+                self.cmd.move_forward()
+                self.updateInfos()
+                self.cmd.sendArrayCmd()
+
         except KeyboardInterrupt:
             print("Terminating AI client.")
         finally:
             self.socket.close()
 
-    def eat_nearest_food(self, needPrint=False):
-        response = self.cmd.look()
+    def update_inventory(self, p=False):
+        if (self.cmd.isInventoryUpdated == False):
+            return
+        inventory_string = self.cmd.inventoryString
+        if inventory_string is None or inventory_string.startswith("[ food") == False:
+            # print("Error: Inventory string is None")
+            return
+        # Nettoyer et séparer la chaîne de caractères
+        inventory_string = inventory_string.strip('[] ')
+        items = inventory_string.split(', ')
+
+        # Parcourir les éléments et mettre à jour le dictionnaire
+        for item in items:
+            # if (item == "ok" or "ko"): # Gestion d'erreur du broadcast
+            #     print("Broadcast response: ", item)
+            #     return
+            key, value = item.split()
+            self.current_inventory.current_inventory[key] = int(value)
+            self.cmd.current_inventory.current_inventory[key] = int(value)
+        if (p == True):
+            print("Inventory updated: ", self.current_inventory.current_inventory)
+
+    def eat_nearest_ressource(self, ressource, needPrint=False):
+        # print("Eat nearest resource")
+        if (self.cmd.isLookUpdated == False):
+            return
+        # print("We managed to get a look string. Let's eat")
+        response = self.cmd.lookString
         if response is None:
             return
-        a = 0
+        self.cmd.isLookUpdated = False
+        # tiles_with_resource = []
+        destinationTile = 0
+        currentTile = 0
         objects = response.split(",")
         for object in objects:
             object = object.split(" ")
             for obj in object:
-                if obj.startswith("food"):
-                    print("Moving to tile: ", a)
-                    self.move_to_tile(a, needPrint)
-                    self.cmd.take_object("food")
-                    return
-            a += 1
+                if obj.startswith(ressource) or obj.startswith("food"):
+                    # tiles_with_resource.append(destinationTile)
+                    print("Moving to tile: ", destinationTile)
+                    x, y = self.get_coordinates(destinationTile)
+                    current_x, current_y = self.get_coordinates(currentTile)
+                    print("x: ", x, "y: ", y)
+                    self.move_to_tile(x, y, current_x, current_y)
+                    currentTile = destinationTile
+                    if obj.startswith("food"):
+                        self.cmd.take_object("food")
+                    else :
+                        self.cmd.take_object(ressource)
+                    # return
+            destinationTile += 1
 
-    def move_to_tile(self, target_tile, needPrint=False):
-        self.cmd.look(needPrint)
-        if target_tile == 0:
+    def look_for_rarest_stone(self):
+        print("Looking for rarest stone")
+        if (self.cmd.isInventoryUpdated == False):
             return
+        response = self.cmd.inventoryString
+        total_value = 0
+        # print(response)
+        for key, value in self.current_inventory.objective_inventory.items():
+            total_value += value
+            # print(key, value)
+            if key in response and self.current_inventory.objective_inventory[key] > 0:
+                # print("Found ", key)
+                self.eat_nearest_ressource(key, True)
+                # self.current_inventory.objective_inventory[key] -= 1
+                return
+            # if self.current_inventory.current_inventory[key] < value:
+            #     self.lookForTile(key)
+        # if total_value == 0:
+        #     print("All stones have been found")
+        #     os._exit(1)
+
+    def move_to_tile(self, target_x, target_y, current_x, current_y, needPrint=False):
+        # Move in the X direction
+        while current_x != target_x:
+            if current_x < target_x:
+                self.cmd.turn_right(needPrint)
+                while current_x < target_x:
+                    self.cmd.move_forward(needPrint)
+                    current_x += 1
+                self.cmd.turn_left(needPrint)
+            elif current_x > target_x:
+                self.cmd.turn_left(needPrint)
+                while current_x > target_x:
+                    self.cmd.move_forward(needPrint)
+                    current_x -= 1
+                self.cmd.turn_right(needPrint)
+
+        # Move in the Y direction
+        while current_y != target_y:
+            if current_y < target_y:
+                while current_y < target_y:
+                    self.cmd.move_forward(needPrint)
+                    current_y += 1
+            elif current_y > target_y:
+                self.cmd.turn_left(needPrint)
+                self.cmd.turn_left(needPrint)
+                while current_y > target_y:
+                    self.cmd.move_forward(needPrint)
+                    current_y -= 1
+                self.cmd.turn_left(needPrint)
+                self.cmd.turn_left(needPrint)
+
+    def get_coordinates(self, target_tile):
+        if target_tile == 0:
+            return (0, 0)
+
         a = 0
         b = 0
         tab = []
-        for i in range(9): ## max level + 1
+        for i in range(9):  # max level + 1
             tab.append([])
             b = (i * 2) + 1
             a += b
@@ -133,26 +251,30 @@ class ZappyClient:
             while b < a:
                 tab[i].append(b)
                 b += 1
+
         c = 0
+        x = 0
+        y = 0
         for i in tab:
             tmp = i
             if c != 0:
-                self.cmd.move_forward(needPrint)
+                y += 1
             if target_tile <= i[-1]:
                 break
             c += 1
         c = tmp[-1] -c
         if target_tile < c:
-            self.cmd.turn_left(needPrint)
+            # self.cmd.turn_left(needPrint)
             while c != target_tile:
-                self.cmd.move_forward(needPrint)
+                x -= 1
                 c -= 1
         elif target_tile > c:
-            self.cmd.turn_right(needPrint)
+            # self.cmd.turn_right(needPrint)
             while c != target_tile:
-                self.cmd.move_forward(needPrint)
+                x += 1
                 c += 1
-        self.cmd.look(needPrint)
+        return x, y  # If tile not found (which shouldn't happen in this context)
+
 
 if __name__ == "__main__":
     client = ZappyClient()
