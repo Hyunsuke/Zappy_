@@ -19,7 +19,7 @@ void server_usage(server_t *server, struct_t *s)
         elapsed_time = (double)(current_time - start_time) / CLOCKS_PER_SEC;
         server->tmp_fdtab = server->fd_tab;
         handle_activity(server);
-        handle_new_client(server->server_fd);
+        handle_new_client(server);
         handling_cmd(server, s);
         if (elapsed_time >= tick_interval) {
             new_tick(s);

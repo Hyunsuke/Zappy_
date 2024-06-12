@@ -30,7 +30,7 @@ static void new_tick_for_player(struct_t *s, player_t *current_player)
         run_commands_ia(s, current_player->fd, command->command);
         remove_oldest_command(current_player);
     }
-    if (strcmp("incantantion", command->command) == 0 &&
+    if (strcmp("Incantantion\n", command->command) == 0 &&
         c_incantation_checker(s, current_player) == false) {
         run_commands_ia(s, current_player->fd, command->command);
         remove_oldest_command(current_player);
