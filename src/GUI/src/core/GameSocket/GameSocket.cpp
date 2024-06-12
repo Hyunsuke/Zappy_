@@ -16,7 +16,6 @@ void Game::HandleServerMessage(const std::string& message) {
     if (command == "msz") {
         int x, y;
         iss >> x >> y;
-        // Handle map size
     } else if (command == "bct") {
         int x, y, q0, q1, q2, q3, q4, q5, q6;
         iss >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
@@ -24,7 +23,8 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "tna") {
         std::string teamName;
         iss >> teamName;
-        // Handle team name
+        this->teamNames.push_back(teamName);
+        Utils::removeDuplicates(teamNames);
     } else if (command == "pnw") {
         int n, x, y, o, l;
         std::string teamName;
@@ -39,6 +39,7 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "ppo") {
         int n, x, y, o;
         iss >> n >> x >> y >> o;
+        std::cout << "Player moved x: " << x << " y: " << y << std::endl;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetOrientation(o);
@@ -51,11 +52,25 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "plv") {
         int n, l;
         iss >> n >> l;
-        // Handle player level
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetLevel(l);
+        }
     } else if (command == "pin") {
         int n, x, y, q0, q1, q2, q3, q4, q5, q6;
         iss >> n >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
-        // Handle player inventory
+        std::cout << "Player inventory x: " << x << " y: " << y << std::endl;
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->setOBJquantity("food", q0);
+            player->setOBJquantity("linemate", q1);
+            player->setOBJquantity("deraumere", q2);
+            player->setOBJquantity("sibur", q3);
+            player->setOBJquantity("mendiane", q4);
+            player->setOBJquantity("phiras", q5);
+            player->setOBJquantity("thystame", q6);
+        }
+
     } else if (command == "pex") {
         int n;
         iss >> n;
@@ -90,11 +105,20 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "pgt") {
         int n, i;
         iss >> n >> i;
-        // Handle resource collecting
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetAnimation(Player::Animation::Sit);
+            player->WaitForAnimationEnd();
+        }
     } else if (command == "pdi") {
         int n;
         iss >> n;
         // Handle player death
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetAnimation(Player::Animation::Death);
+            gameMap.GetPlayers().erase(std::remove(gameMap.GetPlayers().begin(), gameMap.GetPlayers().end(), player), gameMap.GetPlayers().end());
+        }
     } else if (command == "enw") {
         int e, n, x, y;
         iss >> e >> n >> x >> y;
@@ -110,11 +134,11 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "sgt") {
         int t;
         iss >> t;
-        // Handle time unit request
+        this->timeUnit = t;
     } else if (command == "sst") {
         int t;
         iss >> t;
-        // Handle time unit modification
+        this->timeUnit = t;
     } else if (command == "seg") {
         std::string teamName;
         iss >> teamName;

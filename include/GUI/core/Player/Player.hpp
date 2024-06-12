@@ -50,10 +50,14 @@ public:
     std::shared_ptr<Model> GetModel() const;
     void SetOrientation(int orientation);
     int getOBJquantity(std::string objName);
+    void setOBJquantity(std::string objName, int quantity);
     int getX() const;
     int getY() const;
     int GetLevel() const;
+    void SetLevel(int level);
     std::string GetTeam() const;
+
+    void WaitForAnimationEnd();
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -88,6 +92,10 @@ private:
 
     void UpdateScaleBasedOnLevel();
     void UpdateRotationAngle();
+
+    float animationStartTime;
+    float animationDuration;
+    bool animationPlaying;
 };
 
 #endif // PLAYER_HPP

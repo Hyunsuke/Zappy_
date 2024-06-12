@@ -67,6 +67,15 @@ void Player::UpdateAnimation() {
     }
 }
 
+void Player::WaitForAnimationEnd() {
+    std::thread([this]() {
+        int totalFrames = animations[animIndex]->frameCount;
+        float frameDuration = animations[animIndex]->frameCount / 60.0f;  // Assuming 60 FPS
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
+        SetAnimation(Animation::Idle);
+    }).detach();
+}
+
 void Player::UpdatePosition() {
     if (island) {
         Vector3 islandPosition = island->GetPosition();
@@ -158,12 +167,10 @@ void Player::JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float
         t = (currentTime - startTime) / (endTime - startTime);
         Vector3 newPos = Vector3Lerp(startPos, endPos, t);
         SetPosition(newPos);
-        // UpdateAnimation();
-        // Draw();
-        // Ensure this loop allows rendering the rest of the scene, not blocking
     }
     this->x = newIsland->GetX();
     this->y = newIsland->GetY();
+    SetAnimation(Animation::Idle);
     SetIsland(newIsland);
 }
 
@@ -186,6 +193,24 @@ int Player::getOBJquantity(std::string objName)
     return 0;
 }
 
+void Player::setOBJquantity(std::string objName, int quantity)
+{
+    if (objName == "food")
+        food = quantity;
+    if (objName == "linemate")
+        linemate = quantity;
+    if (objName == "deraumere")
+        deraumere = quantity;
+    if (objName == "sibur")
+        sibur = quantity;
+    if (objName == "mendiane")
+        mendiane = quantity;
+    if (objName == "phiras")
+        phiras = quantity;
+    if (objName == "thystame")
+        thystame = quantity;
+}
+
 int Player::getX() const
 {
     return x;
@@ -201,6 +226,11 @@ int Player::GetLevel() const
     return level;
 }
 
+void Player::SetLevel(int level)
+{
+    this->level = level;
+    UpdateScaleBasedOnLevel();
+}
 
 std::string Player::GetTeam() const
 {
