@@ -33,6 +33,9 @@ SRC	=	src/main.c	\
 		src/commands_ia/c_inventory/inventory.c \
 		src/commands_ia/c_left/left.c \
 		src/commands_ia/c_look/look.c \
+		src/commands_ia/c_look/gestion_coor.c \
+		src/commands_ia/c_look/gestion_first_coor.c \
+		src/commands_ia/c_look/gestion_str.c \
 		src/commands_ia/c_right/right.c \
 		src/commands_ia/c_set_obj/set_obj.c \
 		src/commands_ia/c_take_obj/take_obj.c \

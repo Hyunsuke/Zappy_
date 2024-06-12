@@ -77,6 +77,9 @@ typedef struct struct_s {
     int time;
     int fd_gui;
     char *obj;
+    char *look_str;
+    int len_view;
+    int view_num;
     map_element_t **map;
     player_t *head_player;
     int next_id_player; // For incrementation id_player

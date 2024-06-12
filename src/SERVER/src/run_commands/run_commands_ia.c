@@ -11,11 +11,7 @@ static void define_obj(struct_t *s, char *command, int inter, int len)
 {
     int j = 0;
 
-    s->obj = malloc(sizeof(char) * (len + 1));
-    if (!s->obj) {
-        perror("malloc");
-        return;
-    }
+    s->obj = my_malloc(sizeof(char) * (len + 1));
     for (j = 0; j < len; j++)
         s->obj[j] = command[inter + j];
     s->obj[len] = '\0';
