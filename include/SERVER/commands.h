@@ -32,6 +32,7 @@ int c_look(struct_t *s, int fd);
 void save_elements(struct_t *s, int x, int y);
 void add_in_str(struct_t *s, const char *element);
 void adjust_new_coor(struct_t *s, player_t *mob, int *x, int *y);
+void adjust_first_coor(struct_t *s, player_t *mob, int *x, int *y);
 int c_inventory(struct_t *s, int fd);
 int c_broadcast_txt(struct_t *s, int fd);
 int c_connect_nbr(struct_t *s, int fd);
