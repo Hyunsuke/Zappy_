@@ -95,7 +95,8 @@ void Player::SetScale(const Vector3& newScale) {
     scale = newScale;
 }
 
-std::shared_ptr<Model> Player::GetModel() const {
+std::shared_ptr<Model> Player::GetModel() {
+    model = modelLoader.GetModel();
     return model;
 }
 

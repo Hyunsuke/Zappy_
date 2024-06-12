@@ -47,7 +47,7 @@ public:
     void JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration);
     void SetIsland(std::shared_ptr<Island> newIsland);
     int GetPlayerNumber() const;
-    std::shared_ptr<Model> GetModel() const;
+    std::shared_ptr<Model> GetModel();
     void SetOrientation(int orientation);
     int getOBJquantity(std::string objName);
     void setOBJquantity(std::string objName, int quantity);
