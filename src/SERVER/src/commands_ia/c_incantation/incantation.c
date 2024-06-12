@@ -62,11 +62,15 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
     position_t position)
 {
     player_t *current_player = s->head_player;
+    int count = 0;
 
     while (current_player != NULL) {
         if (current_player->x == position.x && current_player->y == position.y
-            && current_player->level_player == elevation->level_from)
-            current_player->level_player++;
+            && current_player->level_player == elevation->level_from &&
+            count <= elevation->nb_players) {
+                current_player->level_player++;
+                count++;
+            }
         current_player = current_player->next;
     }
 }
