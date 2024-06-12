@@ -90,7 +90,6 @@ void Game::Update() {
         selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
         if (selectedPlayer) {
             selectedIsland = nullptr;
-            RequestPlayerInventory(selectedPlayer->GetPlayerNumber());
         } else {
             selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
             if (selectedIsland) {
