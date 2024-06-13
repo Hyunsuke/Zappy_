@@ -69,6 +69,11 @@ void Game::HandleServerMessage(const std::string& message) {
         int n;
         iss >> n;
         // Handle player expulsion
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetAnimation(Player::Animation::Punch);
+            player->WaitForAnimationEnd(Player::Animation::Idle);
+        }
     } else if (command == "pbc") {
         int n;
         std::string message;
@@ -79,13 +84,15 @@ void Game::HandleServerMessage(const std::string& message) {
         }
     } else if (command == "pic") {
         int x, y, l;
-        std::vector<int> players;
         iss >> x >> y >> l;
-        int player;
-        while (iss >> player) {
-            players.push_back(player);
-        }
+        int playerNumber;
         // Handle start of an incantation
+        while (iss >> playerNumber) {
+            auto currentPlayer = gameMap.GetPlayerByNumber(playerNumber);
+            if (currentPlayer) {
+                currentPlayer->SetAnimation(Player::Animation::Dance);
+            }
+        }
     } else if (command == "pie") {
         int x, y;
         char r;
@@ -98,7 +105,11 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "pdr") {
         int n, i;
         iss >> n >> i;
-        // Handle resource dropping
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            player->SetAnimation(Player::Animation::ThumbsUp);
+            player->WaitForAnimationEnd(Player::Animation::Idle);
+        }
     } else if (command == "pgt") {
         int n, i;
         iss >> n >> i;
