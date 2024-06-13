@@ -44,7 +44,7 @@ public:
     void SetScale(const Vector3& scale);
     void SetRotation(const Vector3& axis, float angleDegrees);
     void SetAnimation(Animation animation);
-    void JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration);
+    void JumpTo(std::shared_ptr<Island> newIsland, float baseDuration);
     void SetIsland(std::shared_ptr<Island> newIsland);
     int GetPlayerNumber() const;
     std::shared_ptr<Model> GetModel();
@@ -87,14 +87,22 @@ private:
     int thystame = 0;
 
     std::shared_ptr<Island> island;
+    std::shared_ptr<Island> newIsland;
+
     std::shared_ptr<Model> model;
     ModelLoader modelLoader;
 
     void UpdateScaleBasedOnLevel();
     void UpdateRotationAngle();
 
-    float animationTime; // Temps écoulé pour l'animation
+    float animationTime;
     float animationSpeed;
+
+    Vector3 startPos;
+    Vector3 endPos;
+    float moveStartTime;
+    float moveDuration;
+    bool isMoving;
 };
 
 #endif // PLAYER_HPP

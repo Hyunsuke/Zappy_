@@ -86,7 +86,23 @@ void Player::WaitForAnimationEnd() {
 }
 
 void Player::UpdatePosition() {
-    if (island) {
+    if (isMoving) {
+        float currentTime = GetTime();
+        float t = (currentTime - moveStartTime) / moveDuration;
+
+        if (t >= 1.0f) {
+            t = 1.0f;
+            isMoving = false;
+            SetAnimation(Animation::Idle);
+
+            this->x = newIsland->GetX();
+            this->y = newIsland->GetY();
+            SetIsland(newIsland);
+        }
+
+        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
+        SetPosition(newPos);
+    } else if (island) {
         Vector3 islandPosition = island->GetPosition();
         position.y = islandPosition.y + 0.5f;
     }
@@ -161,28 +177,17 @@ int Player::GetPlayerNumber() const {
     return playerNumber;
 }
 
-void Player::JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration) {
-    Vector3 startPos = position;
-    Vector3 endPos = {newX * 15.0f, position.y, newY * 15.0f};
+void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
+    startPos = position;
+    endPos = newIsland->GetPosition();
+
+    moveDuration = baseDuration;
+    moveStartTime = GetTime();
+    isMoving = true;
 
     SetAnimation(Animation::Jump);
-    int totalFrames = animations[animIndex]->frameCount;
-    float frameDuration = duration / totalFrames;
 
-    float startTime = GetTime();
-    float endTime = startTime + duration;
-    float t = 0.0f;
-
-    while (t < 1.0f) {
-        float currentTime = GetTime();
-        t = (currentTime - startTime) / (endTime - startTime);
-        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
-        SetPosition(newPos);
-    }
-    this->x = newIsland->GetX();
-    this->y = newIsland->GetY();
-    SetAnimation(Animation::Idle);
-    SetIsland(newIsland);
+    this->newIsland = newIsland;
 }
 
 int Player::getOBJquantity(std::string objName)

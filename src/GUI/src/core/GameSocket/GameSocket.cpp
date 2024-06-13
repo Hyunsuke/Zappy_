@@ -42,12 +42,11 @@ void Game::HandleServerMessage(const std::string& message) {
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetOrientation(o);
-            player->SetAnimation(Player::Animation::Jump);
             auto newIsland = gameMap.GetIslandByXY(x, y);
             if (newIsland) {
-                // player->JumpTo(x, y, newIsland, timeUnit * (41.0f / GetFPS())); // Assuming 41 frames at 60 FPS
+                player->JumpTo(newIsland, 7.0f / timeUnit);
             }
-        }
+    }
     } else if (command == "plv") {
         int n, l;
         iss >> n >> l;
@@ -107,7 +106,7 @@ void Game::HandleServerMessage(const std::string& message) {
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetAnimation(Player::Animation::Sit);
-            player->WaitForAnimationEnd();
+            // player->WaitForAnimationEnd();
         }
     } else if (command == "pdi") {
         int n;
@@ -116,7 +115,6 @@ void Game::HandleServerMessage(const std::string& message) {
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetAnimation(Player::Animation::Death);
-            gameMap.GetPlayers().erase(std::remove(gameMap.GetPlayers().begin(), gameMap.GetPlayers().end(), player), gameMap.GetPlayers().end());
         }
     } else if (command == "enw") {
         int e, n, x, y;
