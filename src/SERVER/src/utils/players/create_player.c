@@ -33,11 +33,10 @@ static void add_position_player(struct_t *s, player_t *new_player)
 {
     team_t *team_p = get_team_by_id(s, new_player->id_team);
 
-    if (team_p == NULL) {
+    if (team_p == NULL)
         add_random_position_player(s, new_player);
-    } else {
+    else
         add_position_egg_player(s, new_player);
-    }
 }
 
 static void init_ressource_player(player_t *new_player)
