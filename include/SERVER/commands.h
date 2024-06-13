@@ -46,6 +46,8 @@ int add_command(player_t *player, char *command, int tick);
 command_t *get_oldest_command(player_t *player);
 int get_command_count(player_t *player);
 int remove_oldest_command(player_t *player);
+int get_tick_for_command(struct_t *s, char *command);
+command_t* initialize_command_ticks(int *num_commands);
 
 
 ///////////////////////////////////////////////////////////////////////////////

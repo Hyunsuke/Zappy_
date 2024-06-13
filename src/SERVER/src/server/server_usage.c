@@ -6,6 +6,7 @@
 */
 
 #include "all.h"
+
 void server_usage(server_t *server, struct_t *s)
 {
     double tick_interval = 1.0 / s->time;
@@ -14,7 +15,7 @@ void server_usage(server_t *server, struct_t *s)
     double elapsed_time;
 
     server->addrlen = sizeof(server->serv_adr);
-    while (1) {
+    while (s->stop_server == false) {
         current_time = clock();
         elapsed_time = (double)(current_time - start_time) / CLOCKS_PER_SEC;
         server->tmp_fdtab = server->fd_tab;

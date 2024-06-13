@@ -90,13 +90,16 @@ typedef struct struct_s {
     int time;
     int fd_gui;
     char *obj;
+    bool stop_server;
     map_element_t **map;
     player_t *head_player;
     int next_id_player; // For incrementation id_player
     team_t *head_team;
     int next_id_team; // For incrementation id_team
-    elevation_t *head_elevation; // Information about incantation of player
+    elevation_t *head_elevation; // Information about incantation of player (INFO)
     clock_t clock;  // Time for runner commands
+    command_t *command_ticks; // Command with tick (INFO)
+    int nb_command_ticks; // Number of command ticks
 } struct_t;
 
 
