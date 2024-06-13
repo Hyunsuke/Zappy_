@@ -64,7 +64,6 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             gestion_team_name(server, s, buffer, client_fd);
         }
     } else {
-        print_response("Command: ", client_fd);
         print_response(buffer, client_fd);
         gestion_function(s, buffer, client_fd);
     }

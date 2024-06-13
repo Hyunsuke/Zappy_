@@ -1,6 +1,5 @@
 # Blender v2.83.1 OBJ File: 'bullfinch.blend'
 # www.blender.org
-mtllib bullfinch.mtl
 o Plane
 v 0.012711 0.125310 0.048082
 v 0.011417 0.116975 0.063994

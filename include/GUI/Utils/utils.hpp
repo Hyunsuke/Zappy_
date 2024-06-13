@@ -13,7 +13,7 @@
 class Utils {
     public:
         std::string GetAssetPath();
-
+        static void removeDuplicates(std::vector<std::string>& vec);
 };
 
 #endif /* !UTILS_HPP_ */

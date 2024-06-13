@@ -10,16 +10,21 @@ OUTDIR = ../../
 
 SRCDIRS = 	$(SRCDIR) \
             $(SRCDIR)/core \
+            $(SRCDIR)/core/Player \
             $(SRCDIR)/Collector \
             $(SRCDIR)/Utils \
             $(SRCDIR)/Sky \
             $(SRCDIR)/Manager \
             $(SRCDIR)/Particles \
+            $(SRCDIR)/Menu \
+            $(SRCDIR)/Settings \
+            $(SRCDIR)/Socket \
+            $(SRCDIR)/core/GameSocket \
 
 SRC_ALL = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.cpp))
 SRC_OBJ = $(SRC_ALL:.cpp=.o)
 
-CPPFLAGS = -W -Wall -Wextra -I../../include/GUI -g -std=c++20
+CPPFLAGS = -W -Wall -Wextra -I../../include/GUI -std=c++20 -g
 
 LIBS = -lraylib -lGL -lX11 -lpthread -ldl -lm -lrt
 

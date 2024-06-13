@@ -7,15 +7,15 @@
 
 #include "gui.hpp"
 
-Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
-    :   screenWidth(screenWidth),
-        screenHeight(screenHeight),
-        gameMap(mapWidth,mapHeight),
-        sky(screenWidth, screenHeight),
-        uiManager(screenWidth, screenHeight) {
-
-    InitWindow(screenWidth, screenHeight, "Zappy 3D GUI with raylib");
-    SetTargetFPS(60);
+Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs)
+    : screenWidth(screenWidth),
+      screenHeight(screenHeight),
+      timeUnit(timeUnit),
+      teamNames(teamNames),
+      sky(screenWidth, screenHeight),
+      uiManager(screenWidth, screenHeight),
+      settings(screenWidth, screenHeight),
+      chatManager(screenWidth, screenHeight) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -27,24 +27,43 @@ Game::Game(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
     shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
     shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
 
-    InitializeMap(mapWidth, mapHeight);
+    ModelCollector::GetInstance().LoadModel("src/GUI/assets/Player/robot.glb");
+
+    InitializeMap(mapSize, mapContent, eggs);
 }
 
 Game::~Game() {
-    CloseWindow();
+    if (socketManager) {
+        socketManager->Disconnect();
+    }
 }
 
-void Game::InitializeMap(int width, int height) {
-    float spacing = 15.0f;
-    for (int i = 0; i < width; ++i) {
-        for (int j = 0; j < height; ++j) {
-            Vector3 position = {i * spacing, 0.0f, j * spacing};
-            float scale = 0.7f;
-            Vector3 rotationAxis = {0.0f, 1.0f, 0.0f};
-            float rotationAngle = 0.0f;
-            auto island = std::make_shared<Island>(i, j, position, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", scale, rotationAxis, rotationAngle);
-            island->SetShader(shaderManager->GetShader());
-            gameMap.AddIsland(island);
+void Game::InitializeMap(const std::string& mapSize, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs) {
+    int width, height;
+    sscanf(mapSize.c_str(), "msz %d %d", &width, &height);
+    gameMap = Map(width, height);
+
+    for (const auto& content : mapContent) {
+        int x, y, q0, q1, q2, q3, q4, q5, q6;
+        sscanf(content.c_str(), "bct %d %d %d %d %d %d %d %d %d", &x, &y, &q0, &q1, &q2, &q3, &q4, &q5, &q6);
+        auto island = std::make_shared<Island>(x, y, Vector3{(float)x * 15.0f, 0.0f, (float)y * 15.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
+        island->SetShader(shaderManager->GetShader());
+        island->food->SetQuantity(q0);
+        island->linemate->SetQuantity(q1);
+        island->deraumere->SetQuantity(q2);
+        island->sibur->SetQuantity(q3);
+        island->mendiane->SetQuantity(q4);
+        island->phiras->SetQuantity(q5);
+        island->thystame->SetQuantity(q6);
+        gameMap.AddIsland(island);
+    }
+
+    for (const auto& egg : eggs) {
+        int e, n, x, y;
+        sscanf(egg.c_str(), "enw %d %d %d %d", &e, &n, &x, &y);
+        auto island = gameMap.GetIslandByXY(x, y);
+        if (island) {
+            // Add egg to the island
         }
     }
 }
@@ -59,7 +78,6 @@ void Game::Run() {
 void Game::Update() {
     cameraController.Update();
     gameMap.Update();
-
     sky.Update();
 
     Vector3 lightPos = sky.GetLightPosition();
@@ -68,7 +86,56 @@ void Game::Update() {
     shaderManager->SetShaderValue("lightColor", &lightCol, SHADER_UNIFORM_VEC3);
 
     rayManager.UpdateRay(cameraController.GetCamera());
-    selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
+        if (selectedPlayer) {
+            selectedIsland = nullptr;
+        } else {
+            selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+            if (selectedIsland) {
+                selectedPlayer = nullptr;
+            }
+        }
+    }
+
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        settings.Open();
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        CloseWindow();
+        std::exit(0);
+    }
+
+    if (settings.IsOpen()) {
+        settings.Update();
+    }
+
+    if (IsWindowResized()) {
+        int newWidth = GetScreenWidth();
+        int newHeight = GetScreenHeight();
+        sky.OnWindowResized(newWidth, newHeight);
+        uiManager.OnWindowResized(newWidth, newHeight);
+    }
+
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        settings.Open();
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        CloseWindow();
+        std::exit(0);
+    }
+
+    if (settings.IsOpen()) {
+        settings.Update();
+    }
+
+    if (IsWindowResized()) {
+        int newWidth = GetScreenWidth();
+        int newHeight = GetScreenHeight();
+        sky.OnWindowResized(newWidth, newHeight);
+        uiManager.OnWindowResized(newWidth, newHeight);
+        chatManager.OnWindowResized(newWidth, newHeight);
+    }
 }
 
 void Game::Draw() {
@@ -81,29 +148,12 @@ void Game::Draw() {
     sky.DrawSunAndMoon();
     gameMap.Draw();
     gameMap.DrawIslandWires(selectedIsland);
+    gameMap.DrawPlayerWires(selectedPlayer);
 
     EndMode3D();
-    uiManager.DrawUI(selectedIsland, GetFPS());
-    EndDrawing();
-}
+    uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
+    chatManager.Draw();
+    settings.Draw();
 
-void Game::ToggleObjectActive(int x, int y, const std::string& objectType, int value) {
-    auto island = gameMap.GetIslandByXY(x, y);
-    if (island) {
-        if (objectType == "food") {
-            island->food->SetQuantity(island->food->GetQuantity() + value);
-        } else if (objectType == "linemate") {
-            island->linemate->SetQuantity(island->linemate->GetQuantity() + value);
-        } else if (objectType == "deraumere") {
-            island->deraumere->SetQuantity(island->deraumere->GetQuantity() + value);
-        } else if (objectType == "sibur") {
-            island->sibur->SetQuantity(island->sibur->GetQuantity() + value);
-        } else if (objectType == "mendiane") {
-            island->mendiane->SetQuantity(island->mendiane->GetQuantity() + value);
-        } else if (objectType == "phiras") {
-            island->phiras->SetQuantity(island->phiras->GetQuantity() + value);
-        } else if (objectType == "thystame") {
-            island->thystame->SetQuantity(island->thystame->GetQuantity() + value);
-        }
-    }
+    EndDrawing();
 }

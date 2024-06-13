@@ -21,9 +21,12 @@ class ZappyClient:
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
+            self.ready = False
             self.updateInfos()
             self.cmd.fork()
             self.cmd.sendArrayCmd()
+            self.dropped = False
+            self.printReady = True
             self.fastLvl2()
             self.main_loop()
         except socket.error as e:
@@ -73,8 +76,9 @@ class ZappyClient:
             continue
 
     def updateInfos(self):
-        self.cmd.inventory()
-        self.cmd.look()
+        if self.ready == False:
+            self.cmd.inventory()
+            self.cmd.look()
 
     def random_nb(self):
         return random.choice([0, 1, 2])
@@ -109,18 +113,48 @@ class ZappyClient:
                 self.cmd.sendArrayCmd()
         except KeyboardInterrupt:
             print("Terminating AI client.")
+            self.socket.close()
+            os._exit(0)
 
     def main_loop(self):
         try:
             while True:
                 self.blockingBuffer()
                 self.update_inventory()
-                if self.current_inventory.current_inventory['food'] < 15:
-                    self.eat_nearest_ressource("food", False)
+                # print(self.cmd.get_status())
+                if self.cmd.get_status() == -2:
+                    if self.ready == True:
+                        self.cmd.incantation()
+                        self.cmd.responseList.append("Current level")
+                    elif self.cmd.nb_player_ready() >= 5 and self.ready == False:
+                        print("EVERYONE'S READY TO PLAY")
+                        self.cmd.look()
+                        self.ready = True
+                        self.drop_all(True)
+                    else:
+                        print("waiting for friends")
+                        self.cmd.broadcast(f"{self.team_name}_ready_come")
+                elif self.cmd.get_status() >= 0 and self.ready == False:
+                    if self.cmd.shouldMove() == True and self.cmd.positionChanged() == True:
+                        self.join_leader()
+                    # break
+                elif self.ready == True:
+                    if self.printReady == True:
+                        print("I'm ready")
+                        self.printReady = False
+                    if self.dropped == False:
+                        self.drop_all()
+                    # self.cmd.look()
+                    # break
                 else:
-                    self.look_for_rarest_stone()
-                self.rotatePlayer()
-                self.cmd.move_forward()
+                    print("---------------------------")
+                    if self.current_inventory.current_inventory['food'] < 15:
+                        self.eat_nearest_ressource("food", False)
+                    else:
+                        self.look_for_rarest_stone()
+                    self.rotatePlayer()
+                    self.cmd.move_forward()
+                    self.cmd.move_forward()
                 self.updateInfos()
                 self.cmd.sendArrayCmd()
 
@@ -128,6 +162,7 @@ class ZappyClient:
             print("Terminating AI client.")
         finally:
             self.socket.close()
+            os._exit(0)
 
     def update_inventory(self, p=False):
         if (self.cmd.isInventoryUpdated == False):
@@ -272,6 +307,55 @@ class ZappyClient:
                 x += 1
                 c += 1
         return x, y  # If tile not found (which shouldn't happen in this context)
+
+    def get_cood(self, num):
+        if num == 0:
+            return
+        mov = {
+            1: (0, 1),
+            2: (-1, 1),
+            3: (-1, 0),
+            4: (-1, -1),
+            5: (0, -1),
+            6: (1, -1),
+            7: (1, 0),
+            8: (1, 1)
+        }
+
+        if num not in mov:
+            raise ValueError("Le numéro doit être entre 1 et 8")
+
+        dx, dy = mov[num]
+        return dx, dy
+
+
+    def join_leader(self):
+        print("IM JOINING THE LEADER")
+        status = self.cmd.get_status()
+        if status == 0 and self.ready == False:
+            print("-----------------------------------------------------------------------------------------------")
+            print("Je suis prêt")
+            self.ready = True
+            print("-----------------------------------------------------------------------------------------------")
+            # os._exit(1)
+            return
+        x, y = self.get_cood(status)
+        self.move_to_tile(x, y, 0, 0)
+        self.cmd.shallMove = False
+        self.cmd.positionHasBeenChanged = False
+
+    def drop_all(self, leads=False):
+        for key, value in self.current_inventory.current_inventory.items():
+            # print("Dropping all  {}".format(key))
+            if key == "food":
+                continue
+            for i in range(value):
+                print(key)
+                self.cmd.set_object_down(key)
+        if leads == False:
+            self.cmd.broadcast(f"{self.team_name}_ready_ready")
+        self.dropped = True
+
 
 
 if __name__ == "__main__":

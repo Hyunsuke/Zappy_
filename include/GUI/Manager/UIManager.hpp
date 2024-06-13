@@ -16,14 +16,23 @@
 class UIManager {
 public:
     UIManager(int screenWidth, int screenHeight);
-    void DrawUI(const std::shared_ptr<Island>& selectedIsland, int fps);
+
+    void DrawUI(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int teamCount, int playerCount, int timeUnit, const std::string& mapSize, int fps);
+    void DrawIslandInfoOrPlayer(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int fps);
+    void DrawAdditionalInfo(int teamCount, int playerCount, int timeUnit, const std::string& mapSize);
+    void DrawButtons();
+
+    void OnWindowResized(int newScreenWidth, int newScreenHeight);
+    Rectangle settingsButton;
+    Rectangle closeButton;
 
 private:
     int screenWidth;
     int screenHeight;
 
-    void DrawTextBox(const std::string& text, int x, int y, int width, int height, Color bgColor, Color borderColor, int textSize);
+
+    void UpdateButtonPositions();
+    void UpdateTextSizes();
 };
 
 #endif // UIMANAGER_HPP_
-

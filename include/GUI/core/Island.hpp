@@ -41,7 +41,7 @@ public:
     std::shared_ptr<Object3D> mendiane;
     std::shared_ptr<Object3D> phiras;
     std::shared_ptr<Object3D> thystame;
-    std::shared_ptr<Object3D> player;
+    std::shared_ptr<Object3D> egg;
 
 private:
     int x, y;
@@ -55,6 +55,8 @@ private:
     float floatOffset;
     float floatSpeed;
     float baseY;
+
+    float thystameAngle;
 };
 
 #endif // ISLAND_HPP_

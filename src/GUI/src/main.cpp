@@ -7,14 +7,147 @@
 
 #include "gui.hpp"
 
-int main() {
+void init_Window(int screenWidth, int screenHeight, const char* title) {
+    InitWindow(screenWidth, screenHeight, title);
+    SetTargetFPS(60);
+}
+
+bool runMenu(int& screenWidth, int& screenHeight, std::string& host, int& port) {
+    Menu menu(screenWidth, screenHeight, host, port);
+    menu.Run();
+    if (menu.ShouldStartGame()) {
+        host = menu.GetHost();
+        port = menu.GetPort();
+        screenHeight = menu.GetScreenHeight();
+        screenWidth = menu.GetScreenWidth();
+        return true;
+    }
+    return false;
+}
+
+bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketManager>& socketManager) {
+    socketManager = std::make_unique<SocketManager>(host, port);
+    socketManager->Connect();
+    if (!socketManager->IsRunning()) {
+        std::cerr << "Failed to connect to the server" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 5) {
+    auto start = std::chrono::steady_clock::now();
+
+    while (true) {
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+        if (elapsed > timeoutSeconds) {
+            throw GameException("Timeout waiting for initial server messages");
+            return false;
+        }
+
+        std::string message = socketManager.ReceiveMessage();
+        std::istringstream iss(message);
+        std::string command;
+        iss >> command;
+
+        if (command == "msz") {
+            mapSize = message;
+        } else if (command == "sgt") {
+            iss >> timeUnit;
+        } else if (command == "tna") {
+            std::string teamName;
+            iss >> teamName;
+            teamNames.push_back(teamName);
+        } else if (command == "bct") {
+            mapContent.push_back(message);
+        } else if (command == "enw") {
+            eggs.push_back(message);
+        }
+
+        if (!mapSize.empty() && timeUnit > 0 && !teamNames.empty() && !mapContent.empty() && elapsed > 1) {
+            Utils::removeDuplicates(mapContent);
+            Utils::removeDuplicates(eggs);
+            Utils::removeDuplicates(teamNames);
+            break;
+        }
+
+    }
+    return true;
+}
+
+void runGame(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs, std::unique_ptr<SocketManager>& socketManager) {
+    Game game(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs);
+    game.SetSocketManager(std::move(socketManager));
+    game.Run();
+}
+
+void printUsage() {
+    std::cerr << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+    std::cerr << "option description" << std::endl;
+    std::cerr << "-p port       port number" << std::endl;
+    std::cerr << "-h machine    hostname of the server" << std::endl;
+}
+
+void parseArguments(int ac, char** av, std::string& host, int& port) {
+    for (int i = 1; i < ac; ++i) {
+        if (std::strcmp(av[i], "-p") == 0) {
+            if (i + 1 < ac) {
+                port = std::stoi(av[++i]);
+            } else {
+                throw ArgumentException("Missing port number");
+            }
+        } else if (std::strcmp(av[i], "-h") == 0) {
+            if (i + 1 < ac) {
+                host = av[++i];
+            } else {
+                throw ArgumentException("Missing hostname");
+            }
+        } else {
+            throw ArgumentException("Invalid argument");
+        }
+    }
+
+    if (host.empty() || port == 0) {
+        throw ArgumentException("Host and port must be specified");
+    }
+}
+
+int main(int ac, char** av) {
     try {
-        Game game(1920, 1080, 10, 10);
-        game.Run();
+        std::string host;
+        int port;
+
+        parseArguments(ac, av, host, port);
+
+        int screenWidth = 1920;
+        int screenHeight = 1080;
+        init_Window(screenWidth, screenHeight, "Zappy GUI");
+
+        if (runMenu(screenWidth, screenHeight, host, port)) {
+            std::unique_ptr<SocketManager> socketManager;
+
+            if (connectToServer(host, port, socketManager)) {
+                std::string mapSize;
+                int timeUnit = 0;
+                std::vector<std::string> teamNames;
+                std::vector<std::string> mapContent;
+                std::vector<std::string> eggs;
+
+                if (processInitialServerMessages(*socketManager, mapSize, timeUnit, teamNames, mapContent, eggs)) {
+                    runGame(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs, socketManager);
+                }
+            }
+        }
+    } catch (const ArgumentException& e) {
+        std::cerr << "Argument error: " << e.what() << std::endl;
+        printUsage();
+        return 84;
     } catch (const GameException& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         CloseWindow();
         return 84;
     }
+    CloseWindow();
     return 0;
 }

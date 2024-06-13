@@ -15,6 +15,7 @@ ModelLoader::ModelLoader(const std::string& filePath) {
 ModelLoader::~ModelLoader() {}
 
 void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
+    if (!model) return;
     for (int i = 0; i < model->materialCount; i++) {
         model->materials[i].shader = shader;
     }
