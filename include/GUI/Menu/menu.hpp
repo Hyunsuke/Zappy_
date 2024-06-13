@@ -13,7 +13,7 @@
 
 class Menu {
 public:
-    Menu(int screenWidth, int screenHeight);
+    Menu(int screenWidth, int screenHeight, const std::string& host, int port);
     void Run();
     std::string GetHost() const;
     int GetPort() const;
