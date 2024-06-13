@@ -26,6 +26,11 @@ void server_usage(server_t *server, struct_t *s)
         if (elapsed_time >= tick_interval) {
             new_tick(s);
             start_time = current_time;
+            nb_tick++;
+        }
+        if (nb_tick >= 126) {
+            nb_tick = 0;
+            tiredness(s);
         }
     }
 }

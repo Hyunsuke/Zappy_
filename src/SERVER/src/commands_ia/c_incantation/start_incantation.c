@@ -96,6 +96,6 @@ bool start_incantation(struct_t *s, player_t *player)
     add_incantation(s, player->fd, p_id, nb);
     printf("Start Incantation -> OK\n");
     dprintf(player->fd, "Elevation underway\n");
-    c_pic(s, p_pos, eleva->level_to, p_id);
+    c_pic(p_pos, eleva->level_to, p_id);
     return true;
 }

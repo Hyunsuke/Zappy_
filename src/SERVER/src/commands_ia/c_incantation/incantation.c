@@ -66,7 +66,7 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
 }
 
 static bool check_incantation_conditions(struct_t *s, elevation_t *elevation,
-    incantation_t *incantation, position_t *position)
+    position_t *position)
 {
     if (elevation == NULL)
         return false;
@@ -101,7 +101,7 @@ int c_incantation(struct_t *s, int fd)
         return print_incantation_ko(s, fd, pos_incant);
     else
         pos_incant = &incantation->position;
-    if (!check_incantation_conditions(s, elevation, incantation, pos_incant)) {
+    if (!check_incantation_conditions(s, elevation, pos_incant)) {
         remove_incantation(s, fd);
         return print_incantation_ko(s, fd, pos_incant);
     }

@@ -42,7 +42,7 @@ static void add_position_player(struct_t *s, player_t *new_player)
 
 static void init_ressource_player(player_t *new_player)
 {
-    new_player->food = 0;
+    new_player->food = 10;
     new_player->linemate = 0;
     new_player->deraumere = 0;
     new_player->sibur = 0;

@@ -71,8 +71,7 @@ int c_sst(struct_t *s, char *buffer);
 int c_pnw(struct_t *s, int id_player, int *position, int incantation_level);
 int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
-// int c_pic(struct_t *s); Fix Makefile
-int c_pic(struct_t *s, position_t position, int level, int *player);
+int c_pic(position_t position, int level, int *player);
 int c_pie(struct_t *s, int x, int y, char *incantation_result);
 int c_pfk(struct_t *s, int id_player);
 int c_pdr(struct_t *s, int id_player, int id_rsc);

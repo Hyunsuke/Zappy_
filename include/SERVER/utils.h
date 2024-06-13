@@ -44,6 +44,7 @@ void add_player(struct_t *s, int fd, int id_team);
 player_t *get_player_by_fd(struct_t *s, int fd);
 player_t *get_player_by_id(struct_t *s, int id_player);
 void print_players(struct_t *s);
+void remove_player(struct_t *s, int fd);
     /////////////////////////////////
 
     //////////////////////// TEAMS ///
