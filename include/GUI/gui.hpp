@@ -35,6 +35,7 @@
 #include "Manager/ShaderManager.hpp"
 #include "Manager/UIManager.hpp"
 #include "Manager/RayManager.hpp"
+#include "Manager/ChatManager.hpp"
 
 #include "Particles/Particle.hpp"
 #include "Particles/ParticleSystem.hpp"

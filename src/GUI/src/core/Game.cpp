@@ -14,7 +14,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight) {
+      settings(screenWidth, screenHeight),
+      chatManager(screenWidth, screenHeight) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -133,6 +134,7 @@ void Game::Update() {
         int newHeight = GetScreenHeight();
         sky.OnWindowResized(newWidth, newHeight);
         uiManager.OnWindowResized(newWidth, newHeight);
+        chatManager.OnWindowResized(newWidth, newHeight);
     }
 }
 
@@ -150,10 +152,8 @@ void Game::Draw() {
 
     EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
-
-    if (settings.IsOpen()) {
-        settings.Draw();
-    }
+    chatManager.Draw();
+    settings.Draw();
 
     EndDrawing();
 }

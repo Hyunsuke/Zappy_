@@ -30,15 +30,12 @@ void Game::HandleServerMessage(const std::string& message) {
         iss >> n >> x >> y >> o >> l >> teamName;
         auto island = gameMap.GetIslandByXY(x, y);
         if (island) {
-            std::cout << "Player created x: " << x << " y: " << y << std::endl;
-            std::cout << "Player number: " << n << " team name: " << teamName << " orientation: " << o << " level: " << l << std::endl;
             auto player = std::make_shared<Player>(n, teamName, x, y, o, l, "src/GUI/assets/Player/robot.glb", island);
             gameMap.AddPlayer(player);
         }
     } else if (command == "ppo") {
         int n, x, y, o;
         iss >> n >> x >> y >> o;
-        std::cout << "Player moved x: " << x << " y: " << y << std::endl;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetOrientation(o);
@@ -57,7 +54,6 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "pin") {
         int n, x, y, q0, q1, q2, q3, q4, q5, q6;
         iss >> n >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
-        std::cout << "Player inventory x: " << x << " y: " << y << std::endl;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->setOBJquantity("food", q0);
@@ -77,7 +73,10 @@ void Game::HandleServerMessage(const std::string& message) {
         int n;
         std::string message;
         iss >> n >> message;
-        // Handle broadcast message
+        auto player = gameMap.GetPlayerByNumber(n);
+        if (player) {
+            chatManager.AddMessage(n, player->GetTeam(), message);
+        }
     } else if (command == "pic") {
         int x, y, l;
         std::vector<int> players;
@@ -143,11 +142,8 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "smg") {
         std::string message;
         iss >> message;
-        // Handle message from the server
     } else if (command == "suc") {
-        // Handle unknown command
     } else if (command == "sbp") {
-        // Handle command parameter
     }
 }
 
