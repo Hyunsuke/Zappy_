@@ -23,6 +23,9 @@ class Command:
         self.dataIndex = 0
         self.debug = 0
         self.lookString = ""
+        self.shallMove = False
+        self.positionHasBeenChanged = False
+        self.forwardIndex = 0
         self.isLookUpdated = False
         self.inventoryString = ""
         self.isInventoryUpdated = False
@@ -64,6 +67,7 @@ class Command:
     def processResponseArray(self, data):
         self.data_received = data
         if self.elevation == True:
+            print("Data received : ", self.data_received)
             self.elevation = False
             return
         if data == "Elevation underway" and self.level >= 2 and self.leaderIsChosen != 1:
@@ -81,8 +85,8 @@ class Command:
             self.adjustBroadcast()
         else:
             # print("Données > " + data)
-            print("We received " + data)
-            print("for command" + self.responseList[0])
+            # print("We received " + data)
+            # print("for command" + self.responseList[0])
             self.adjustData()
             if not self.responseList:
                 return
@@ -124,12 +128,35 @@ class Command:
                 if self.leaderIsChosen == -1:
                     self.leaderIsChosen = 1
                     self.status = -2
+        elif self.responseList[0].startswith("Forward"):
+            self.adjustForward()
         if self.responseList[0].startswith("Look"):
             self.lookString = self.data_received
             self.isLookUpdated = True
         if self.responseList[0].startswith("Inventory"):
             self.inventoryString = self.data_received
             self.isInventoryUpdated = True
+
+    def positionChanged(self):
+        return self.positionHasBeenChanged
+
+    def adjustForward(self):
+        # if self.nb != 0 il faut continuer la fonction
+        if self.leaderIsChosen == -1:
+            return
+        if self.positionHasBeenChanged == True:
+            return
+        if self.status == 1 or self.status == 3 or self.status == 5 or self.status == 7:
+            # print("CHANGE POSITION")
+            self.positionHasBeenChanged = True
+        else:
+            self.forwardIndex += 1
+            if self.forwardIndex == 2:
+                # print("CHANGED POSITION TO CORNER")
+                self.positionHasBeenChanged = True
+                self.forwardIndex = 0
+            # else:
+            #     print("Forward Index: ", self.forwardIndex)
 
     def adjustBroadcast(self):
         # print("Données reçu : " + self.data_received)
@@ -155,7 +182,13 @@ class Command:
                 if self.leaderIsChosen != -1:
                     return
                 self.leaderIsChosen = 0 # 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
-                self.status = num
+                if self.positionHasBeenChanged == True:
+                    if self.shallMove == False:
+                        # print("Je devrais bouger vers le numéro : ", num)
+                        self.status = num
+                        self.shallMove = True
+                # else:
+                #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
                 # Prendre les coordonées du boug
                 print("Je vais rejoindre l'émetteur du message")
                 # os._exit(0) # A supprimer
@@ -171,7 +204,16 @@ class Command:
                     print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 return
             elif fct == "come":
-                self.status = num
+                if self.positionHasBeenChanged == True:
+                    if self.shallMove == False:
+                        # print("Je devrais bouger vers le numéro : ", num)
+                        self.status = num
+                        self.shallMove = True
+                # else:
+                #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
+
+    def shouldMove(self):
+        return self.shallMove
 
     def skip_to_first_comma(self, string):
         pos = string.find(',')
@@ -190,9 +232,9 @@ class Command:
 
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
-        # if self.data_received == "ko":
-        #     self.responseList.pop(1)
-        #     return
+        if self.data_received == "ko":
+            self.responseList.pop(1)
+            return
         self.level += 1
         if self.level == 8:
             print("Niveau 8 atteint !")

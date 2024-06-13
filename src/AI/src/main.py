@@ -21,11 +21,12 @@ class ZappyClient:
             self.initial_handshake()
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
+            self.ready = False
             self.updateInfos()
             self.cmd.fork()
             self.cmd.sendArrayCmd()
-            self.ready = False
             self.dropped = False
+            self.printReady = True
             self.fastLvl2()
             self.main_loop()
         except socket.error as e:
@@ -75,8 +76,9 @@ class ZappyClient:
             continue
 
     def updateInfos(self):
-        self.cmd.inventory()
-        self.cmd.look()
+        if self.ready == False:
+            self.cmd.inventory()
+            self.cmd.look()
 
     def random_nb(self):
         return random.choice([0, 1, 2])
@@ -124,18 +126,23 @@ class ZappyClient:
                         self.cmd.responseList.append("Current level")
                     elif self.cmd.nb_player_ready() >= 5 and self.ready == False:
                         print("EVERYONE'S READY TO PLAY")
+                        self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
-                    print("waiting for friends")
-                    self.cmd.broadcast(f"{self.team_name}_ready_come")
+                    else:
+                        print("waiting for friends")
+                        self.cmd.broadcast(f"{self.team_name}_ready_come")
                 elif self.cmd.get_status() >= 0 and self.ready == False:
-                    self.join_leader()
+                    if self.cmd.shouldMove() == True and self.cmd.positionChanged() == True:
+                        self.join_leader()
                     # break
                 elif self.ready == True:
-                    print("I'm ready")
+                    if self.printReady == True:
+                        print("I'm ready")
+                        self.printReady = False
                     if self.dropped == False:
                         self.drop_all()
-                    self.cmd.look()
+                    # self.cmd.look()
                     # break
                 else:
                     print("---------------------------")
@@ -331,6 +338,8 @@ class ZappyClient:
             return
         x, y = self.get_cood(status)
         self.move_to_tile(x, y, 0, 0)
+        self.cmd.shallMove = False
+        self.cmd.positionHasBeenChanged = False
 
     def drop_all(self, leads=False):
         for key, value in self.current_inventory.current_inventory.items():
