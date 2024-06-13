@@ -11,7 +11,7 @@ command_t *get_oldest_command(player_t *player)
 {
     if (player->command_count == 0)
         return NULL;
-    return &player->commands[player->command_start];
+    return &player->commands[0];
 }
 
 int get_command_count(player_t *player)

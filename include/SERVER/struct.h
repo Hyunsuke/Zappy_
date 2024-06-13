@@ -17,6 +17,7 @@
 typedef struct player_s player_t;
 typedef struct position_s position_t;
 typedef struct team_s team_t;
+typedef struct incantation_s incantation_t;
 
 typedef struct command_s {
     char *command;
@@ -80,6 +81,8 @@ typedef struct position_s {
 ////// ALL ////////////////////////
 //////////////////////////////////
 
+typedef struct elevation_s elevation_t;
+
 typedef struct struct_s {
     int port;
     int map_width;
@@ -88,6 +91,7 @@ typedef struct struct_s {
     int time;
     int fd_gui;
     char *obj;
+    bool stop_server;
     char *look_str;
     int len_view;
     int view_num;
@@ -96,7 +100,10 @@ typedef struct struct_s {
     int next_id_player; // For incrementation id_player
     team_t *head_team;
     int next_id_team; // For incrementation id_team
+    elevation_t *head_elevation; // Information about incantation of player (INFO)
     clock_t clock;  // Time for runner commands
+    command_t *command_ticks; // Command with tick (INFO)
+    incantation_t *head_progress_incantation; // Incantation in progress
 } struct_t;
 
 

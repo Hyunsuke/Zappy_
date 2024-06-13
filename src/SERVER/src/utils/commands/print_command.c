@@ -9,16 +9,13 @@
 
 void print_all_commands(player_t *player)
 {
-    int index = player->command_start;
-
     if (player->command_count == 0) {
         printf("No commands available\n");
         return;
     }
     for (int i = 0; i < player->command_count; i++) {
         printf("Command %d: %s (TICK: %d)\n",
-            i + 1, player->commands[index].command,
-                player->commands[index].tick);
-        index = (index + 1) % MAX_COMMANDS;
+            i + 1, player->commands[i].command,
+            player->commands[i].tick);
     }
 }

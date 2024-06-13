@@ -9,11 +9,11 @@
 
 static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
-    if (client_fd == s->fd_gui && s->fd_gui != -1) {
+    if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
-    } else {
-        run_commands_ia(s, client_fd, buffer);
-    }
+    else
+        add_command(get_player_by_fd(s, client_fd), buffer,
+            get_tick_for_command(s, buffer));
 }
 
 static void list_actions(server_t *server, struct_t *s, int client_fd,
@@ -40,9 +40,8 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     team_t *team = NULL;
     char *team_name;
 
-    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {
+    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
         buffer[len - 2] = '\0';
-    }
     team_name = strtok(buffer, "\r\n");
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
@@ -91,8 +90,7 @@ void handling_cmd(server_t *server, struct_t *s)
     char buffer[1024] = { 0 };
 
     for (int i = server->server_fd + 1; i <= server->last_cli; i++) {
-        if (FD_ISSET(i, &server->tmp_fdtab)) {
+        if (FD_ISSET(i, &server->tmp_fdtab))
             i = receive_cmd(server, s, buffer, i);
-        }
     }
 }

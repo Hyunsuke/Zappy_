@@ -13,6 +13,7 @@ int main(int ac, char **av)
     server_t *server = my_malloc(sizeof(server_t));
 
     init_struct(s);
+    signal(SIGINT, signal_handler);
     if (parsing(ac, av, s) == 84)
         return 84;
     generator_map(s);

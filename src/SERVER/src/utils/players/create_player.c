@@ -77,6 +77,7 @@ void add_player(struct_t *s, int fd, int id_team)
     new_player->y = 0;
     new_player->level_player = 1;
     new_player->next = s->head_player;
+    new_player->level_player = 1;
     s->head_player = new_player;
     add_position_player(s, new_player);
 }
