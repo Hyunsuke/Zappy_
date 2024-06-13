@@ -60,6 +60,7 @@ static void send_info_gui(struct_t *s)
     c_msz(s, "");
     c_mct(s, "");
     c_tna(s, "");
+    s_sgt(s, "");
     while (current != NULL) {
         dprintf(s->fd_gui, "ppo #%d %d %d %d\n", current->id_player,
             current->x, current->y, current->view_direction);
