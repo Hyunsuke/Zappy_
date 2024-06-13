@@ -13,7 +13,7 @@ void init_Window(int screenWidth, int screenHeight, const char* title) {
 }
 
 bool runMenu(int& screenWidth, int& screenHeight, std::string& host, int& port) {
-    Menu menu(screenWidth, screenHeight);
+    Menu menu(screenWidth, screenHeight, host, port);
     menu.Run();
     if (menu.ShouldStartGame()) {
         host = menu.GetHost();
@@ -82,14 +82,47 @@ void runGame(int screenWidth, int screenHeight, const std::string& mapSize, int 
     game.Run();
 }
 
-int main() {
+void printUsage() {
+    std::cerr << "USAGE: ./zappy_gui -p port -h machine" << std::endl;
+    std::cerr << "option description" << std::endl;
+    std::cerr << "-p port       port number" << std::endl;
+    std::cerr << "-h machine    hostname of the server" << std::endl;
+}
+
+void parseArguments(int ac, char** av, std::string& host, int& port) {
+    for (int i = 1; i < ac; ++i) {
+        if (std::strcmp(av[i], "-p") == 0) {
+            if (i + 1 < ac) {
+                port = std::stoi(av[++i]);
+            } else {
+                throw ArgumentException("Missing port number");
+            }
+        } else if (std::strcmp(av[i], "-h") == 0) {
+            if (i + 1 < ac) {
+                host = av[++i];
+            } else {
+                throw ArgumentException("Missing hostname");
+            }
+        } else {
+            throw ArgumentException("Invalid argument");
+        }
+    }
+
+    if (host.empty() || port == 0) {
+        throw ArgumentException("Host and port must be specified");
+    }
+}
+
+int main(int ac, char** av) {
     try {
+        std::string host;
+        int port;
+
+        parseArguments(ac, av, host, port);
+
         int screenWidth = 1920;
         int screenHeight = 1080;
         init_Window(screenWidth, screenHeight, "Zappy GUI");
-
-        std::string host;
-        int port;
 
         if (runMenu(screenWidth, screenHeight, host, port)) {
             std::unique_ptr<SocketManager> socketManager;
@@ -106,6 +139,10 @@ int main() {
                 }
             }
         }
+    } catch (const ArgumentException& e) {
+        std::cerr << "Argument error: " << e.what() << std::endl;
+        printUsage();
+        return 84;
     } catch (const GameException& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         CloseWindow();

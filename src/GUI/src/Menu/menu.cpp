@@ -7,17 +7,52 @@
 
 #include "gui.hpp"
 
-Menu::Menu(int screenWidth, int screenHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight), host("localhost"), port(4242),
+Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
+    : screenWidth(screenWidth), screenHeight(screenHeight), host(host), port(port),
       startGame(false), hostActive(false), portActive(false),
-      hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight) {
+      hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight),
+      sky(screenWidth, screenHeight)
+{
     std::strcpy(hostBuffer, host.c_str());
     std::sprintf(portBuffer, "%d", port);
+
+    shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
+    Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
+    Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
+    Vector3 lightColor = { 1.0f, 1.0f, 1.0f };
+    Vector3 ambientColor = { 0.2f, 0.2f, 0.2f };
+    shaderManager->SetShaderValue("lightPosition", &lightPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("viewPosition", &viewPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
+
+    islandModel = LoadModel("src/GUI/assets/Island/Island01.obj");
+    islandTexture = LoadTexture("src/GUI/assets/Island/TextIsland.png");
+    islandModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = islandTexture;
+    islandModel.materials[0].shader = shaderManager->GetShader();
+
+    camera.position = { 0.0f, 5.0f, 20.0f };
+    camera.target = { 0.0f, 2.5f, 0.0f };
+    camera.up = { 0.0f, 1.0f, 0.0f };
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+
+    std::shared_ptr<Island> island = std::make_shared<Island>(0, 0, Vector3{0.0f, 0.0f, 0.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
+    player = std::make_unique<Player>(1, "menu", 0, 0, 1, 1, "src/GUI/assets/Player/robot.glb", island);
+    player->SetAnimation(Player::Animation::Dance);
 }
 
 void Menu::Run() {
     while (!WindowShouldClose() && !startGame) {
         HandleInput();
+        player->UpdateAnimation();
+        player->UpdatePosition();
+
+        player->SetPosition({0.0f, 1.0f, 2.5f});
+        player->SetScale({1.0f, 1.0f, 1.0f});
+
+        sky.Update();
+
         Draw();
     }
 }
@@ -139,6 +174,16 @@ void Menu::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
+    // Dessiner le fond d'écran
+    sky.DrawBackground();
+
+    BeginMode3D(camera);
+
+    DrawModel(islandModel, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
+    player->Draw();
+
+    EndMode3D();
+
     DrawText("Zappy GUI", screenWidth / 2 - MeasureText("Zappy GUI", 40) / 2, screenHeight / 4, 40, LIGHTGRAY);
 
     DrawText("Host:", screenWidth / 4, screenHeight / 2 - 60, 20, DARKGRAY);
@@ -159,6 +204,7 @@ void Menu::Draw() {
 
     EndDrawing();
 }
+
 
 void Menu::UpdateWindowSize(int width, int height) {
     screenWidth = width;

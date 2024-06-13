@@ -44,9 +44,10 @@ public:
     void SetScale(const Vector3& scale);
     void SetRotation(const Vector3& axis, float angleDegrees);
     void SetAnimation(Animation animation);
-    void JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration);
+    void JumpTo(std::shared_ptr<Island> newIsland, float baseDuration);
     void SetIsland(std::shared_ptr<Island> newIsland);
     int GetPlayerNumber() const;
+    void SetPlayerNumber(int playerNumber);
     std::shared_ptr<Model> GetModel();
     void SetOrientation(int orientation);
     int getOBJquantity(std::string objName);
@@ -56,8 +57,9 @@ public:
     int GetLevel() const;
     void SetLevel(int level);
     std::string GetTeam() const;
+    void SetDead();
 
-    void WaitForAnimationEnd();
+    void WaitForAnimationEnd(Player::Animation animation);
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -87,15 +89,23 @@ private:
     int thystame = 0;
 
     std::shared_ptr<Island> island;
+    std::shared_ptr<Island> newIsland;
+
     std::shared_ptr<Model> model;
     ModelLoader modelLoader;
 
     void UpdateScaleBasedOnLevel();
     void UpdateRotationAngle();
 
-    float animationStartTime;
-    float animationDuration;
-    bool animationPlaying;
+    float animationTime;
+    float animationSpeed;
+
+    Vector3 startPos;
+    Vector3 endPos;
+    float moveStartTime;
+    float moveDuration;
+    bool isMoving;
+    bool Dead = false;
 };
 
 #endif // PLAYER_HPP

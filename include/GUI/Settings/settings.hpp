@@ -45,6 +45,9 @@ private:
     std::vector<Vector2> resolutions;
     std::vector<int> fpsOptions;
 
+    int tempResolutionIndex;
+    int tempFPSIndex;
+
     void DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box);
 };
 

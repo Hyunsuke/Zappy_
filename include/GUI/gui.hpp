@@ -8,6 +8,7 @@
 #ifndef GUI_HPP_
 #define GUI_HPP_
 
+#include "ArgumentException.hpp"
 #include "core/CameraController.hpp"
 #include "core/Game.hpp"
 #include "core/Object3D.hpp"

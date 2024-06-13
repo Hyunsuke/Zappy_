@@ -15,7 +15,9 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
         orientation(orientation),
         level(level),
         island(island),
-        modelLoader(modelPath) {
+        modelLoader(modelPath),
+        animationTime(0.0f),
+        animationSpeed(60.0f) {
 
     std::shared_ptr<ModelAnimation> rawAnimations = AnimationCollector::GetInstance().LoadAnimation(modelPath, &animCount);
 
@@ -60,24 +62,47 @@ void Player::DrawWires() {
 }
 
 void Player::UpdateAnimation() {
-    if (!animations.empty() && animIndex < animations.size() && animations[animIndex]) {
-        animCurrentFrame = (animCurrentFrame + 1) % animations[animIndex]->frameCount;
+    if (!animations.empty() && animIndex < animations.size() && animations[animIndex] && Dead == false) {
+        float deltaTime = GetFrameTime();
+        animationTime += deltaTime;
+
+        int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
+
+        animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        animationTime -= framesToAdvance / animationSpeed;
+
         model = modelLoader.GetModel();
         UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
     }
 }
 
-void Player::WaitForAnimationEnd() {
-    std::thread([this]() {
+void Player::WaitForAnimationEnd(Player::Animation animation) {
+    std::thread([this, animation]() {
         int totalFrames = animations[animIndex]->frameCount;
-        float frameDuration = animations[animIndex]->frameCount / 60.0f;  // Assuming 60 FPS
+        float frameDuration = animations[animIndex]->frameCount / 60.0f;
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
-        SetAnimation(Animation::Idle);
+        SetAnimation(animation);
     }).detach();
 }
 
 void Player::UpdatePosition() {
-    if (island) {
+    if (isMoving) {
+        float currentTime = GetTime();
+        float t = (currentTime - moveStartTime) / moveDuration;
+
+        if (t >= 1.0f) {
+            t = 1.0f;
+            isMoving = false;
+            SetAnimation(Animation::Idle);
+
+            this->x = newIsland->GetX();
+            this->y = newIsland->GetY();
+            SetIsland(newIsland);
+        }
+
+        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
+        SetPosition(newPos);
+    } else if (island) {
         Vector3 islandPosition = island->GetPosition();
         position.y = islandPosition.y + 0.5f;
     }
@@ -109,6 +134,7 @@ void Player::SetAnimation(Animation animation) {
     if (animationMap.find(animation) != animationMap.end()) {
         animIndex = animationMap[animation];
         animCurrentFrame = 0;
+        animationTime = 0.0f;
     }
 }
 
@@ -151,28 +177,17 @@ int Player::GetPlayerNumber() const {
     return playerNumber;
 }
 
-void Player::JumpTo(int newX, int newY, std::shared_ptr<Island> newIsland, float duration) {
-    Vector3 startPos = position;
-    Vector3 endPos = {newX * 15.0f, position.y, newY * 15.0f};
+void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
+    startPos = position;
+    endPos = newIsland->GetPosition();
+
+    moveDuration = baseDuration;
+    moveStartTime = GetTime();
+    isMoving = true;
 
     SetAnimation(Animation::Jump);
-    int totalFrames = animations[animIndex]->frameCount;
-    float frameDuration = duration / totalFrames;
 
-    float startTime = GetTime();
-    float endTime = startTime + duration;
-    float t = 0.0f;
-
-    while (t < 1.0f) {
-        float currentTime = GetTime();
-        t = (currentTime - startTime) / (endTime - startTime);
-        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
-        SetPosition(newPos);
-    }
-    this->x = newIsland->GetX();
-    this->y = newIsland->GetY();
-    SetAnimation(Animation::Idle);
-    SetIsland(newIsland);
+    this->newIsland = newIsland;
 }
 
 int Player::getOBJquantity(std::string objName)
@@ -236,4 +251,16 @@ void Player::SetLevel(int level)
 std::string Player::GetTeam() const
 {
     return teamName;
+}
+
+void Player::SetDead()
+{
+    SetAnimation(Animation::Death);
+    WaitForAnimationEnd(Player::Animation::Death);
+    Dead = true;
+}
+
+void Player::SetPlayerNumber(int playerNumber)
+{
+    this->playerNumber = playerNumber;
 }
