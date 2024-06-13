@@ -106,7 +106,7 @@ void Game::HandleServerMessage(const std::string& message) {
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetAnimation(Player::Animation::Sit);
-            // player->WaitForAnimationEnd();
+            player->WaitForAnimationEnd(Player::Animation::Idle);
         }
     } else if (command == "pdi") {
         int n;
@@ -114,7 +114,7 @@ void Game::HandleServerMessage(const std::string& message) {
         // Handle player death
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
-            player->SetAnimation(Player::Animation::Death);
+            player->SetDead();
         }
     } else if (command == "enw") {
         int e, n, x, y;

@@ -47,6 +47,7 @@ public:
     void JumpTo(std::shared_ptr<Island> newIsland, float baseDuration);
     void SetIsland(std::shared_ptr<Island> newIsland);
     int GetPlayerNumber() const;
+    void SetPlayerNumber(int playerNumber);
     std::shared_ptr<Model> GetModel();
     void SetOrientation(int orientation);
     int getOBJquantity(std::string objName);
@@ -56,8 +57,9 @@ public:
     int GetLevel() const;
     void SetLevel(int level);
     std::string GetTeam() const;
+    void SetDead();
 
-    void WaitForAnimationEnd();
+    void WaitForAnimationEnd(Player::Animation animation);
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -103,6 +105,7 @@ private:
     float moveStartTime;
     float moveDuration;
     bool isMoving;
+    bool Dead = false;
 };
 
 #endif // PLAYER_HPP

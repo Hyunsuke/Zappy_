@@ -62,7 +62,7 @@ void Player::DrawWires() {
 }
 
 void Player::UpdateAnimation() {
-    if (!animations.empty() && animIndex < animations.size() && animations[animIndex]) {
+    if (!animations.empty() && animIndex < animations.size() && animations[animIndex] && Dead == false) {
         float deltaTime = GetFrameTime();
         animationTime += deltaTime;
 
@@ -76,12 +76,12 @@ void Player::UpdateAnimation() {
     }
 }
 
-void Player::WaitForAnimationEnd() {
-    std::thread([this]() {
+void Player::WaitForAnimationEnd(Player::Animation animation) {
+    std::thread([this, animation]() {
         int totalFrames = animations[animIndex]->frameCount;
         float frameDuration = animations[animIndex]->frameCount / 60.0f;
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
-        SetAnimation(Animation::Idle);
+        SetAnimation(animation);
     }).detach();
 }
 
@@ -251,4 +251,16 @@ void Player::SetLevel(int level)
 std::string Player::GetTeam() const
 {
     return teamName;
+}
+
+void Player::SetDead()
+{
+    SetAnimation(Animation::Death);
+    WaitForAnimationEnd(Player::Animation::Death);
+    Dead = true;
+}
+
+void Player::SetPlayerNumber(int playerNumber)
+{
+    this->playerNumber = playerNumber;
 }
