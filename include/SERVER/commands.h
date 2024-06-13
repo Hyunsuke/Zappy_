@@ -73,10 +73,10 @@ int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
 // int c_pic(struct_t *s); Fix Makefile
 int c_pic(struct_t *s, position_t position, int level, int *player);
-int c_pie(struct_t *s, int x, int y, int incantation_result);
+int c_pie(struct_t *s, int x, int y, char *incantation_result);
 int c_pfk(struct_t *s, int id_player);
-int c_pdr(struct_t *s, int id_player, int nb_rsc);
-int c_pgt(struct_t *s, int id_player, int nb_rsc);
+int c_pdr(struct_t *s, int id_player, int id_rsc);
+int c_pgt(struct_t *s, int id_player, int id_rsc);
 int c_pdi(struct_t *s, int id_player);
 int c_enw(struct_t *s, int nb_egg, int nb_player, int *pos);
 int c_ebo(struct_t *s, int nb_egg);

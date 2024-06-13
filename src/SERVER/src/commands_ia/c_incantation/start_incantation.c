@@ -67,11 +67,12 @@ static int collect_player_ids(player_t *current_player,
         if (current_player->x == player_position->x &&
             current_player->y == player_position->y &&
                 current_player->level_player == level) {
-            count++;
             player_ids[count] = current_player->id_player;
+            count++;
         }
         current_player = current_player->next;
     }
+    player_ids[count] = -1;
     return count;
 }
 
@@ -86,8 +87,7 @@ bool start_incantation(struct_t *s, player_t *player)
     if (eleva == NULL ||
         check_items_for_incantation(s, eleva, &p_pos) == false ||
         get_number_of_players_on_case(s, p_pos.x, p_pos.y)
-            < eleva->nb_players
-            || check_level_player(s, eleva, p_pos) == false) {
+        < eleva->nb_players || check_level_player(s, eleva, p_pos) == false) {
         printf("Start Incantation -> KO\n");
         dprintf(player->fd, "KO\n");
         return false;
@@ -96,5 +96,6 @@ bool start_incantation(struct_t *s, player_t *player)
     add_incantation(s, player->fd, p_id, nb);
     printf("Start Incantation -> OK\n");
     dprintf(player->fd, "Elevation underway\n");
+    c_pic(s, p_pos, eleva->level_to, p_id);
     return true;
 }

@@ -68,7 +68,6 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
 static bool check_incantation_conditions(struct_t *s, elevation_t *elevation,
     incantation_t *incantation, position_t *position)
 {
-    printf("Position: %d-%d\n", position->x, position->y);
     if (elevation == NULL)
         return false;
     if (check_items_for_incantation(s, elevation, position) == false) {
@@ -82,10 +81,11 @@ static bool check_incantation_conditions(struct_t *s, elevation_t *elevation,
     return true;
 }
 
-static int print_incantation_ko(struct_t *s, int fd)
+static int print_incantation_ko(struct_t *s, int fd, position_t *pos_incant)
 {
     printf("Incantation -> KO\n");
     dprintf(fd, "KO\n");
+    c_pie(s, pos_incant->x, pos_incant->y, "KO");
     return -1;
 }
 
@@ -95,18 +95,19 @@ int c_incantation(struct_t *s, int fd)
     elevation_t *elevation = get_elevation_by_level_to(s,
         (player->level_player + 1));
     incantation_t *incantation = get_incantation(s, fd);
-    position_t *pos_incant;
+    position_t *pos_incant = NULL;
 
     if (incantation == NULL)
-        return print_incantation_ko(s, fd);
+        return print_incantation_ko(s, fd, pos_incant);
     else
         pos_incant = &incantation->position;
     if (!check_incantation_conditions(s, elevation, incantation, pos_incant)) {
         remove_incantation(s, fd);
-        return print_incantation_ko(s, fd);
+        return print_incantation_ko(s, fd, pos_incant);
     }
     change_level_elevation(s, elevation, pos_incant);
     printf("Incantation -> OK\n");
     remove_incantation(s, fd);
+    c_pie(s, pos_incant->x, pos_incant->y, "OK");
     return 0;
 }

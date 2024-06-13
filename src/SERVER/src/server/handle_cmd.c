@@ -51,14 +51,29 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     list_actions(server, s, client_fd, team);
 }
 
+static void send_info_gui(struct_t *s)
+{
+    player_t *current = s->head_player;
+
+    printf("It's GUI\n");
+    print_response("Server: You're a GUI\n", s->fd_gui);
+    c_msz(s, "");
+    c_mct(s, "");
+    c_tna(s, "");
+    while (current != NULL) {
+        dprintf(s->fd_gui, "ppo #%d %d %d %d\n", current->id_player,
+            current->x, current->y, current->view_direction);
+        current = current->next;
+    }
+}
+
 static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     if (server->round[client_fd] == 0) {
         if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
-            printf("It's GUI\n");
-            print_response("Server: You're a GUI\n", client_fd);
             s->fd_gui = client_fd;
+            send_info_gui(s);
             server->round[client_fd]++;
         } else {
             gestion_team_name(server, s, buffer, client_fd);
