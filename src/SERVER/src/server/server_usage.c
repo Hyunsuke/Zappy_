@@ -13,6 +13,7 @@ void server_usage(server_t *server, struct_t *s)
     clock_t start_time = clock();
     clock_t current_time;
     double elapsed_time;
+    int nb_tick = 0;
 
     server->addrlen = sizeof(server->serv_adr);
     while (s->stop_server == false) {

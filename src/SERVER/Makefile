@@ -87,6 +87,7 @@ SRC	=	src/main.c	\
 		src/utils/commands/remove_command.c \
 		src/utils/commands/get_tick_for_command.c \
 		src/utils/tick.c \
+		src/utils/tiredness.c \
 		src/utils/signal.c \
 		src/utils/progress_incantation/add_progress_incantation.c \
 		src/utils/progress_incantation/get_progress_incantation.c \
