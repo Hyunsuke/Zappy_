@@ -15,7 +15,9 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
         orientation(orientation),
         level(level),
         island(island),
-        modelLoader(modelPath) {
+        modelLoader(modelPath),
+        animationTime(0.0f),
+        animationSpeed(60.0f) {
 
     std::shared_ptr<ModelAnimation> rawAnimations = AnimationCollector::GetInstance().LoadAnimation(modelPath, &animCount);
 
@@ -61,7 +63,16 @@ void Player::DrawWires() {
 
 void Player::UpdateAnimation() {
     if (!animations.empty() && animIndex < animations.size() && animations[animIndex]) {
-        animCurrentFrame = (animCurrentFrame + 1) % animations[animIndex]->frameCount;
+        float deltaTime = GetFrameTime();
+        animationTime += deltaTime;
+
+        // Calculez le nombre de frames d'animation à avancer
+        int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
+
+        // Mettez à jour la frame actuelle et réinitialisez le temps d'animation
+        animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        animationTime -= framesToAdvance / animationSpeed;
+
         model = modelLoader.GetModel();
         UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
     }
@@ -109,6 +120,7 @@ void Player::SetAnimation(Animation animation) {
     if (animationMap.find(animation) != animationMap.end()) {
         animIndex = animationMap[animation];
         animCurrentFrame = 0;
+        animationTime = 0.0f; // Réinitialisez le temps d'animation
     }
 }
 

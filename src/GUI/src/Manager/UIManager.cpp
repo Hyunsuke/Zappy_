@@ -1,18 +1,25 @@
-/*
-** EPITECH PROJECT, 2024
-** zappy
-** File description:
-** UIManager
-*/
-
 #include "gui.hpp"
 
 UIManager::UIManager(int screenWidth, int screenHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight) {}
+    : screenWidth(screenWidth), screenHeight(screenHeight) {
+    UpdateButtonPositions();
+}
+
+void UIManager::UpdateButtonPositions() {
+    settingsButton = { (float)(screenWidth - 220), (float)(screenHeight - 50), 100, 40 };
+    closeButton = { (float)(screenWidth - 110), (float)(screenHeight - 50), 100, 40 };
+}
+
+void UIManager::OnWindowResized(int newScreenWidth, int newScreenHeight) {
+    screenWidth = newScreenWidth;
+    screenHeight = newScreenHeight;
+    UpdateButtonPositions();
+}
 
 void UIManager::DrawUI(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int teamCount, int playerCount, int timeUnit, const std::string& mapSize, int fps) {
     DrawIslandInfoOrPlayer(selectedIsland, selectedPlayer, fps);
     DrawAdditionalInfo(teamCount, playerCount, timeUnit, mapSize);
+    DrawButtons();
 }
 
 void UIManager::DrawIslandInfoOrPlayer(const std::shared_ptr<Island>& selectedIsland, const std::shared_ptr<Player>& selectedPlayer, int fps) {
@@ -75,4 +82,14 @@ void UIManager::DrawAdditionalInfo(int teamCount, int playerCount, int timeUnit,
     DrawText(TextFormat("Players: %d", playerCount), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
     DrawText(TextFormat("Time Unit: %d", timeUnit), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
     DrawText(TextFormat("Map Size: %s", mapSize.c_str()), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
+}
+
+void UIManager::DrawButtons() {
+    DrawRectangleRec(settingsButton, LIGHTGRAY);
+    DrawRectangleLinesEx(settingsButton, 2, DARKGRAY);
+    DrawText("Settings", settingsButton.x + 10, settingsButton.y + 10, 20, BLACK);
+
+    DrawRectangleRec(closeButton, LIGHTGRAY);
+    DrawRectangleLinesEx(closeButton, 2, DARKGRAY);
+    DrawText("Close", closeButton.x + 20, closeButton.y + 10, 20, BLACK);
 }

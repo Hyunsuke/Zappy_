@@ -11,7 +11,6 @@
 #include <raylib.h>
 #include <cmath>
 
-
 class Sky {
 public:
     Sky(int screenWidth, int screenHeight);
@@ -22,6 +21,7 @@ public:
     void DrawSunAndMoon();
     Vector3 GetLightPosition() const;
     Vector3 GetLightColor();
+    void OnWindowResized(int newScreenWidth, int newScreenHeight); // Nouvelle méthode
 
 private:
     int screenWidth;
@@ -40,4 +40,3 @@ private:
 };
 
 #endif // SKY_HPP_
-

@@ -93,9 +93,8 @@ private:
     void UpdateScaleBasedOnLevel();
     void UpdateRotationAngle();
 
-    float animationStartTime;
-    float animationDuration;
-    bool animationPlaying;
+    float animationTime; // Temps écoulé pour l'animation
+    float animationSpeed;
 };
 
 #endif // PLAYER_HPP

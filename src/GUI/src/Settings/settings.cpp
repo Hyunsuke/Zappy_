@@ -9,7 +9,8 @@
 
 Settings::Settings(int screenWidth, int screenHeight)
     : open(false), screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
-      selectedResolutionIndex(0), selectedFPSIndex(0) {
+      selectedResolutionIndex(0), selectedFPSIndex(0),
+      tempResolutionIndex(0), tempFPSIndex(0) {
 
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
     fpsOptions = { 30, 60, 120 };
@@ -28,6 +29,8 @@ Settings::Settings(int screenWidth, int screenHeight)
 
 void Settings::Open() {
     open = true;
+    tempResolutionIndex = selectedResolutionIndex;
+    tempFPSIndex = selectedFPSIndex;
     UpdateLayout(screenWidth, screenHeight);
 }
 
@@ -52,6 +55,8 @@ int Settings::GetFPS() const {
 }
 
 void Settings::ApplySettings() {
+    selectedResolutionIndex = tempResolutionIndex;
+    selectedFPSIndex = tempFPSIndex;
     screenWidth = resolutions[selectedResolutionIndex].x;
     screenHeight = resolutions[selectedResolutionIndex].y;
     fps = fpsOptions[selectedFPSIndex];
@@ -65,6 +70,8 @@ void Settings::Update() {
             ApplySettings();
             Close();
         } else if (CheckCollisionPointRec(GetMousePosition(), closeButton)) {
+            tempResolutionIndex = selectedResolutionIndex;
+            tempFPSIndex = selectedFPSIndex;
             Close();
         }
     }
@@ -84,11 +91,11 @@ void Settings::Draw() {
 
     DrawText("Resolution:", resolutionBox.x - 100, resolutionBox.y + 5, 20, BLACK);
     std::vector<std::string> resolutionOptions = { "1920x1080", "1280x720", "800x600" };
-    DrawDropDown(resolutionOptions, selectedResolutionIndex, resolutionBox);
+    DrawDropDown(resolutionOptions, tempResolutionIndex, resolutionBox);
 
     DrawText("FPS:", fpsBox.x - 50, fpsBox.y + 5, 20, BLACK);
     std::vector<std::string> fpsOptionsText = { "30", "60", "120" };
-    DrawDropDown(fpsOptionsText, selectedFPSIndex, fpsBox);
+    DrawDropDown(fpsOptionsText, tempFPSIndex, fpsBox);
 
     DrawText("Key Bindings:", keyBindingsBox.x - 150, keyBindingsBox.y - 25, 20, BLACK);
 

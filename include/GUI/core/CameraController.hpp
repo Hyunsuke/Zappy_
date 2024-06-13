@@ -18,6 +18,9 @@ public:
 
 private:
     Camera camera;
+    Vector2 previousMousePosition;
+    bool firstMouseMove;
+    void RotateCamera(float yaw, float pitch);
 };
 
 #endif /* !CAMERACONTROLLER_HPP_ */

@@ -54,7 +54,7 @@ void Sky::DrawBackground() {
         endColor = ColorLerp(BLACK, DARKBLUE, nightFactor);
     }
 
-    for (int y = 0; y < screenHeight; y++) {
+    for (int y = 0; y < (screenHeight + 1); y++) {
         float t = (float)y / (float)screenHeight;
         Color color = ColorLerp(startColor, endColor, t);
         DrawLine(0, y, screenWidth, y, color);
@@ -88,4 +88,9 @@ Color Sky::ColorLerp(Color start, Color end, float amount) {
 
 Vector3 Sky::ColorToVector3(Color color) {
     return { (float)color.r / 255.0f, (float)color.g / 255.0f, (float)color.b / 255.0f };
+}
+
+void Sky::OnWindowResized(int newScreenWidth, int newScreenHeight) {
+    screenWidth = newScreenWidth;
+    screenHeight = newScreenHeight;
 }

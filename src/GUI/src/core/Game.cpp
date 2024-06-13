@@ -77,7 +77,6 @@ void Game::Run() {
 void Game::Update() {
     cameraController.Update();
     gameMap.Update();
-
     sky.Update();
 
     Vector3 lightPos = sky.GetLightPosition();
@@ -97,6 +96,44 @@ void Game::Update() {
             }
         }
     }
+
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        settings.Open();
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        CloseWindow();
+        std::exit(0);
+    }
+
+    if (settings.IsOpen()) {
+        settings.Update();
+    }
+
+    if (IsWindowResized()) {
+        int newWidth = GetScreenWidth();
+        int newHeight = GetScreenHeight();
+        sky.OnWindowResized(newWidth, newHeight);
+        uiManager.OnWindowResized(newWidth, newHeight);
+    }
+
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        settings.Open();
+    }
+    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        CloseWindow();
+        std::exit(0);
+    }
+
+    if (settings.IsOpen()) {
+        settings.Update();
+    }
+
+    if (IsWindowResized()) {
+        int newWidth = GetScreenWidth();
+        int newHeight = GetScreenHeight();
+        sky.OnWindowResized(newWidth, newHeight);
+        uiManager.OnWindowResized(newWidth, newHeight);
+    }
 }
 
 void Game::Draw() {
@@ -113,5 +150,10 @@ void Game::Draw() {
 
     EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
+
+    if (settings.IsOpen()) {
+        settings.Draw();
+    }
+
     EndDrawing();
 }
