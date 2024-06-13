@@ -31,6 +31,11 @@ static void new_tick_for_player(struct_t *s, player_t *current_player)
     if (command->tick <= 0) {
         run_commands_ia(s, current_player->fd, command->command);
         remove_oldest_command(current_player);
+        return;
+    }
+    if (command->tick == 299) {
+        if (start_incantation(s, current_player) == false)
+            remove_oldest_command(current_player);
     }
 }
 

@@ -17,6 +17,7 @@
 typedef struct player_s player_t;
 typedef struct position_s position_t;
 typedef struct team_s team_t;
+typedef struct incantation_s incantation_t;
 
 typedef struct command_s {
     char *command;
@@ -99,6 +100,7 @@ typedef struct struct_s {
     elevation_t *head_elevation; // Information about incantation of player (INFO)
     clock_t clock;  // Time for runner commands
     command_t *command_ticks; // Command with tick (INFO)
+    incantation_t *head_progress_incantation; // Incantation in progress
 } struct_t;
 
 

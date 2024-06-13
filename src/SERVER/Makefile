@@ -30,6 +30,7 @@ SRC	=	src/main.c	\
 		src/commands_ia/c_forward/forward.c \
 		src/commands_ia/c_forward/moove.c \
 		src/commands_ia/c_incantation/incantation.c \
+		src/commands_ia/c_incantation/start_incantation.c \
 		src/commands_ia/c_inventory/inventory.c \
 		src/commands_ia/c_left/left.c \
 		src/commands_ia/c_look/look.c \
@@ -84,6 +85,9 @@ SRC	=	src/main.c	\
 		src/utils/commands/get_tick_for_command.c \
 		src/utils/tick.c \
 		src/utils/signal.c \
+		src/utils/progress_incantation/add_progress_incantation.c \
+		src/utils/progress_incantation/get_progress_incantation.c \
+		src/utils/progress_incantation/remove_progress_incantation.c \
 
 
 INCLUDEDIR = ../../include/SERVER/

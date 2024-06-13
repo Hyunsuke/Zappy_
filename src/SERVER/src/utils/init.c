@@ -15,4 +15,5 @@ void init_struct(struct_t *s)
     s->stop_server = false;
     s->head_elevation = init_elevation();
     s->command_ticks = initialize_command_ticks();
+    s->head_progress_incantation = NULL;
 }

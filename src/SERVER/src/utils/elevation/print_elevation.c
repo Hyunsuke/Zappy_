@@ -14,7 +14,7 @@ void print_elevations(struct_t *s)
     printf("Level From -> Level To | Nb Players | Linemate");
     printf(" | Deraumere | Sibur | Mendiane | Phiras | Thystame\n");
     while (current != NULL) {
-        printf("%d->%d                  %d            %d          %d",
+        printf("      \t%d->%d                  %d            %d          %d",
                 current->level_from, current->level_to,
                 current->nb_players, current->resources.linemate,
                 current->resources.deraumere);
