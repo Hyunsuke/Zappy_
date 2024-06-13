@@ -66,10 +66,8 @@ void Player::UpdateAnimation() {
         float deltaTime = GetFrameTime();
         animationTime += deltaTime;
 
-        // Calculez le nombre de frames d'animation à avancer
         int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
 
-        // Mettez à jour la frame actuelle et réinitialisez le temps d'animation
         animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
         animationTime -= framesToAdvance / animationSpeed;
 
@@ -81,7 +79,7 @@ void Player::UpdateAnimation() {
 void Player::WaitForAnimationEnd() {
     std::thread([this]() {
         int totalFrames = animations[animIndex]->frameCount;
-        float frameDuration = animations[animIndex]->frameCount / 60.0f;  // Assuming 60 FPS
+        float frameDuration = animations[animIndex]->frameCount / 60.0f;
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
         SetAnimation(Animation::Idle);
     }).detach();
@@ -120,7 +118,7 @@ void Player::SetAnimation(Animation animation) {
     if (animationMap.find(animation) != animationMap.end()) {
         animIndex = animationMap[animation];
         animCurrentFrame = 0;
-        animationTime = 0.0f; // Réinitialisez le temps d'animation
+        animationTime = 0.0f;
     }
 }
 

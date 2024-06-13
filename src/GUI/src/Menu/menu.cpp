@@ -16,7 +16,6 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     std::strcpy(hostBuffer, host.c_str());
     std::sprintf(portBuffer, "%d", port);
 
-    // Initialize ShaderManager and load island model
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
@@ -32,14 +31,12 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     islandModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = islandTexture;
     islandModel.materials[0].shader = shaderManager->GetShader();
 
-    // Initialize camera
     camera.position = { 0.0f, 5.0f, 20.0f };
     camera.target = { 0.0f, 2.5f, 0.0f };
     camera.up = { 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
-    // Initialize player on the island
     std::shared_ptr<Island> island = std::make_shared<Island>(0, 0, Vector3{0.0f, 0.0f, 0.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
     player = std::make_unique<Player>(1, "menu", 0, 0, 1, 1, "src/GUI/assets/Player/robot.glb", island);
     player->SetAnimation(Player::Animation::Dance);
@@ -54,7 +51,6 @@ void Menu::Run() {
         player->SetPosition({0.0f, 1.0f, 2.5f});
         player->SetScale({1.0f, 1.0f, 1.0f});
 
-        // Mettre à jour et dessiner le ciel
         sky.Update();
 
         Draw();
