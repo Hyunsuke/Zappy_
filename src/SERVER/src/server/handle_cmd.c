@@ -42,7 +42,7 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
 
     if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
         buffer[len - 2] = '\0';
-    team_name = strtok(buffer, "\r\n");
+    team_name = strtok(buffer, "\n");
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
         printf("Name team unknown\n");
@@ -72,7 +72,7 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     if (server->round[client_fd] == 0) {
-        if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
+        if (strcmp(buffer, "GRAPHIC\n") == 0) {
             s->fd_gui = client_fd;
             send_info_gui(s);
             server->round[client_fd]++;
