@@ -37,7 +37,6 @@ int c_eject(struct_t *s, int fd);
 int c_take_obj(struct_t *s, int fd);
 int c_set_obj(struct_t *s, int fd);
 int c_incantation(struct_t *s, int fd);
-bool c_incantation_checker(struct_t *s, player_t *player);
 
 
 ////// Command functions ////
@@ -47,7 +46,7 @@ command_t *get_oldest_command(player_t *player);
 int get_command_count(player_t *player);
 int remove_oldest_command(player_t *player);
 int get_tick_for_command(struct_t *s, char *command);
-command_t* initialize_command_ticks(int *num_commands);
+command_t *initialize_command_ticks();
 
 
 ///////////////////////////////////////////////////////////////////////////////

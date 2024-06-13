@@ -99,7 +99,6 @@ typedef struct struct_s {
     elevation_t *head_elevation; // Information about incantation of player (INFO)
     clock_t clock;  // Time for runner commands
     command_t *command_ticks; // Command with tick (INFO)
-    int nb_command_ticks; // Number of command ticks
 } struct_t;
 
 

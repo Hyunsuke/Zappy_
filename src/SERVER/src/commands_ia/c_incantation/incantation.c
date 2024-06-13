@@ -94,20 +94,3 @@ int c_incantation(struct_t *s, int fd)
     printf("OK\n");
     return 0;
 }
-
-bool c_incantation_checker(struct_t *s, player_t *player)
-{
-    elevation_t *elevation = get_elevation_by_level_to(s,
-        (player->level_player + 1));
-    position_t player_position = { .x = player->x, .y = player->y };
-
-    if (elevation == NULL ||
-        check_items_for_incantation(s, elevation, &player_position) == false ||
-        get_number_of_players_on_case(s, player_position.x, player_position.y)
-            != elevation->nb_players
-            || check_level_player(s, elevation, player_position) == false) {
-        return false;
-    }
-    printf("OK\n");
-    return true;
-}
