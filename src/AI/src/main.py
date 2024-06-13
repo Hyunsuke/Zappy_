@@ -113,6 +113,8 @@ class ZappyClient:
                 self.cmd.sendArrayCmd()
         except KeyboardInterrupt:
             print("Terminating AI client.")
+            self.socket.close()
+            os._exit(0)
 
     def main_loop(self):
         try:
@@ -160,6 +162,7 @@ class ZappyClient:
             print("Terminating AI client.")
         finally:
             self.socket.close()
+            os._exit(0)
 
     def update_inventory(self, p=False):
         if (self.cmd.isInventoryUpdated == False):

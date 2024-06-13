@@ -106,7 +106,7 @@ class Command:
 
             except socket.error as e:
                 print(f"Erreur lors de la réception des données : {e}")
-                break
+                os._exit(0)
 
     def adjustData(self):
         if not self.responseList:
