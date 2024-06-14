@@ -30,6 +30,7 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         return;
     }
     // Remove le player de la liste player
+    dprintf(client_fd, "Client number: %d\n", mob->id_player);
     printf("Error not enough slot in the requested team\n");
 }
 
@@ -72,7 +73,6 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     if (server->round[client_fd] == 0) {
-        printf("buffer -> .%s.\n", buffer);
         if (strcmp(buffer, "GRAPHIC\n") == 0) {
             s->fd_gui = client_fd;
             send_info_gui(s);
