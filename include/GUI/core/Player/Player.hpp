@@ -104,7 +104,7 @@ private:
     Vector3 endPos;
     float moveStartTime;
     float moveDuration;
-    bool isMoving;
+    bool isMoving = false;
     bool Dead = false;
 };
 

@@ -14,8 +14,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight),
-      chatManager(screenWidth, screenHeight) {
+      settings(screenWidth, screenHeight) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -98,44 +97,11 @@ void Game::Update() {
         }
     }
 
-    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        settings.Open();
-    }
-    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        CloseWindow();
-        std::exit(0);
-    }
+    settings.HandleMouseInput(GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
 
-    if (settings.IsOpen()) {
-        settings.Update();
-    }
+    settings.Update();
 
-    if (IsWindowResized()) {
-        int newWidth = GetScreenWidth();
-        int newHeight = GetScreenHeight();
-        sky.OnWindowResized(newWidth, newHeight);
-        uiManager.OnWindowResized(newWidth, newHeight);
-    }
-
-    if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        settings.Open();
-    }
-    if (CheckCollisionPointRec(GetMousePosition(), uiManager.closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        CloseWindow();
-        std::exit(0);
-    }
-
-    if (settings.IsOpen()) {
-        settings.Update();
-    }
-
-    if (IsWindowResized()) {
-        int newWidth = GetScreenWidth();
-        int newHeight = GetScreenHeight();
-        sky.OnWindowResized(newWidth, newHeight);
-        uiManager.OnWindowResized(newWidth, newHeight);
-        chatManager.OnWindowResized(newWidth, newHeight);
-    }
+    settings.HandleWindowResize(sky, uiManager);
 }
 
 void Game::Draw() {
@@ -152,7 +118,6 @@ void Game::Draw() {
 
     EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
-    chatManager.Draw();
     settings.Draw();
 
     EndDrawing();

@@ -174,7 +174,6 @@ void Menu::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    // Dessiner le fond d'écran
     sky.DrawBackground();
 
     BeginMode3D(camera);
@@ -194,17 +193,16 @@ void Menu::Draw() {
     DrawRectangle(screenWidth / 4 + 100, screenHeight / 2, 200, 30, portActive ? LIGHTGRAY : GRAY);
     DrawText(portBuffer, screenWidth / 4 + 110, screenHeight / 2 + 5, 20, BLACK);
 
-    DrawRectangle(screenWidth / 2 - 50, screenHeight - 150, 100, 40, LIGHTGRAY);
-    DrawText("Connect", screenWidth / 2 - MeasureText("Connect", 20) / 2, screenHeight - 140, 20, BLACK);
+    Rectangle connectButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
+    DrawButton(connectButton, "Connect", 20);
 
-    DrawRectangle(screenWidth / 2 - 50, screenHeight - 80, 100, 40, LIGHTGRAY);
-    DrawText("Settings", screenWidth / 2 - MeasureText("Settings", 20) / 2, screenHeight - 70, 20, BLACK);
+    Rectangle settingsButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 80), 100.0f, 40.0f};
+    DrawButton(settingsButton, "Settings", 20);
 
     settings.Draw();
 
     EndDrawing();
 }
-
 
 void Menu::UpdateWindowSize(int width, int height) {
     screenWidth = width;

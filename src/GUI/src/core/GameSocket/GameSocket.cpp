@@ -80,7 +80,7 @@ void Game::HandleServerMessage(const std::string& message) {
         iss >> n >> message;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
-            chatManager.AddMessage(n, player->GetTeam(), message);
+            settings.SendMessage(n, player, message);
         }
     } else if (command == "pic") {
         int x, y, l;

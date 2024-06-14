@@ -1,55 +1,52 @@
-/*
-** EPITECH PROJECT, 2024
-** zappy
-** File description:
-** settings
-*/
+#ifndef SETTINGS_HPP
+#define SETTINGS_HPP
 
-#ifndef SETTINGS_HPP_
-#define SETTINGS_HPP_
-
-#include <string>
 #include <vector>
+#include <string>
+#include <ctime>
 #include <raylib.h>
+#include "../Sky/Sky.hpp"
+#include "../Manager/UIManager.hpp"
+#include "../Manager/ChatManager.hpp"
 
 class Settings {
 public:
     Settings(int screenWidth, int screenHeight);
-    void Draw();
-    void Update();
     void Open();
     void Close();
     bool IsOpen() const;
-    void ApplySettings();
-
     int GetScreenWidth() const;
     int GetScreenHeight() const;
     int GetFPS() const;
+    void ApplySettings();
+    void Update();
+    void Draw();
     void UpdateLayout(int screenWidth, int screenHeight);
+    void HandleMouseInput(Vector2 mousePosition, Rectangle settingsButton, Rectangle closeButton);
+    void HandleWindowResize(Sky& sky, UIManager& uiManager);
+    void SendMessage(int n, std::shared_ptr<Player> Player, std::string message);
 
 private:
+    void DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box);
+
     bool open;
     int screenWidth;
     int screenHeight;
     int fps;
+    int selectedResolutionIndex;
+    int selectedFPSIndex;
+    int tempResolutionIndex;
+    int tempFPSIndex;
+    std::vector<Vector2> resolutions;
+    std::vector<int> fpsOptions;
     std::vector<std::string> keyBindingsDescriptions;
-
     Rectangle resolutionBox;
     Rectangle fpsBox;
     Rectangle keyBindingsBox;
     Rectangle applyButton;
     Rectangle closeButton;
 
-    int selectedResolutionIndex;
-    int selectedFPSIndex;
-    std::vector<Vector2> resolutions;
-    std::vector<int> fpsOptions;
-
-    int tempResolutionIndex;
-    int tempFPSIndex;
-
-    void DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box);
+    ChatManager chat;
 };
 
-#endif // SETTINGS_HPP_
-
+#endif // SETTINGS_HPP

@@ -85,11 +85,40 @@ void UIManager::DrawAdditionalInfo(int teamCount, int playerCount, int timeUnit,
 }
 
 void UIManager::DrawButtons() {
-    DrawRectangleRec(settingsButton, LIGHTGRAY);
+    if (IsMouseOverButton(settingsButton)) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            settingsButtonColor = GREEN;
+        } else {
+            settingsButtonColor = YELLOW;
+        }
+    } else {
+        settingsButtonColor = LIGHTGRAY;
+    }
+
+    if (IsMouseOverButton(closeButton)) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            closeButtonColor = GREEN;
+        } else {
+            closeButtonColor = YELLOW;
+        }
+    } else {
+        closeButtonColor = LIGHTGRAY;
+    }
+
+    DrawRectangleRec(settingsButton, settingsButtonColor);
     DrawRectangleLinesEx(settingsButton, 2, DARKGRAY);
     DrawText("Settings", settingsButton.x + 10, settingsButton.y + 10, 20, BLACK);
 
-    DrawRectangleRec(closeButton, LIGHTGRAY);
+    DrawRectangleRec(closeButton, closeButtonColor);
     DrawRectangleLinesEx(closeButton, 2, DARKGRAY);
     DrawText("Close", closeButton.x + 20, closeButton.y + 10, 20, BLACK);
+}
+
+bool UIManager::IsMouseOverButton(Rectangle button) {
+    Vector2 mousePoint = GetMousePosition();
+    return CheckCollisionPointRec(mousePoint, button);
+}
+
+bool UIManager::IsButtonClicked(Rectangle button) {
+    return IsMouseOverButton(button) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 }

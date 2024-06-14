@@ -1,16 +1,10 @@
-/*
-** EPITECH PROJECT, 2024
-** zappy
-** File description:
-** settings
-*/
-
 #include "gui.hpp"
 
 Settings::Settings(int screenWidth, int screenHeight)
     : open(false), screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
       selectedResolutionIndex(0), selectedFPSIndex(0),
-      tempResolutionIndex(0), tempFPSIndex(0) {
+      tempResolutionIndex(0), tempFPSIndex(0),
+      chat(screenWidth, screenHeight) {
 
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
     fpsOptions = { 30, 60, 120 };
@@ -65,6 +59,7 @@ void Settings::ApplySettings() {
 }
 
 void Settings::Update() {
+    if (!open) return;
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (CheckCollisionPointRec(GetMousePosition(), applyButton)) {
             ApplySettings();
@@ -77,7 +72,30 @@ void Settings::Update() {
     }
 }
 
+void Settings::HandleMouseInput(Vector2 mousePosition, Rectangle settingsButton, Rectangle closeButton) {
+    if (CheckCollisionPointRec(mousePosition, settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        Open();
+    }
+    if (CheckCollisionPointRec(mousePosition, closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        CloseWindow();
+        std::exit(0);
+    }
+}
+
+void Settings::HandleWindowResize(Sky& sky, UIManager& uiManager) {
+    if (IsWindowResized()) {
+        int newWidth = GetScreenWidth();
+        int newHeight = GetScreenHeight();
+        sky.OnWindowResized(newWidth, newHeight);
+        uiManager.OnWindowResized(newWidth, newHeight);
+        chat.OnWindowResized(newWidth, newHeight);
+        UpdateLayout(newWidth, newHeight);
+    }
+}
+
 void Settings::Draw() {
+    chat.Draw();
+
     if (!open) return;
 
     int dialogWidth = screenWidth * 3 / 4;
@@ -104,11 +122,8 @@ void Settings::Draw() {
         i++;
     }
 
-    DrawText("Apply", applyButton.x + 20, applyButton.y + 10, 20, BLACK);
-    DrawRectangleLines(applyButton.x, applyButton.y, applyButton.width, applyButton.height, DARKGRAY);
-
-    DrawText("Close", closeButton.x + 20, closeButton.y + 10, 20, BLACK);
-    DrawRectangleLines(closeButton.x, closeButton.y, closeButton.width, closeButton.height, DARKGRAY);
+    DrawButton(applyButton, "Apply", 20);
+    DrawButton(closeButton, "Close", 20);
 }
 
 void Settings::UpdateLayout(int screenWidth, int screenHeight) {
@@ -135,4 +150,9 @@ void Settings::DrawDropDown(const std::vector<std::string>& options, int& select
     if (CheckCollisionPointRec(GetMousePosition(), box) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         selectedIndex = (selectedIndex + 1) % options.size();
     }
+}
+
+void Settings::SendMessage(int n, std::shared_ptr<Player> Player, std::string message)
+{
+    chat.AddMessage(n, Player->GetTeam(), message);
 }

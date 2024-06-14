@@ -72,8 +72,6 @@ private:
 
     std::shared_ptr<Island> selectedIsland;
     std::shared_ptr<Player> selectedPlayer;
-
-    ChatManager chatManager;
 };
 
 #endif /* !GAME_HPP_ */

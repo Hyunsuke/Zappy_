@@ -26,10 +26,15 @@ public:
     Rectangle settingsButton;
     Rectangle closeButton;
 
+    bool IsMouseOverButton(Rectangle button);
+    bool IsButtonClicked(Rectangle button);
+
 private:
+
     int screenWidth;
     int screenHeight;
-
+    Color settingsButtonColor;
+    Color closeButtonColor;
 
     void UpdateButtonPositions();
     void UpdateTextSizes();
