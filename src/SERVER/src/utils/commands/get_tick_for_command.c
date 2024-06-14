@@ -57,6 +57,6 @@ int get_tick_for_command(struct_t *s, char *command)
             return command_ticks[i].tick;
         }
     }
-    printf("NOT FOUND\n");
+    printf("NOT FOUND TICK - search -> .%s.\n", command);
     return 1;
 }

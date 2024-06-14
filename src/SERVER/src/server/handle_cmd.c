@@ -7,13 +7,25 @@
 
 #include "all.h"
 
+static void add_multiple_command(void *s, int client_fd, const char *buffer)
+{
+    int count = 0;
+    char **buffers = split_buffer(buffer, &count);
+    void *player = get_player_by_fd(s, client_fd);
+
+    for (int i = 0; i < count; i++) {
+        add_command(player, buffers[i], get_tick_for_command(s, buffers[i]));
+        my_free(buffers[i]);
+    }
+    my_free(buffers);
+}
+
 static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
     if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
     else if (s->start_game == true)
-        add_command(get_player_by_fd(s, client_fd), buffer,
-            get_tick_for_command(s, buffer));
+        add_multiple_command(s, client_fd, buffer);
 }
 
 static void list_actions(server_t *server, struct_t *s, int client_fd,

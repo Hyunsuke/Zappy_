@@ -47,7 +47,7 @@ typedef struct player_s {
 } player_t;
 
 typedef struct team_s {
-    char name[254];
+    char *name;
     int team_id;
     int *players_id;
     position_t **position_egg;

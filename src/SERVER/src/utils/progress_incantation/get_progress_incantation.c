@@ -16,6 +16,6 @@ incantation_t *get_incantation(struct_t *s, int fd)
             return current;
         current = current->next;
     }
-    printf("NOT FOUND\n");
+    printf("NOT FOUND INCANTATION\n");
     return NULL;
 }

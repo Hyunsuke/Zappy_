@@ -9,6 +9,8 @@
 
 int add_command(player_t *player, char *command, int tick)
 {
+    if (player == NULL)
+        return -1;
     if (player->command_count >= MAX_COMMANDS)
         return -1;
     player->commands[player->command_count].command = my_strdup(command);

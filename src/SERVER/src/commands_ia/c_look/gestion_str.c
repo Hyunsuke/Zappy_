@@ -14,7 +14,7 @@ void add_in_str(struct_t *s, const char *element)
 
     if (s->look_str == NULL) {
         new_len = strlen(element) + 1;
-        new_str = malloc(new_len * sizeof(char));
+        new_str = my_malloc(new_len * sizeof(char));
         new_str[0] = '\0';
     } else {
         new_len = strlen(s->look_str) + strlen(element) + 1;
