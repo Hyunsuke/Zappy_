@@ -13,7 +13,7 @@ static void dead_player(struct_t *s, player_t *player)
         player->id_team);
     dprintf(player->fd, "dead\n");
     c_pdi(s, player->id_player);
-    // close(player->fd);
+    // close(player->fd); Venir fermer le FD
     remove_player_from_team(s, player->id_team, player->id_player);
     remove_player(s, player->fd);
 }

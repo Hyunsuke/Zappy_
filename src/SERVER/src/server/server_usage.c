@@ -22,6 +22,22 @@ static bool start_game(struct_t *s)
     return true;
 }
 
+static bool end_game(struct_t *s)
+{
+    player_t *current_player = s->head_player;
+
+    while (current_player != NULL) {
+        if (current_player->level_player >= 8) {
+            c_seg(s, get_team_by_id(s, current_player->id_team));
+            s->start_game = false;
+            return true;
+        }
+        current_player = current_player->next;
+    }
+    // TODO: venir connecteur tout les joueurs (sauf GUI)
+    return false;
+}
+
 static void update_ticks_and_check_tiredness(struct_t *s, double *start_time,
     int *nb_tick, double tick_interval)
 {
@@ -33,6 +49,8 @@ static void update_ticks_and_check_tiredness(struct_t *s, double *start_time,
         c_mct(s, "");
         *start_time = current_time;
         (*nb_tick)++;
+        if (end_game(s))
+            return;
     }
     if (*nb_tick >= 126) {
         *nb_tick = 0;
