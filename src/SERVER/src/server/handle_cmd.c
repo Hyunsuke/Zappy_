@@ -95,7 +95,7 @@ static int receive_cmd(server_t *server, struct_t *s, char *buffer, int i)
         return i;
     } else {
         buffer[server->valread] = '\0';
-        printf("-> %s", buffer);
+        printf("-> %s\n", buffer);
         gestion_cmd(server, s, buffer, i);
         printf("\n");
         return i;
