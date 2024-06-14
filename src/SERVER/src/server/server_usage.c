@@ -25,6 +25,7 @@ void server_usage(server_t *server, struct_t *s)
         handling_cmd(server, s);
         if (elapsed_time >= tick_interval) {
             new_tick(s);
+            c_mct(s, "");
             start_time = current_time;
         }
     }
