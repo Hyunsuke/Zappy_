@@ -28,7 +28,7 @@ static bool end_game(struct_t *s)
 
     while (current_player != NULL) {
         if (current_player->level_player >= 8) {
-            c_seg(s, get_team_by_id(s, current_player->id_team));
+            c_seg(s, get_team_by_id(s, current_player->id_team)->name);
             s->start_game = false;
             return true;
         }
