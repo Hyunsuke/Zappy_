@@ -47,6 +47,6 @@ int c_eject(struct_t *s, int fd)
                 get_player_by_id(s, s->map[player->x][player->y].id_mob[n]));
     }
     remove_all_eggs_at_position_for_all_teams(s, player->x, player->y);
-    print_response("ok\n", fd);
+    dprintf(fd, "ok\n");
     return 0;
 }

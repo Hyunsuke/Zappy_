@@ -57,7 +57,7 @@ static void send_info_gui(struct_t *s)
     player_t *current = s->head_player;
 
     printf("It's GUI\n");
-    print_response("Server: You're a GUI\n", s->fd_gui);
+    dprintf(s->fd_gui, "Server: You're a GUI\n");
     c_msz(s, "");
     c_mct(s, "");
     c_tna(s, "");
@@ -81,7 +81,7 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             gestion_team_name(server, s, buffer, client_fd);
         }
     } else {
-        print_response(buffer, client_fd);
+        dprintf(client_fd, "%s", buffer);
         gestion_function(s, buffer, client_fd);
     }
 }
