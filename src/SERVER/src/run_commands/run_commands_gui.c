@@ -34,7 +34,7 @@ int run_commands_gui(struct_t *s, int fd, char *buffer)
         printf("Error FD GUI not good\n");
         return -1;
     }
-    command = strtok(buffer, "\r\n");
+    command = strtok(buffer, "\n");
     if (command == NULL) {
         printf("Command not found -> run_commands_GUI\n");
         return -1;

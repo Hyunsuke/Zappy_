@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-int add_in_team_list(struct_t *s, int player_id, team_t *team,
+int add_in_team_list(int player_id, team_t *team,
     int player_count)
 {
     team->players_id = my_realloc(team->players_id,
@@ -36,7 +36,7 @@ int add_player_to_team(struct_t *s, int team_id, int player_id, int fd)
     dprintf(fd, "%d %d\n", s->map_width, s->map_height);
     if (player_count >= s->client_nb)
         return -1;
-    if (add_in_team_list(s, player_id, team, player_count) == -1)
+    if (add_in_team_list(player_id, team, player_count) == -1)
         return -1;
     return 0;
 }

@@ -19,12 +19,16 @@ static void parse_ppo(const char *input, int *n)
 
 int c_ppo(struct_t *s, char *buffer)
 {
-    int nb_player = 0;
+    int id_player = 0;
     player_t *player;
 
-    parse_ppo(buffer, &nb_player);
-    player = get_player_by_id(s, nb_player);
-    dprintf(s->fd_gui, "ppo #%d %d %d %d\n", nb_player, player->x, player->y,
+    parse_ppo(buffer, &id_player);
+    player = get_player_by_id(s, id_player);
+    if (player == NULL) {
+        dprintf(s->fd_gui, "KO\n");
+        return -1;
+    }
+    dprintf(s->fd_gui, "ppo #%d %d %d %d\n", id_player, player->x, player->y,
         player->view_direction);
     return 0;
 }

@@ -41,6 +41,8 @@ int c_eject(struct_t *s, int fd);
 int c_take_obj(struct_t *s, int fd);
 int c_set_obj(struct_t *s, int fd);
 int c_incantation(struct_t *s, int fd);
+bool start_incantation(struct_t *s, player_t *player);
+
 
 ////// Command functions ////
 void print_all_commands(player_t *player);
@@ -48,10 +50,12 @@ int add_command(player_t *player, char *command, int tick);
 command_t *get_oldest_command(player_t *player);
 int get_command_count(player_t *player);
 int remove_oldest_command(player_t *player);
+int get_tick_for_command(struct_t *s, char *command);
+command_t *initialize_command_ticks();
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/////////////////////////// COMMANDS GUI///////////////////////////////////////
+/////////////////////////// COMMANDS GUI //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 int c_msz(struct_t *s, char *buffer);
@@ -69,10 +73,10 @@ int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
 // int c_pic(struct_t *s); Fix Makefile
 int c_pic(struct_t *s, position_t position, int level, int *player);
-int c_pie(struct_t *s, int x, int y, int incantation_result);
+int c_pie(struct_t *s, int x, int y, char *incantation_result);
 int c_pfk(struct_t *s, int id_player);
-int c_pdr(struct_t *s, int id_player, int nb_rsc);
-int c_pgt(struct_t *s, int id_player, int nb_rsc);
+int c_pdr(struct_t *s, int id_player, int id_rsc);
+int c_pgt(struct_t *s, int id_player, int id_rsc);
 int c_pdi(struct_t *s, int id_player);
 int c_enw(struct_t *s, int nb_egg, int nb_player, int *pos);
 int c_ebo(struct_t *s, int nb_egg);
@@ -87,7 +91,7 @@ int run_commands_ia(struct_t *s, int fd, char *buffer);
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/////////////////////// STRUCT ///////////////////////////////////////////////
+/////////////////////// STRUCT ////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef struct {

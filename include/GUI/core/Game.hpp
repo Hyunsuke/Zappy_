@@ -17,6 +17,7 @@
 #include "../Particles/ParticleSystem.hpp"
 #include "../Settings/settings.hpp"
 #include "../Socket/SocketManager.hpp"
+#include "../Manager/ChatManager.hpp"
 
 #include <vector>
 #include <iostream>
@@ -71,6 +72,8 @@ private:
 
     std::shared_ptr<Island> selectedIsland;
     std::shared_ptr<Player> selectedPlayer;
+
+    ChatManager chatManager;
 };
 
 #endif /* !GAME_HPP_ */

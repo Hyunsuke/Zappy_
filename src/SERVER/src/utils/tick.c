@@ -24,11 +24,19 @@ static void new_tick_for_player(struct_t *s, player_t *current_player)
 {
     command_t *command = get_oldest_command(current_player);
 
-    if (command != NULL && command->tick <= 0) {
+    if (command == NULL)
+        return;
+    print_all_commands(current_player);
+    printf("Command ---> .%s.\n", command->command);
+    if (command->tick <= 0) {
         run_commands_ia(s, current_player->fd, command->command);
         remove_oldest_command(current_player);
+        return;
     }
-    // Check if the command incantation (add checker incantation)
+    if (command->tick == 299) {
+        if (start_incantation(s, current_player) == false)
+            remove_oldest_command(current_player);
+    }
 }
 
 void new_tick(struct_t *s)

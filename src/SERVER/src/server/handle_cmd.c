@@ -9,11 +9,11 @@
 
 static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
-    if (client_fd == s->fd_gui && s->fd_gui != -1) {
+    if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
-    } else {
-        run_commands_ia(s, client_fd, buffer);
-    }
+    else
+        add_command(get_player_by_fd(s, client_fd), buffer,
+            get_tick_for_command(s, buffer));
 }
 
 static void list_actions(server_t *server, struct_t *s, int client_fd,
@@ -40,10 +40,9 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     team_t *team = NULL;
     char *team_name;
 
-    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {
+    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
         buffer[len - 2] = '\0';
-    }
-    team_name = strtok(buffer, "\r\n");
+    team_name = strtok(buffer, "\n");
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
         printf("Name team unknown\n");
@@ -52,14 +51,30 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     list_actions(server, s, client_fd, team);
 }
 
+static void send_info_gui(struct_t *s)
+{
+    player_t *current = s->head_player;
+
+    printf("It's GUI\n");
+    print_response("Server: You're a GUI\n", s->fd_gui);
+    c_msz(s, "");
+    c_mct(s, "");
+    c_tna(s, "");
+    c_sgt(s, "");
+    while (current != NULL) {
+        dprintf(s->fd_gui, "ppo #%d %d %d %d\n", current->id_player,
+            current->x, current->y, current->view_direction);
+        current = current->next;
+    }
+}
+
 static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     if (server->round[client_fd] == 0) {
-        if (strcmp(buffer, "GRAPHIC\r\n") == 0) {
-            printf("It's GUI\n");
-            print_response("Server: You're a GUI\n", client_fd);
+        if (strcmp(buffer, "GRAPHIC\n") == 0) {
             s->fd_gui = client_fd;
+            send_info_gui(s);
             server->round[client_fd]++;
         } else {
             gestion_team_name(server, s, buffer, client_fd);
@@ -91,8 +106,7 @@ void handling_cmd(server_t *server, struct_t *s)
     char buffer[1024] = { 0 };
 
     for (int i = server->server_fd + 1; i <= server->last_cli; i++) {
-        if (FD_ISSET(i, &server->tmp_fdtab)) {
+        if (FD_ISSET(i, &server->tmp_fdtab))
             i = receive_cmd(server, s, buffer, i);
-        }
     }
 }

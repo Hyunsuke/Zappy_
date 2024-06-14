@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pie(struct_t *s, int x, int y, int incantation_result)
+int c_pie(struct_t *s, int x, int y, char *incantation_result)
 {
-    dprintf(s->fd_gui, "pie %d %d %d\n", x, y, incantation_result);
+    dprintf(s->fd_gui, "pie %d %d %s\n", x, y, incantation_result);
     return 0;
 }

@@ -98,5 +98,6 @@ int c_set_obj(struct_t *s, int fd)
         return -1;
     }
     add_obj_to_map(s, player, id_obj);
+    c_pdr(s, player->id_player, id_obj);
     return 0;
 }
