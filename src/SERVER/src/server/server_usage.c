@@ -7,6 +7,21 @@
 
 #include "all.h"
 
+static bool start_game(struct_t *s)
+{
+    team_t *current_team = s->head_team;
+
+    if (s->fd_gui == -1)
+        return false;
+    while (current_team != NULL) {
+        if (current_team->players_id == NULL)
+            return false;
+        current_team = current_team->next;
+    }
+    s->start_game = true;
+    return true;
+}
+
 static void update_ticks_and_check_tiredness(struct_t *s, double *start_time,
     int *nb_tick, double tick_interval)
 {
@@ -37,7 +52,10 @@ void server_usage(server_t *server, struct_t *s)
         handle_activity(server);
         handle_new_client(server);
         handling_cmd(server, s);
-        update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
-            tick_interval);
+        if (s->start_game == false)
+            start_game(s);
+        if (s->start_game == true)
+            update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
+                tick_interval);
     }
 }
