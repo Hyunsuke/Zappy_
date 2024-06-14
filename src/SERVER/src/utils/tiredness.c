@@ -9,9 +9,12 @@
 
 static void dead_player(struct_t *s, player_t *player)
 {
+    printf("Dead player: %d [ID team -> %d]\n", player->id_player,
+        player->id_team);
     dprintf(player->fd, "dead\n");
     c_pdi(s, player->id_player);
-    close(player->fd);
+    // close(player->fd);
+    remove_player_from_team(s, player->id_team, player->id_player);
     remove_player(s, player->fd);
 }
 
@@ -21,7 +24,6 @@ static void process_player_food(struct_t *s, player_t **current,
     player_t *next = (*current)->next;
 
     (*current)->food--;
-    printf("FOOD -> %d\n", (*current)->food);
     if ((*current)->food <= 0) {
         dead_player(s, *current);
         if (*prev == NULL)

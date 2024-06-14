@@ -49,6 +49,7 @@ void remove_player(struct_t *s, int fd);
 
     //////////////////////// TEAMS ///
 int add_player_to_team(struct_t *s, int team_id, int player_id, int fd);
+int remove_player_from_team(struct_t *s, int team_id, int player_id);
 team_t *create_team(struct_t *s, const char *name);
 int add_position_egg_to_team(struct_t *s, int team_id, int x, int y);
 position_t *get_and_remove_first_egg_position(struct_t *s, int team_id);

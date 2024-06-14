@@ -92,6 +92,7 @@ typedef struct struct_s {
     int fd_gui;
     char *obj;
     bool stop_server;
+    bool start_game;
     char *look_str;
     int len_view;
     int view_num;
