@@ -44,6 +44,7 @@ SRC	=	src/main.c	\
 		src/utils/players/create_player.c \
 		src/utils/players/display_player.c \
 		src/utils/players/get_player.c \
+		src/utils/players/remove_player.c \
 		src/commands_gui/c_msz/msz.c \
 		src/commands_gui/c_bct/bct.c \
 		src/commands_gui/c_mct/mct.c \
