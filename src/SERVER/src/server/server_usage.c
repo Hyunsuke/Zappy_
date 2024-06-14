@@ -35,6 +35,8 @@ static bool end_game(struct_t *s)
         current_player = current_player->next;
     }
     // TODO: venir connecteur tout les joueurs (sauf GUI)
+    printf("WIN THE GAME - TEAM -> %s",
+        get_team_by_id(s, current_player->id_team)->name);
     return false;
 }
 
