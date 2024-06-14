@@ -72,6 +72,7 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
     if (server->round[client_fd] == 0) {
+        printf("buffer -> .%s.\n", buffer);
         if (strcmp(buffer, "GRAPHIC\n") == 0) {
             s->fd_gui = client_fd;
             send_info_gui(s);

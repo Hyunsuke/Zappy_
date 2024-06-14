@@ -35,12 +35,14 @@ io.on('connection', (socket) => {
 
     socket.on('send_message', ({ message, timestamp }) => {
         if (client) {
-            client.write(message, (err) => {
+            // Replace '\n' in the message with the actual newline character
+            const formattedMessage = message.replace(/\\n/g, '\n');
+            client.write(formattedMessage, (err) => {
                 if (err) {
                     console.error('Error sending message: ', err);
                     socket.emit('receive_message', { message: 'Error sending message: ' + err.message });
                 } else {
-                    console.log(`Message sent: ${message}`);
+                    console.log(`Message sent: ${formattedMessage}`);
                 }
             });
         } else {
