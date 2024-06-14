@@ -229,9 +229,12 @@ class ZappyClient:
             # print(key, value)
             if key in response and self.current_inventory.objective_inventory[key] > 0:
                 # print("Found ", key)
-                self.eat_nearest_ressource(key, True)
+                total_amount = self.cmd.current_inventory.current_inventory.get(key, 0) + self.cmd.current_inventory.shared_inventory.get(key, 0)
+                print(key, ": ", total_amount)
+                if total_amount < self.cmd.current_inventory.objective_inventory[key]:
+                    self.eat_nearest_ressource(key, True)
                 # self.current_inventory.objective_inventory[key] -= 1
-                return
+                    return
             # if self.current_inventory.current_inventory[key] < value:
             #     self.lookForTile(key)
         # if total_value == 0:
