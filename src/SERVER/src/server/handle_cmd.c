@@ -11,7 +11,7 @@ static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
     if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
-    else
+    else if (s->start_game == true)
         add_command(get_player_by_fd(s, client_fd), buffer,
             get_tick_for_command(s, buffer));
 }
