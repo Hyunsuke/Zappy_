@@ -33,16 +33,15 @@ static void add_position_player(struct_t *s, player_t *new_player)
 {
     team_t *team_p = get_team_by_id(s, new_player->id_team);
 
-    if (team_p == NULL) {
+    if (team_p == NULL)
         add_random_position_player(s, new_player);
-    } else {
+    else
         add_position_egg_player(s, new_player);
-    }
 }
 
 static void init_ressource_player(player_t *new_player)
 {
-    new_player->food = 0;
+    new_player->food = 10;
     new_player->linemate = 0;
     new_player->deraumere = 0;
     new_player->sibur = 0;
@@ -77,6 +76,7 @@ void add_player(struct_t *s, int fd, int id_team)
     new_player->y = 0;
     new_player->level_player = 1;
     new_player->next = s->head_player;
+    new_player->level_player = 1;
     s->head_player = new_player;
     add_position_player(s, new_player);
 }

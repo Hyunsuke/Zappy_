@@ -9,11 +9,13 @@
 
 void handle_activity(server_t *server)
 {
-    server->activity = select(server->last_cli + 1, &server->tmp_fdtab,
-    NULL, NULL, NULL);
+    struct timeval timeout = {0, 0};
+
+    server->activity = select(server->last_cli + 1,
+        &server->tmp_fdtab, NULL, NULL, &timeout);
     if ((server->activity < 0) && (errno != EINTR)) {
         perror("select error");
-        exit(EXIT_FAILURE);
+        exit(84);
     }
 }
 
@@ -26,13 +28,12 @@ void handle_new_client(server_t *server)
             (struct sockaddr *) &server->serv_adr, &server->addrlen);
         if (new_socket < 0) {
             perror("accept");
-            exit(EXIT_FAILURE);
+            exit(84);
         }
-        print_response("WELCOME\n", new_socket);
+        dprintf(new_socket, "WELCOME\n");
         FD_SET(new_socket, &server->fd_tab);
-        if (new_socket > server->last_cli) {
+        if (new_socket > server->last_cli)
             server->last_cli = new_socket;
-        }
         server->round[new_socket] = 0;
     }
 }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/emoji-picker-element@^1.0.0/dist/emoji-picker-element.css">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="left">
+            <h1>Connection</h1>
+            <div class="form-group">
+                <label for="hostname">Hostname:</label>
+                <input type="text" id="hostname" placeholder="Enter hostname">
+            </div>
+            <div class="form-group">
+                <label for="port">Port:</label>
+                <input type="number" id="port" placeholder="Enter port">
+            </div>
+            <button id="connect">Connect</button>
+            <button id="toggle-theme">Toggle Theme</button>
+        </div>
+        <div class="center">
+            <h1>Chat System</h1>
+            <div class="chat-box" id="chat-box">
+                <input type="text" id="search" placeholder="Search messages">
+                <div id="messages"></div>
+                <input type="text" id="message" placeholder="Enter message">
+                <button id="send">Send</button>
+                <p id="typing-indicator" style="display: none;">Someone is typing...</p>
+            </div>
+        </div>
+        <div class="right">
+            <h1>Statistics</h1>
+            <div class="debug-info">
+                <p id="response-time">Response Time: N/A</p>
+                <p id="total-messages">Total Messages: 0</p>
+                <p id="last-message">Last Message: N/A</p>
+                <p id="connection-status">Connection Status: Disconnected</p>
+            </div>
+        </div>
+    </div>
+
+    <emoji-picker></emoji-picker>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let totalMessages = 0;
+        const typingIndicator = document.getElementById('typing-indicator');
+        let typingTimeout;
+
+        document.getElementById('connect').addEventListener('click', () => {
+            const hostname = document.getElementById('hostname').value;
+            const port = document.getElementById('port').value;
+            socket.emit('connect_to_server', { hostname, port });
+        });
+
+        document.getElementById('send').addEventListener('click', () => {
+            sendMessage();
+        });
+
+        document.getElementById('message').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            } else {
+                socket.emit('typing');
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    socket.emit('stop_typing');
+                }, 1000);
+            }
+        });
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (message.trim() !== '') {
+                const timestamp = Date.now();
+                socket.emit('send_message', { message, timestamp });
+                document.getElementById('message').value = '';
+                totalMessages++;
+                document.getElementById('total-messages').textContent = `Total Messages: ${totalMessages}`;
+                document.getElementById('last-message').textContent = `Last Message: ${message}`;
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `You: ${message}`;
+                document.getElementById('messages').appendChild(messageElement);
+                scrollChatToBottom();
+            }
+        }
+
+        socket.on('receive_message', (data) => {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = data.message;
+            document.getElementById('messages').appendChild(messageElement);
+            scrollChatToBottom();
+        });
+
+        socket.on('server_response', (data) => {
+            const responseElement = document.createElement('div');
+            responseElement.innerHTML = `<strong>Server:</strong> ${data.response.replace(/\\n/g, '\\n\n').replace(/\\r/g, '\\r').replace(/\\0/g, '\\0')}`;
+            document.getElementById('messages').appendChild(responseElement);
+
+            const currentTime = Date.now();
+            const responseTime = currentTime - data.timestamp;
+            document.getElementById('response-time').textContent = `Response Time: ${responseTime} ms`;
+            scrollChatToBottom();
+        });
+
+        socket.on('typing', () => {
+            typingIndicator.style.display = 'block';
+        });
+
+        socket.on('stop_typing', () => {
+            typingIndicator.style.display = 'none';
+        });
+
+        socket.on('connect', () => {
+            document.getElementById('connection-status').textContent = 'Connection Status: Connected';
+        });
+
+        socket.on('disconnect', () => {
+            document.getElementById('connection-status').textContent = 'Connection Status: Disconnected';
+        });
+
+        document.getElementById('toggle-theme').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        document.getElementById('search').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const messages = document.getElementById('messages').children;
+            Array.from(messages).forEach(message => {
+                if (message.textContent.toLowerCase().includes(searchTerm)) {
+                    message.style.display = 'block';
+                } else {
+                    message.style.display = 'none';
+                }
+            });
+        });
+
+        function scrollChatToBottom() {
+            const messages = document.getElementById('messages');
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+            document.getElementById('message').value += event.detail.unicode;
+        });
+    </script>
+</body>
+</html>

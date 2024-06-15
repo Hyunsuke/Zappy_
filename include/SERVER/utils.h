@@ -44,10 +44,12 @@ void add_player(struct_t *s, int fd, int id_team);
 player_t *get_player_by_fd(struct_t *s, int fd);
 player_t *get_player_by_id(struct_t *s, int id_player);
 void print_players(struct_t *s);
+void remove_player(struct_t *s, int fd);
     /////////////////////////////////
 
     //////////////////////// TEAMS ///
 int add_player_to_team(struct_t *s, int team_id, int player_id, int fd);
+int remove_player_from_team(struct_t *s, int team_id, int player_id);
 team_t *create_team(struct_t *s, const char *name);
 int add_position_egg_to_team(struct_t *s, int team_id, int x, int y);
 position_t *get_and_remove_first_egg_position(struct_t *s, int team_id);
@@ -63,6 +65,11 @@ int get_resource_code(char *obj);
     /////////////////////////////////
 
 void init_struct(struct_t *s);
+void signal_handler(int signum);
+
+void tiredness(struct_t *s);
+
+char **split_buffer(const char *buffer, int *count);
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// STRUCT GORBAGE COLLECTOR //////////////////////////

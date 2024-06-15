@@ -17,5 +17,7 @@
     #include "parsing.h"
     #include "server.h"
     #include "commands.h"
+    #include "elevation.h"
+    #include "progress_incantation.h"
 
 #endif /* !SERVER_H_ */

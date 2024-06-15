@@ -7,8 +7,8 @@
 
 #include "all.h"
 
-int c_pgt(struct_t *s, int id_player, int nb_rsc)
+int c_pgt(struct_t *s, int id_player, int id_rsc)
 {
-    dprintf(s->fd_gui, "pgt #%d %d\n", id_player, nb_rsc);
+    dprintf(s->fd_gui, "pgt #%d %d\n", id_player, id_rsc);
     return 0;
 }

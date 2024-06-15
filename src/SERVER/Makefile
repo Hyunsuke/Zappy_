@@ -15,7 +15,6 @@ SRC	=	src/main.c	\
 		src/utils/my_strdup.c \
 		src/server/server.c \
 		src/server/server_usage.c \
-		src/server/print.c \
 		src/server/init.c \
 		src/server/handle.c \
 		src/server/handle_cmd.c \
@@ -30,6 +29,7 @@ SRC	=	src/main.c	\
 		src/commands_ia/c_forward/forward.c \
 		src/commands_ia/c_forward/moove.c \
 		src/commands_ia/c_incantation/incantation.c \
+		src/commands_ia/c_incantation/start_incantation.c \
 		src/commands_ia/c_inventory/inventory.c \
 		src/commands_ia/c_left/left.c \
 		src/commands_ia/c_look/look.c \
@@ -43,6 +43,7 @@ SRC	=	src/main.c	\
 		src/utils/players/create_player.c \
 		src/utils/players/display_player.c \
 		src/utils/players/get_player.c \
+		src/utils/players/remove_player.c \
 		src/commands_gui/c_msz/msz.c \
 		src/commands_gui/c_bct/bct.c \
 		src/commands_gui/c_mct/mct.c \
@@ -76,11 +77,22 @@ SRC	=	src/main.c	\
 		src/utils/map.c \
 		src/utils/init.c \
 		src/utils/get_rsc_code.c \
+		src/utils/elevation/add_elevation.c \
+		src/utils/elevation/get_elevation.c \
+		src/utils/elevation/init_elevation.c \
+		src/utils/elevation/print_elevation.c \
 		src/utils/commands/get_command.c \
 		src/utils/commands/add_command.c \
 		src/utils/commands/print_command.c \
 		src/utils/commands/remove_command.c \
+		src/utils/commands/get_tick_for_command.c \
 		src/utils/tick.c \
+		src/utils/tiredness.c \
+		src/utils/signal.c \
+		src/utils/split_buffer.c \
+		src/utils/progress_incantation/add_progress_incantation.c \
+		src/utils/progress_incantation/get_progress_incantation.c \
+		src/utils/progress_incantation/remove_progress_incantation.c \
 
 
 INCLUDEDIR = ../../include/SERVER/

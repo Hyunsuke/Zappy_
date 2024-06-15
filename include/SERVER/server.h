@@ -27,6 +27,5 @@ void init_fd_table(server_t *server);
 void handle_new_client(server_t *server);
 void handle_activity(server_t *server);
 void handling_cmd(server_t *server, struct_t *s);
-void print_response(char *buffer, int client_fd);
 
 #endif /* !SERVER_H */

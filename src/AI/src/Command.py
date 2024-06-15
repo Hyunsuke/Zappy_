@@ -175,8 +175,8 @@ class Command:
             elif fct == "OK":
                 if object in self.current_inventory.shared_inventory:
                     print("Il faut pop l'objet du objective inventory")
-                    self.pop_item(object)
-                    self.validateInventory(object)
+                    # self.pop_item(object)
+                    self.validateInventory(object, True)
                     # Check si on a atteint l'objectif
             elif fct == "END":
                 if self.leaderIsChosen != -1:
@@ -251,16 +251,17 @@ class Command:
         if self.level == 1:
             return
 
-    def validateInventory(self, objectTaken):
+    def validateInventory(self, objectTaken, broadcast=False):
         if self.check_inventory() == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
             self.broadcastMaterial(objectTaken, "END")
-            self.pop_item(objectTaken)
+            # self.pop_item(objectTaken)
             # self.status = -3
             return True
         if self.check_item(objectTaken) == True:
-            self.broadcastMaterial(objectTaken, "OK")
-            self.pop_item(objectTaken)
+            if broadcast == False and objectTaken != "food":
+                self.broadcastMaterial(objectTaken, "OK")
+            # self.pop_item(objectTaken)
             return True
         return False
 

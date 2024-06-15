@@ -12,6 +12,8 @@ static void define_obj(struct_t *s, char *command, int inter, int len)
     int j = 0;
 
     s->obj = my_malloc(sizeof(char) * (len + 1));
+    if (!s->obj)
+        exit(0);
     for (j = 0; j < len; j++)
         s->obj[j] = command[inter + j];
     s->obj[len] = '\0';
@@ -81,7 +83,7 @@ int run_commands_ia(struct_t *s, int fd, char *buffer)
 {
     char *command;
 
-    command = strtok(buffer, "\r\n");
+    command = strtok(buffer, "\n");
     if (command == NULL) {
         printf("ko\n");
         return -1;

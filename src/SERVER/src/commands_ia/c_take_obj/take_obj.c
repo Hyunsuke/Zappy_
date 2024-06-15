@@ -91,9 +91,10 @@ int c_take_obj(struct_t *s, int fd)
     int id_obj = get_resource_code(s->obj);
 
     if (remove_obj_map(&s->map[player->y][player->x], id_obj) == false) {
-        print_response("ko\n", fd);
+        dprintf(fd, "ko\n");
         return -1;
     }
     add_obj_inventory_player(player, id_obj);
+    c_pgt(s, player->id_player, id_obj);
     return 0;
 }
