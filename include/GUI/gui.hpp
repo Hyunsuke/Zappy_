@@ -44,6 +44,7 @@
 //////////////////
 
 #include "Menu/menu.hpp"
+#include "Menu/Button.hpp"
 
 #include "Settings/settings.hpp"
 
