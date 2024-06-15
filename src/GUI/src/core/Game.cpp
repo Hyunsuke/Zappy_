@@ -14,7 +14,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight) {
+      settings(screenWidth, screenHeight, "game") {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };

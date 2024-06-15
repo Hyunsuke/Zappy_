@@ -10,7 +10,7 @@
 Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     : screenWidth(screenWidth), screenHeight(screenHeight), host(host), port(port),
       startGame(false), hostActive(false), portActive(false),
-      hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight),
+      hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight, "menu"),
       sky(screenWidth, screenHeight)
 {
     std::strcpy(hostBuffer, host.c_str());

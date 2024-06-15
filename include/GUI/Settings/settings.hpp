@@ -11,7 +11,7 @@
 
 class Settings {
 public:
-    Settings(int screenWidth, int screenHeight);
+    Settings(int screenWidth, int screenHeight, std::string InstanceName);
     void Open();
     void Close();
     bool IsOpen() const;

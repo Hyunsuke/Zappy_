@@ -1,6 +1,6 @@
 #include "gui.hpp"
 
-Settings::Settings(int screenWidth, int screenHeight)
+Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
     : open(false), screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
       selectedResolutionIndex(0), selectedFPSIndex(0),
       tempResolutionIndex(0), tempFPSIndex(0),
@@ -9,14 +9,23 @@ Settings::Settings(int screenWidth, int screenHeight)
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
     fpsOptions = { 30, 60, 120 };
 
-    keyBindingsDescriptions = {
-        "ENTER -> Connect",
-        "ESCAPE -> Quit",
-        "W -> Move Up",
-        "S -> Move Down",
-        "A -> Move Left",
-        "D -> Move Right"
-    };
+    if (InstanceName == "menu") {
+        keyBindingsDescriptions = {
+            "ENTER -> Connect",
+            "ESCAPE -> Quit",
+        };
+    } else {
+        keyBindingsDescriptions = {
+            "Z -> Forward",
+            "S -> Backward",
+            "Q -> Left",
+            "D -> Right",
+            "A -> Up",
+            "E -> Down",
+            "Left Click -> Select island",
+            "Right Click -> Select player",
+        };
+    }
 
     UpdateLayout(screenWidth, screenHeight);
 }
