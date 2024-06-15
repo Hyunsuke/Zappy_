@@ -82,6 +82,17 @@ std::string SocketManager::ReceiveMessage() {
     return message;
 }
 
+bool SocketManager::TryReceiveMessage(std::string& message) {
+    std::unique_lock<std::mutex> lock(messageMutex);
+    if (messageQueue.empty()) {
+        return false;
+    }
+    message = messageQueue.front();
+    messageQueue.pop();
+    return true;
+}
+
+
 void SocketManager::SetMessageHandler(MessageHandler handler) {
     messageHandler = handler;
 }

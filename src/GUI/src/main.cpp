@@ -6,6 +6,7 @@
 */
 
 #include "gui.hpp"
+#include <future>
 
 void init_Window(int screenWidth, int screenHeight, const char* title) {
     InitWindow(screenWidth, screenHeight, title);
@@ -35,18 +36,21 @@ bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketMa
     return true;
 }
 
-bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 5) {
+bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 15) {
     auto start = std::chrono::steady_clock::now();
 
     while (true) {
         auto now = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
         if (elapsed > timeoutSeconds) {
+            std::exit(84);
             throw GameException("Timeout waiting for initial server messages");
-            return false;
         }
-
-        std::string message = socketManager.ReceiveMessage();
+        std::string message;
+        if (!socketManager.TryReceiveMessage(message)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            continue;
+        }
         std::istringstream iss(message);
         std::string command;
         iss >> command;
@@ -71,7 +75,6 @@ bool processInitialServerMessages(SocketManager& socketManager, std::string& map
             Utils::removeDuplicates(teamNames);
             break;
         }
-
     }
     return true;
 }
@@ -136,7 +139,8 @@ int main(int ac, char** av) {
 
                 if (processInitialServerMessages(*socketManager, mapSize, timeUnit, teamNames, mapContent, eggs)) {
                     runGame(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs, socketManager);
-                }
+                } else
+                    std::cout << "Failed to process initial server messages" << std::endl;
             }
         }
     } catch (const ArgumentException& e) {

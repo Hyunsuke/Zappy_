@@ -22,6 +22,7 @@ public:
 
 private:
     bool CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform);
+    bool CheckCollisionRayBox(Ray ray, BoundingBox box);
     Ray ray;
 };
 

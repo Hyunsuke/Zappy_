@@ -154,3 +154,15 @@ void Island::SetShader(const Shader& shader) {
         obj->SetShader(shader);
     }
 }
+
+std::vector<std::shared_ptr<Player>> Island::GetPlayers() {
+    return players;
+}
+
+void Island::AddPlayer(std::shared_ptr<Player> player) {
+    players.push_back(player);
+}
+
+void Island::RemovePlayer(std::shared_ptr<Player> player) {
+    players.erase(std::remove(players.begin(), players.end(), player), players.end());
+}

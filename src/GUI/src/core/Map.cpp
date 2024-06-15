@@ -63,8 +63,10 @@ void Map::Update() {
         island->Move(position);
     }
     for (auto& player : players) {
-        player->UpdateAnimation();
-        player->UpdatePosition();
+        if (player) {
+            player->UpdateAnimation();
+            player->UpdatePosition();
+        }
     }
 }
 

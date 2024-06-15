@@ -86,17 +86,11 @@ void Game::Update() {
     shaderManager->SetShaderValue("lightColor", &lightCol, SHADER_UNIFORM_VEC3);
 
     rayManager.UpdateRay(cameraController.GetCamera());
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
-        if (selectedPlayer) {
-            selectedIsland = nullptr;
-        } else {
-            selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
-            if (selectedIsland) {
-                selectedPlayer = nullptr;
-            }
-        }
-    }
 
     if (CheckCollisionPointRec(GetMousePosition(), uiManager.settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         settings.Open();

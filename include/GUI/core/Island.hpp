@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 #include "../Utils/utils.hpp"
+#include "Player/Player.hpp"
 
 class Island {
 public:
@@ -43,6 +44,10 @@ public:
     std::shared_ptr<Object3D> thystame;
     std::shared_ptr<Object3D> egg;
 
+    std::vector<std::shared_ptr<Player>> GetPlayers();
+    void AddPlayer(std::shared_ptr<Player> player);
+    void RemovePlayer(std::shared_ptr<Player> player);
+
 private:
     int x, y;
     Vector3 position;
@@ -55,8 +60,9 @@ private:
     float floatOffset;
     float floatSpeed;
     float baseY;
-
     float thystameAngle;
+
+    std::vector<std::shared_ptr<Player>> players;
 };
 
 #endif // ISLAND_HPP_

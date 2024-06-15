@@ -35,6 +35,7 @@ public:
     void SendMessage(const std::string& message);
     std::string SendCommand(const std::string& command);
     std::string ReceiveMessage();
+    bool TryReceiveMessage(std::string& message);
     void SetMessageHandler(MessageHandler handler);
     bool IsRunning() const;
 

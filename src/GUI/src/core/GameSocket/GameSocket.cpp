@@ -32,6 +32,7 @@ void Game::HandleServerMessage(const std::string& message) {
         if (island) {
             auto player = std::make_shared<Player>(n, teamName, x, y, o, l, "src/GUI/assets/Player/robot.glb", island);
             gameMap.AddPlayer(player);
+            island->AddPlayer(player);
         }
     } else if (command == "ppo") {
         int n, x, y, o;
@@ -39,11 +40,18 @@ void Game::HandleServerMessage(const std::string& message) {
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
             player->SetOrientation(o);
+            auto currentIsland = player->GetIsland();
             auto newIsland = gameMap.GetIslandByXY(x, y);
-            if (newIsland) {
-                player->JumpTo(newIsland, 7.0f / timeUnit);
+            if (currentIsland != newIsland) {
+                if (currentIsland) {
+                    currentIsland->RemovePlayer(player);
+                }
+                if (newIsland) {
+                    newIsland->AddPlayer(player);
+                    player->JumpTo(newIsland, 7.0f / timeUnit);
+                }
             }
-    }
+        }
     } else if (command == "plv") {
         int n, l;
         iss >> n >> l;

@@ -8,12 +8,14 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+class Island;
+
+#include "../Island.hpp"
 #include <string>
 #include <memory>
 #include <unordered_map>
 #include <vector>
 #include "raylib.h"
-#include "../Island.hpp"
 #include <GL/gl.h>
 
 class Player {
@@ -46,6 +48,7 @@ public:
     void SetAnimation(Animation animation);
     void JumpTo(std::shared_ptr<Island> newIsland, float baseDuration);
     void SetIsland(std::shared_ptr<Island> newIsland);
+    std::shared_ptr<Island> GetIsland() const;
     int GetPlayerNumber() const;
     void SetPlayerNumber(int playerNumber);
     std::shared_ptr<Model> GetModel();
@@ -58,8 +61,13 @@ public:
     void SetLevel(int level);
     std::string GetTeam() const;
     void SetDead();
+    Vector3 GetScale() const;
+    std::shared_ptr<ModelAnimation> GetCurrentAnimation() const;
+    int GetCurrentFrame() const;
+
 
     void WaitForAnimationEnd(Player::Animation animation);
+    void UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island);
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -104,7 +112,7 @@ private:
     Vector3 endPos;
     float moveStartTime;
     float moveDuration;
-    bool isMoving;
+    bool isMoving = false;
     bool Dead = false;
 };
 

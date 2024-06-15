@@ -98,6 +98,8 @@ void Player::UpdatePosition() {
             this->x = newIsland->GetX();
             this->y = newIsland->GetY();
             SetIsland(newIsland);
+
+            UpdatePlayersPositionsOnIsland(newIsland);
         }
 
         Vector3 newPos = Vector3Lerp(startPos, endPos, t);
@@ -139,7 +141,7 @@ void Player::SetAnimation(Animation animation) {
 }
 
 void Player::UpdateScaleBasedOnLevel() {
-    float baseScale = 1.0f;
+    float baseScale = 0.7f;
     float scaleFactor = 0.5f + 0.1f * level;
     scale = {baseScale * scaleFactor, baseScale * scaleFactor, baseScale * scaleFactor};
 }
@@ -173,6 +175,10 @@ void Player::SetIsland(std::shared_ptr<Island> newIsland) {
     island = newIsland;
 }
 
+std::shared_ptr<Island> Player::GetIsland() const {
+    return island;
+}
+
 int Player::GetPlayerNumber() const {
     return playerNumber;
 }
@@ -189,6 +195,23 @@ void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
 
     this->newIsland = newIsland;
 }
+
+void Player::UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island) {
+    std::vector<std::shared_ptr<Player>> players = island->GetPlayers();
+    int playerCount = players.size();
+    float radius = std::max(1.0f, playerCount * 0.35f);
+
+    for (int i = 0; i < playerCount; ++i) {
+        float angle = 2.0f * PI * i / playerCount;
+        Vector3 islandPos = island->GetPosition();
+        Vector3 offset = {0.0f, 0.0f, 0.0f};
+        if (playerCount > 1) {
+            offset = {radius * cos(angle), 0.0f, radius * sin(angle)};
+        }
+        players[i]->SetPosition(Vector3Add(islandPos, offset));
+    }
+}
+
 
 int Player::getOBJquantity(std::string objName)
 {
@@ -263,4 +286,20 @@ void Player::SetDead()
 void Player::SetPlayerNumber(int playerNumber)
 {
     this->playerNumber = playerNumber;
+}
+
+Vector3 Player::GetScale() const
+{
+    return scale;
+}
+
+std::shared_ptr<ModelAnimation> Player::GetCurrentAnimation() const {
+    if (animIndex < animations.size()) {
+        return animations[animIndex];
+    }
+    return nullptr;
+}
+
+int Player::GetCurrentFrame() const {
+    return animCurrentFrame;
 }

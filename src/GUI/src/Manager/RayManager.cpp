@@ -25,8 +25,13 @@ std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::s
 
 std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players) {
     for (auto& player : players) {
-        Matrix transform = MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
-        if (CheckRayCollisionModel(ray, *player->GetModel(), transform)) {
+        BoundingBox playerBoundingBox = GetModelBoundingBox(*player->GetModel());
+        Vector3 scale = player->GetScale();
+        Matrix transform = MatrixMultiply(MatrixScale(scale.x, scale.y, scale.z), MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z));
+        playerBoundingBox.min = Vector3Transform(playerBoundingBox.min, transform);
+        playerBoundingBox.max = Vector3Transform(playerBoundingBox.max, transform);
+
+        if (CheckCollisionRayBox(ray, playerBoundingBox)) {
             return player;
         }
     }
@@ -62,15 +67,49 @@ bool CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vect
 bool RayManager::CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform) {
     for (int i = 0; i < model.meshCount; i++) {
         Mesh mesh = model.meshes[i];
-        for (int j = 0; j < mesh.triangleCount; j++) {
-            Vector3 v0 = Vector3Transform(Vector3{mesh.vertices[j * 9 + 0], mesh.vertices[j * 9 + 1], mesh.vertices[j * 9 + 2]}, transform);
-            Vector3 v1 = Vector3Transform(Vector3{mesh.vertices[j * 9 + 3], mesh.vertices[j * 9 + 4], mesh.vertices[j * 9 + 5]}, transform);
-            Vector3 v2 = Vector3Transform(Vector3{mesh.vertices[j * 9 + 6], mesh.vertices[j * 9 + 7], mesh.vertices[j * 9 + 8]}, transform);
+        int vertexCount = mesh.vertexCount;
 
-            if (CheckCollisionRayTriangle(ray, v0, v1, v2, nullptr)) {
-                return true;
+        for (int j = 0; j < mesh.triangleCount; j++) {
+            int index0 = j * 9 + 0;
+            int index1 = j * 9 + 3;
+            int index2 = j * 9 + 6;
+
+            if (index0 < vertexCount * 3 && index1 < vertexCount * 3 && index2 < vertexCount * 3) {
+                Vector3 v0 = Vector3Transform(Vector3{mesh.vertices[index0], mesh.vertices[index0 + 1], mesh.vertices[index0 + 2]}, transform);
+                Vector3 v1 = Vector3Transform(Vector3{mesh.vertices[index1], mesh.vertices[index1 + 1], mesh.vertices[index1 + 2]}, transform);
+                Vector3 v2 = Vector3Transform(Vector3{mesh.vertices[index2], mesh.vertices[index2 + 1], mesh.vertices[index2 + 2]}, transform);
+
+                if (CheckCollisionRayTriangle(ray, v0, v1, v2, nullptr)) {
+                    return true;
+                }
             }
         }
     }
     return false;
+}
+
+bool RayManager::CheckCollisionRayBox(Ray ray, BoundingBox box) {
+    Vector3 dirfrac = {};
+    dirfrac.x = 1.0f / ray.direction.x;
+    dirfrac.y = 1.0f / ray.direction.y;
+    dirfrac.z = 1.0f / ray.direction.z;
+
+    Vector3 lb = box.min;
+    Vector3 rt = box.max;
+
+    float t1 = (lb.x - ray.position.x) * dirfrac.x;
+    float t2 = (rt.x - ray.position.x) * dirfrac.x;
+    float t3 = (lb.y - ray.position.y) * dirfrac.y;
+    float t4 = (rt.y - ray.position.y) * dirfrac.y;
+    float t5 = (lb.z - ray.position.z) * dirfrac.z;
+    float t6 = (rt.z - ray.position.z) * dirfrac.z;
+
+    float tmin = std::max({std::min(t1, t2), std::min(t3, t4), std::min(t5, t6)});
+    float tmax = std::min({std::max(t1, t2), std::max(t3, t4), std::max(t5, t6)});
+
+    if (tmax < 0 || tmin > tmax) {
+        return false;
+    }
+
+    return true;
 }
