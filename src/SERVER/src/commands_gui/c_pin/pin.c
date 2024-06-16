@@ -37,3 +37,20 @@ int c_pin(struct_t *s, char *buffer)
         player->thystame);
     return 0;
 }
+
+
+int c_pin_send(struct_t *s, player_t *player)
+{
+    dprintf(s->fd_gui, "pin #%d %d %d %d %d %d %d %d %d %d\n",
+        player->id_player,
+        player->x,
+        player->y,
+        player->food,
+        player->linemate,
+        player->deraumere,
+        player->sibur,
+        player->mendiane,
+        player->phiras,
+        player->thystame);
+    return 0;
+}
