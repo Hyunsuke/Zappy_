@@ -13,6 +13,7 @@ static void add_multiple_command(void *s, int client_fd, const char *buffer)
     char **buffers = split_buffer(buffer, &count);
     void *player = get_player_by_fd(s, client_fd);
 
+    printf("Add command: %s\n", buffer);
     for (int i = 0; i < count; i++) {
         add_command(player, buffers[i], get_tick_for_command(s, buffers[i]));
         my_free(buffers[i]);
@@ -24,7 +25,7 @@ static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
     if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
-    else if (s->start_game == true)
+    else
         add_multiple_command(s, client_fd, buffer);
 }
 
@@ -36,14 +37,17 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     add_player(s, client_fd, team->team_id);
     mob = get_player_by_fd(s, client_fd);
     if (add_player_to_team(s, team->team_id, mob->id_player,
-        client_fd) != -1) {
-        print_players(s);
-        server->round[client_fd]++;
+        client_fd) == -1)
         return;
-    }
-    c_pnw(s, mob->id_player, mob->level_player);
-    // Remove le player de la liste player
+    print_players(s);
+    server->round[client_fd]++;
     dprintf(client_fd, "Client number: %d\n", mob->id_player);
+    if (s->fd_gui != -1) {
+        c_pnw(s, mob->id_player, mob->level_player);
+        c_pin_send(s, mob);
+        dprintf(s->fd_gui,
+            "plv %d %d\n", mob->id_player, mob->level_player);
+    }
     printf("Error not enough slot in the requested team\n");
 }
 
@@ -70,13 +74,16 @@ static void send_info_gui(struct_t *s)
     player_t *current = s->head_player;
 
     printf("It's GUI\n");
-    dprintf(s->fd_gui, "Server: You're a GUI\n");
+    // dprintf(s->fd_gui, "Server: You're a GUI\n");
     c_msz(s, "");
+    c_sgt(s, "");
     c_mct(s, "");
     c_tna(s, "");
-    c_sgt(s, "");
     while (current != NULL) {
         c_pnw(s, current->id_player, current->level_player);
+        c_pin_send(s, current);
+        dprintf(s->fd_gui,
+            "plv %d %d\n", current->id_player, current->level_player);
         current = current->next;
     }
 }
@@ -93,7 +100,7 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             gestion_team_name(server, s, buffer, client_fd);
         }
     } else {
-        dprintf(client_fd, "%s", buffer);
+        // dprintf(client_fd, "%s", buffer);
         gestion_function(s, buffer, client_fd);
     }
 }
@@ -107,9 +114,7 @@ static int receive_cmd(server_t *server, struct_t *s, char *buffer, int i)
         return i;
     } else {
         buffer[server->valread] = '\0';
-        printf("-> %s\n", buffer);
         gestion_cmd(server, s, buffer, i);
-        printf("\n");
         return i;
     }
 }

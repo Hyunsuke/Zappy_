@@ -65,6 +65,7 @@ int c_tna(struct_t *s, char *buffer);
 int c_ppo(struct_t *s, char *buffer);
 int c_plv(struct_t *s, char *buffer);
 int c_pin(struct_t *s, char *buffer);
+int c_pin_send(struct_t *s, player_t *player);
 int c_sgt(struct_t *s, char *buffer);
 int c_sst(struct_t *s, char *buffer);
 

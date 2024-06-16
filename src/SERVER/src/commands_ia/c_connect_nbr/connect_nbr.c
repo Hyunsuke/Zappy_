@@ -15,7 +15,7 @@ int c_connect_nbr(struct_t *s, int fd)
     team_t *team = get_team_by_id(s, player->id_team);
 
     if (team == NULL) {
-        dprintf(fd, "ko\n");
+        dprintf(fd, "KO\n");
         return -1;
     } else {
         list_id_player = team->players_id;

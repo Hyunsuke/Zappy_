@@ -13,9 +13,12 @@ static bool start_game(struct_t *s)
 
     if (s->fd_gui == -1)
         return false;
+    printf("FD CONNECT");
     while (current_team != NULL) {
-        if (current_team->players_id == NULL)
+        if (current_team->players_id == NULL) {
+            printf("No players for this team %s\n", current_team->name);
             return false;
+        }
         current_team = current_team->next;
     }
     s->start_game = true;
@@ -30,7 +33,7 @@ static bool end_game(struct_t *s)
         if (current_player->level_player >= 8) {
             c_seg(s, get_team_by_id(s, current_player->id_team)->name);
             s->start_game = false;
-            // TODO: venir connecteur tout les joueurs (sauf GUI)
+            // TODO: venir deconnecter tout les joueurs (sauf GUI)
             printf("WIN THE GAME - TEAM -> %s",
                 get_team_by_id(s, current_player->id_team)->name);
             return true;
@@ -75,7 +78,7 @@ void server_usage(server_t *server, struct_t *s)
         if (s->start_game == false)
             start_game(s);
         if (s->start_game == true)
-            update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
-                tick_interval);
+        update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
+            tick_interval);
     }
 }

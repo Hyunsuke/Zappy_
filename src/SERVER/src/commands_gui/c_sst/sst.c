@@ -12,7 +12,7 @@ static void parse_sst(const char *input, int *n)
     int result;
 
     *n = 0;
-    result = sscanf(input, "pin #%d", n);
+    result = sscanf(input, "pin %d", n);
     if (result < 1)
         *n = -1;
 }

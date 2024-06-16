@@ -10,10 +10,10 @@
 int c_inventory(struct_t *s, int fd)
 {
     player_t *player = get_player_by_fd(s, fd);
-    int length = snprintf(NULL, 0, "pin #%d\n", player->id_player);
+    int length = snprintf(NULL, 0, "pin %d\n", player->id_player);
     char *command_gui = my_malloc(length + 1);
 
-    snprintf(command_gui, length + 1, "pin #%d\n", player->id_player);
+    snprintf(command_gui, length + 1, "pin %d\n", player->id_player);
     dprintf(fd, "[food %d, linemate %d, deraumere %d, sibur %d, ",
         player->food, player->linemate, player->deraumere, player->sibur);
     dprintf(fd, "mendiane %d, phiras %d, thystame %d]\n",
