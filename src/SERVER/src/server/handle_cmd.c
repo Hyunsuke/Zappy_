@@ -96,6 +96,10 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             s->fd_gui = client_fd;
             send_info_gui(s);
             server->round[client_fd]++;
+            return;
+        }
+        if (strcmp(buffer, "DASHBOARD\n") == 0) {
+            s->fd_web_debug = client_fd;
         } else {
             gestion_team_name(server, s, buffer, client_fd);
         }

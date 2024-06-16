@@ -90,6 +90,7 @@ typedef struct struct_s {
     int client_nb;
     int time;
     int fd_gui;
+    int fd_web_debug;
     char *obj;
     bool stop_server;
     bool start_game;

@@ -75,6 +75,7 @@ void server_usage(server_t *server, struct_t *s)
         handle_activity(server);
         handle_new_client(server);
         handling_cmd(server, s);
+        send_info_web_debug(s);
         if (s->start_game == false)
             start_game(s);
         if (s->start_game == true)
