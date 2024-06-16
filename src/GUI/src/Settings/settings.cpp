@@ -1,7 +1,7 @@
 #include "gui.hpp"
 
 Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
-    : open(false), screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
+    : open(false), instanceName(InstanceName),screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
       selectedResolutionIndex(0), selectedFPSIndex(0),
       tempResolutionIndex(0), tempFPSIndex(0),
       chat(screenWidth, screenHeight) {
@@ -103,7 +103,8 @@ void Settings::HandleWindowResize(Sky& sky, UIManager& uiManager) {
 }
 
 void Settings::Draw() {
-    chat.Draw();
+    if (instanceName != "menu")
+        chat.Draw();
 
     if (!open) return;
 

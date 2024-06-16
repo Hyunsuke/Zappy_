@@ -138,13 +138,20 @@ void Game::HandleServerMessage(const std::string& message) {
         int e, n, x, y;
         iss >> e >> n >> x >> y;
         // Handle egg was laid by a player
+        auto island = gameMap.GetIslandByXY(x, y);
+        if (island) {
+            auto egg = std::make_shared<Egg>(e, n);
+            island->AddEgg(egg);
+        }
     } else if (command == "ebo") {
         int e;
         iss >> e;
         // Handle player connection for an egg
+        gameMap.RemoveEgg(e);
     } else if (command == "edi") {
         int e;
         iss >> e;
+        gameMap.RemoveEgg(e);
         // Handle death of an egg
     } else if (command == "sgt") {
         int t;

@@ -17,6 +17,7 @@
 #include "core/Map.hpp"
 #include "core/GameException.hpp"
 #include "core/Player/Player.hpp"
+#include "core/Egg.hpp"
 
 #include "Collector/ModelCollector.hpp"
 #include "Collector/TextureCollector.hpp"

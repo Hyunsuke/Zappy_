@@ -27,6 +27,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
     shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
 
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Player/robot.glb");
+    ModelCollector::GetInstance().LoadModel("src/GUI/assets/Egg/egg.obj");
+    TextureCollector::GetInstance().LoadTexture("src/GUI/assets/Egg/egg.png");
 
     InitializeMap(mapSize, mapContent, eggs);
 }
@@ -62,7 +64,8 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
         sscanf(egg.c_str(), "enw %d %d %d %d", &e, &n, &x, &y);
         auto island = gameMap.GetIslandByXY(x, y);
         if (island) {
-            // Add egg to the island
+            auto egg = std::make_shared<Egg>(e, n);
+            island->AddEgg(egg);
         }
     }
 }
