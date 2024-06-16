@@ -46,7 +46,7 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         c_pnw(s, mob->id_player, mob->level_player);
         c_pin_send(s, mob);
         dprintf(s->fd_gui,
-            "plv #%d %d\n", mob->id_player, mob->level_player);
+            "plv %d %d\n", mob->id_player, mob->level_player);
     }
     printf("Error not enough slot in the requested team\n");
 }
@@ -83,7 +83,7 @@ static void send_info_gui(struct_t *s)
         c_pnw(s, current->id_player, current->level_player);
         c_pin_send(s, current);
         dprintf(s->fd_gui,
-            "plv #%d %d\n", current->id_player, current->level_player);
+            "plv %d %d\n", current->id_player, current->level_player);
         current = current->next;
     }
 }

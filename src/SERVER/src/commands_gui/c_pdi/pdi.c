@@ -9,6 +9,6 @@
 
 int c_pdi(struct_t *s, int id_player)
 {
-    dprintf(s->fd_gui, "pdi #%d\n", id_player);
+    dprintf(s->fd_gui, "pdi %d\n", id_player);
     return 0;
 }

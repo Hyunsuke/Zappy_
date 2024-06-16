@@ -12,7 +12,7 @@ static void parse_pin(const char *input, int *n)
     int result;
 
     *n = 0;
-    result = sscanf(input, "pin #%d", n);
+    result = sscanf(input, "pin %d", n);
     if (result < 1)
         *n = 0;
 }
@@ -24,7 +24,7 @@ int c_pin(struct_t *s, char *buffer)
 
     parse_pin(buffer, &nb_player);
     player = get_player_by_id(s, nb_player);
-    dprintf(s->fd_gui, "pin #%d %d %d %d %d %d %d %d %d %d\n",
+    dprintf(s->fd_gui, "pin %d %d %d %d %d %d %d %d %d %d\n",
         nb_player,
         player->x,
         player->y,
@@ -41,7 +41,7 @@ int c_pin(struct_t *s, char *buffer)
 
 int c_pin_send(struct_t *s, player_t *player)
 {
-    dprintf(s->fd_gui, "pin #%d %d %d %d %d %d %d %d %d %d\n",
+    dprintf(s->fd_gui, "pin %d %d %d %d %d %d %d %d %d %d\n",
         player->id_player,
         player->x,
         player->y,

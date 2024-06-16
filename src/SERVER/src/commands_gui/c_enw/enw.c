@@ -10,7 +10,7 @@
 // Pos -> x; y
 int c_enw(struct_t *s, int nb_egg, int nb_player, int *pos)
 {
-    dprintf(s->fd_gui, "enw #%d #%d %d %d\n",
+    dprintf(s->fd_gui, "enw %d %d %d %d\n",
         nb_egg, nb_player, pos[0], pos[1]);
     return 0;
 }
