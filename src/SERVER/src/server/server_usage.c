@@ -78,7 +78,7 @@ void server_usage(server_t *server, struct_t *s)
         if (s->start_game == false)
             start_game(s);
         if (s->start_game == true)
-            update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
-                tick_interval);
+        update_ticks_and_check_tiredness(s, &start_time, &nb_tick,
+            tick_interval);
     }
 }
