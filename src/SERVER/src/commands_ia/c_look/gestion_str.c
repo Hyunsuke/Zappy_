@@ -18,7 +18,7 @@ void add_in_str(struct_t *s, const char *element)
         new_str[0] = '\0';
     } else {
         new_len = strlen(s->look_str) + strlen(element) + 1;
-        new_str = realloc(s->look_str, new_len * sizeof(char));
+        new_str = my_realloc(s->look_str, new_len * sizeof(char));
     }
     strcat(new_str, element);
     s->look_str = new_str;

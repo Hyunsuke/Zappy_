@@ -41,6 +41,7 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         server->round[client_fd]++;
         return;
     }
+    c_pnw(s, mob->id_player, mob->level_player);
     // Remove le player de la liste player
     dprintf(client_fd, "Client number: %d\n", mob->id_player);
     printf("Error not enough slot in the requested team\n");
@@ -75,8 +76,7 @@ static void send_info_gui(struct_t *s)
     c_tna(s, "");
     c_sgt(s, "");
     while (current != NULL) {
-        dprintf(s->fd_gui, "ppo #%d %d %d %d\n", current->id_player,
-            current->x, current->y, current->view_direction);
+        c_pnw(s, current->id_player, current->level_player);
         current = current->next;
     }
 }

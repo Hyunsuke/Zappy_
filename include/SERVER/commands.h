@@ -68,7 +68,7 @@ int c_pin(struct_t *s, char *buffer);
 int c_sgt(struct_t *s, char *buffer);
 int c_sst(struct_t *s, char *buffer);
 
-int c_pnw(struct_t *s, int id_player, int *position, int incantation_level);
+int c_pnw(struct_t *s, int id_player, int incantation_level);
 int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
 int c_pic(position_t position, int level, int *player);
