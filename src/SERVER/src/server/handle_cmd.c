@@ -43,7 +43,6 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         return;
     }
     c_pnw(s, mob->id_player, mob->level_player);
-    // Remove le player de la liste player
     dprintf(client_fd, "Client number: %d\n", mob->id_player);
     printf("Error not enough slot in the requested team\n");
 }

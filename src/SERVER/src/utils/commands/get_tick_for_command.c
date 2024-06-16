@@ -50,7 +50,11 @@ static bool compare_until_whitespace(const char *str1, const char *str2)
 int get_tick_for_command(struct_t *s, char *command)
 {
     command_t *command_ticks = s->command_ticks;
+    char *tmp_command = my_strdup(command);
 
+    for (int n = 0; tmp_command[n] != '\0'; n++)
+        if (tmp_command[n] == ' ')
+            tmp_command[n] = '\0';
     for (int i = 0; command_ticks[i].command != NULL; i++) {
         if (compare_until_whitespace(command, command_ticks[i].command)) {
             printf("Tick found: %d\n", command_ticks[i].tick);
