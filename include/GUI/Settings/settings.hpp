@@ -30,6 +30,7 @@ private:
     void DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box);
 
     bool open;
+    std::string instanceName;
     int screenWidth;
     int screenHeight;
     int fps;
@@ -45,6 +46,7 @@ private:
     Rectangle keyBindingsBox;
     Rectangle applyButton;
     Rectangle closeButton;
+
 
     ChatManager chat;
 };

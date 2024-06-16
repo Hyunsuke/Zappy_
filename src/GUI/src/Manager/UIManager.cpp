@@ -31,7 +31,7 @@ void UIManager::DrawIslandInfo(const std::shared_ptr<Island>& selectedIsland, in
     const int textSize = screenHeight * 0.03;
     const int baseX = padding;
     const int baseY = padding;
-    int lines = 9;
+    int lines = 10;
 
     int rectHeight = (lines * lineSpacing) + (2 * padding);
     int rectWidth = screenWidth * 0.25;
@@ -51,6 +51,7 @@ void UIManager::DrawIslandInfo(const std::shared_ptr<Island>& selectedIsland, in
         DrawText(TextFormat("Mendiane : %d", selectedIsland->mendiane->GetQuantity()), baseX + padding, baseY + padding + (6 * lineSpacing), textSize, BLACK);
         DrawText(TextFormat("Phiras : %d", selectedIsland->phiras->GetQuantity()), baseX + padding, baseY + padding + (7 * lineSpacing), textSize, BLACK);
         DrawText(TextFormat("Thystame : %d", selectedIsland->thystame->GetQuantity()), baseX + padding, baseY + padding + (8 * lineSpacing), textSize, BLACK);
+        DrawText(TextFormat("Egg : %d", selectedIsland->GetEggs().size()), baseX + padding, baseY + padding + (9 * lineSpacing), textSize, BLACK);
     }
 }
 

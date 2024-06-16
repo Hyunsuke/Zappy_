@@ -13,6 +13,7 @@
 #include <memory>
 #include "../Utils/utils.hpp"
 #include "Player/Player.hpp"
+#include "Egg.hpp"
 
 class Island {
 public:
@@ -42,11 +43,15 @@ public:
     std::shared_ptr<Object3D> mendiane;
     std::shared_ptr<Object3D> phiras;
     std::shared_ptr<Object3D> thystame;
-    std::shared_ptr<Object3D> egg;
 
     std::vector<std::shared_ptr<Player>> GetPlayers();
     void AddPlayer(std::shared_ptr<Player> player);
     void RemovePlayer(std::shared_ptr<Player> player);
+
+    void AddEgg(std::shared_ptr<Egg> egg);
+    void RemoveEgg(int eggId);
+    std::vector<std::shared_ptr<Egg>> GetEggs() const;
+    Vector3 GetEggPosition() const;
 
 private:
     int x, y;
@@ -63,6 +68,7 @@ private:
     float thystameAngle;
 
     std::vector<std::shared_ptr<Player>> players;
+    std::vector<std::shared_ptr<Egg>> eggs;
 };
 
 #endif // ISLAND_HPP_

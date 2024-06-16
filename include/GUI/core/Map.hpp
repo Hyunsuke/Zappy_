@@ -31,6 +31,7 @@ public:
     std::string GetMapSize() const;
     int GetPlayerCount() const;
     std::shared_ptr<Player> GetPlayerByNumber(int playerNumber);
+    void RemoveEgg(int eggId);
 
 private:
     std::vector<std::shared_ptr<Island>> islands;

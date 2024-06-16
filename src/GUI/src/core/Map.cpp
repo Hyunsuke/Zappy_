@@ -104,3 +104,9 @@ int Map::GetPlayerCount() const {
 std::string Map::GetMapSize() const {
     return std::to_string(width) + "x" + std::to_string(height);
 }
+
+void Map::RemoveEgg(int eggId) {
+    for (auto& island : islands) {
+        island->RemoveEgg(eggId);
+    }
+}
