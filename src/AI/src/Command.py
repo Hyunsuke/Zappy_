@@ -29,6 +29,7 @@ class Command:
         self.isLookUpdated = False
         self.inventoryString = ""
         self.isInventoryUpdated = False
+        self.hasElevated = False
         self.commandList = []
         self.responseList = []
         self.leaderIsChosen = -1 # -1 signifie qu'il n'y a pas encore de leader attribué, 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
@@ -130,6 +131,11 @@ class Command:
                     self.status = -2
         elif self.responseList[0].startswith("Forward"):
             self.adjustForward()
+        elif self.responseList[0].startswith("Current level"):
+            if self.data_received != "ko":
+                self.level += 1
+                self.hasElevated = True
+                print("Data received : ", self.data_received)
         if self.responseList[0].startswith("Look"):
             self.lookString = self.data_received
             self.isLookUpdated = True
@@ -145,6 +151,8 @@ class Command:
         if self.leaderIsChosen == -1:
             return
         if self.positionHasBeenChanged == True:
+            return
+        if self.status == 0:
             return
         if self.status == 1 or self.status == 3 or self.status == 5 or self.status == 7:
             # print("CHANGE POSITION")
@@ -182,11 +190,11 @@ class Command:
                 if self.leaderIsChosen != -1:
                     return
                 self.leaderIsChosen = 0 # 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
-                if self.positionHasBeenChanged == True:
-                    if self.shallMove == False:
-                        # print("Je devrais bouger vers le numéro : ", num)
-                        self.status = num
-                        self.shallMove = True
+                # if self.positionHasBeenChanged == True:
+                #     if self.shallMove == False:
+                #         # print("Je devrais bouger vers le numéro : ", num)
+                #         self.status = num
+                #         self.shallMove = True
                 # else:
                 #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
                 # Prendre les coordonées du boug
@@ -212,6 +220,9 @@ class Command:
                 # else:
                 #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
 
+    def elevate(self):
+        return self.hasElevated
+
     def shouldMove(self):
         return self.shallMove
 
@@ -235,11 +246,6 @@ class Command:
         if self.data_received == "ko":
             self.responseList.pop(1)
             return
-        self.level += 1
-        if self.level == 8:
-            print("Niveau 8 atteint !")
-        print("Level up")
-        print(self.level)
         # os._exit(0)
 
     def adjustSet(self):
