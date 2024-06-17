@@ -37,8 +37,10 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     add_player(s, client_fd, team->team_id);
     mob = get_player_by_fd(s, client_fd);
     if (add_player_to_team(s, team->team_id, mob->id_player,
-        client_fd) == -1)
+        client_fd) == -1) {
+        printf("Error not enough slot in the requested team\n");
         return;
+    }
     print_players(s);
     server->round[client_fd]++;
     dprintf(client_fd, "Client number: %d\n", mob->id_player);
@@ -48,7 +50,6 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
         dprintf(s->fd_gui,
             "plv %d %d\n", mob->id_player, mob->level_player);
     }
-    printf("Error not enough slot in the requested team\n");
 }
 
 static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
