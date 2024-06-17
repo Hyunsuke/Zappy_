@@ -18,6 +18,7 @@
 #include "../Settings/settings.hpp"
 #include "../Socket/SocketManager.hpp"
 #include "../Manager/ChatManager.hpp"
+#include "../Menu/endMenu.hpp"
 
 #include <vector>
 #include <iostream>
@@ -72,6 +73,10 @@ private:
 
     std::shared_ptr<Island> selectedIsland;
     std::shared_ptr<Player> selectedPlayer;
+
+    bool gameOver = false;
+    std::string winningTeam;
+    EndMenu endMenu;
 };
 
 #endif /* !GAME_HPP_ */

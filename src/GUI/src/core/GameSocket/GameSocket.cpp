@@ -90,7 +90,7 @@ void Game::HandleServerMessage(const std::string& message) {
         if (player) {
             settings.SendMessage(n, player, message);
         }
-    } else if (command == "pic") {
+    } else if (command == "seg") {
         int x, y, l;
         iss >> x >> y >> l;
         int playerNumber;
@@ -161,10 +161,11 @@ void Game::HandleServerMessage(const std::string& message) {
         int t;
         iss >> t;
         this->timeUnit = t;
-    } else if (command == "seg") {
+    } else if (command == "pic") {
         std::string teamName;
         iss >> teamName;
-        // Handle end of game
+        gameOver = true;
+        winningTeam = teamName;
     } else if (command == "smg") {
         std::string message;
         iss >> message;
