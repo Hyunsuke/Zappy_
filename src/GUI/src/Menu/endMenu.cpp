@@ -14,8 +14,8 @@ void EndMenu::Draw(const std::string& winningTeam) {
 
     EndMode3D();
 
-    DrawText("Zappy GUI", screenWidth / 2 - MeasureText("Zappy GUI", 40) / 2, screenHeight / 4, 40, LIGHTGRAY);
-    DrawText(("Winning Team: " + winningTeam + " !").c_str(), screenWidth / 2 - MeasureText(("Winning Team: " + winningTeam + " !").c_str(), 60) / 2, screenHeight / 2, 60, BLACK);
+    DrawText("Game Is Over", screenWidth / 2 - MeasureText("Game Is Over", 100) / 2, screenHeight / 4, 100, BLACK);
+    DrawText(("Winning Team: " + winningTeam + " !").c_str(), screenWidth / 2 - MeasureText(("Winning Team: " + winningTeam + " !").c_str(), 60) / 2, screenHeight / 2, 60, LIGHTGRAY);
 
     Rectangle CloseButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
     DrawButton(CloseButton, "Close", 20);
