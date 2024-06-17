@@ -91,7 +91,9 @@ class Command:
             self.adjustData()
             if not self.responseList:
                 return
-            if self.responseList[0] != "Incantation":
+            if (self.responseList[0] == "Incantation" and self.data_received == "ok"):
+                pass
+            else:
                 self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             # else:
             #     if self.data_received == "ko":
