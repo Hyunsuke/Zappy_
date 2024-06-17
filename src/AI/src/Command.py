@@ -86,14 +86,12 @@ class Command:
             self.adjustBroadcast()
         else:
             # print("Données > " + data)
-            # print("We received " + data)
-            # print("for command" + self.responseList[0])
+            print("We received " + data)
+            print("For command " + self.responseList[0])
             self.adjustData()
             if not self.responseList:
                 return
-            if (self.responseList[0] == "Incantation" and self.data_received == "ok"):
-                pass
-            else:
+            if self.responseList[0] != "Incantation":
                 self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             # else:
             #     if self.data_received == "ko":

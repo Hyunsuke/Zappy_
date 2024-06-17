@@ -99,7 +99,7 @@ class ZappyClient:
                 self.blockingBuffer()
                 self.update_inventory()
                 if self.current_inventory.current_inventory['food'] >= 10 and self.current_inventory.current_inventory['linemate'] >= 1:
-                    self.cmd.set_object_down("linemate")
+                    # self.cmd.set_object_down("linemate")
                     self.cmd.incantation()
                     self.cmd.responseList.append("Current level")
                     self.cmd.fork()
