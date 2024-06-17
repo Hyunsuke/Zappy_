@@ -10,7 +10,7 @@
 static bool check_items_for_incantation(struct_t *s, elevation_t *elevation,
     position_t *position)
 {
-    map_element_t *element = &s->map[position->y][position->y];
+    map_element_t *element = &s->map[position->y][position->x];
 
     if (element->linemate < elevation->resources.linemate)
         return false;
