@@ -96,7 +96,7 @@ int c_take_obj(struct_t *s, int fd)
         return -1;
     }
     add_obj_inventory_player(player, id_obj);
-    c_pgt(s, player->id_player, id_obj);
+    //c_pgt(s, player->id_player, id_obj);
     dprintf(fd, "ok\n");
     return 0;
 }

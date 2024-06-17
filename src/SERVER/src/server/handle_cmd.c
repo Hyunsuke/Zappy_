@@ -46,8 +46,8 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     if (s->fd_gui != -1) {
         c_pnw(s, mob->id_player, mob->level_player);
         c_pin_send(s, mob);
-        dprintf(s->fd_gui,
-            "plv %d %d\n", mob->id_player, mob->level_player);
+        // dprintf(s->fd_gui,
+        //     "plv %d %d\n", mob->id_player, mob->level_player);
     }
 }
 

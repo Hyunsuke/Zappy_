@@ -16,7 +16,7 @@ int c_inventory(struct_t *s, int fd)
     snprintf(command_gui, length + 1, "pin %d\n", player->id_player);
     dprintf(fd, "[ food %d, linemate %d, deraumere %d, sibur %d, mendiane %d, phiras %d, thystame %d ]\n",
         player->food, player->linemate, player->deraumere, player->sibur, player->mendiane, player->phiras, player->thystame);
-    c_pin(s, command_gui);
+    //c_pin(s, command_gui);
     my_free(command_gui);
     return 0;
 }
