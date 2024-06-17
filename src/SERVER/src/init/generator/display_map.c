@@ -7,28 +7,23 @@
 
 #include "all.h"
 
-static void print_map_element(map_element_t *element, int client_nb)
+void print_map_elem(struct_t *s, int i, int j)
 {
-    printf("food: %s\n", element->food ? "true" : "false");
-    printf("linemate: %s\n", element->linemate ? "true" : "false");
-    printf("deraumere: %s\n", element->deraumere ? "true" : "false");
-    printf("sibur: %s\n", element->sibur ? "true" : "false");
-    printf("mendiane: %s\n", element->mendiane ? "true" : "false");
-    printf("phiras: %s\n", element->phiras ? "true" : "false");
-    printf("thystame: %s\n", element->thystame ? "true" : "false");
-    printf("id_mob: ");
-    for (int i = 0; i < client_nb; i++)
-        printf("%d ", element->id_mob[i]);
-    printf("\n");
+    printf("Coor: x->%d y->:%d\n", j, i);
+    printf("Food: %d\n", s->map[i][j].food);
+    printf("Deraumere: %d\n", s->map[i][j].deraumere);
+    printf("Linemate: %d\n", s->map[i][j].linemate);
+    printf("Mendiane: %d\n", s->map[i][j].mendiane);
+    printf("Phiras: %d\n", s->map[i][j].phiras);
+    printf("Sibur: %d\n", s->map[i][j].sibur);
+    printf("Thystame: %d\n", s->map[i][j].thystame);
 }
 
 void print_map(struct_t *s)
 {
-    for (int y = 0; y < s->map_height; y++) {
-        for (int x = 0; x < s->map_width; x++) {
-            printf("Cell (%d, %d):\n", y, x);
-            print_map_element(&(s->map[y][x]), s->client_nb);
-            printf("\n");
+    for (int i = 0; i < s->map_height; i++) {
+        for (int j = 0; j < s->map_width; j++) {
+            print_map_elem(s, i, j);
         }
-    }
+    }    
 }

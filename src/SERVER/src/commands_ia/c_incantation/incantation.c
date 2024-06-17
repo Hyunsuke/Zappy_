@@ -83,8 +83,8 @@ static bool check_incantation_conditions(struct_t *s, elevation_t *elevation,
 
 static int print_incantation_ko(struct_t *s, int fd, position_t *pos_incant)
 {
-    printf("Incantation -> KO\n");
-    dprintf(fd, "KO\n");
+    printf("Incantation -> ko\n");
+    dprintf(fd, "ko\n");
     c_pie(s, pos_incant->x, pos_incant->y, "KO");
     return -1;
 }
@@ -106,7 +106,7 @@ int c_incantation(struct_t *s, int fd)
         return print_incantation_ko(s, fd, pos_incant);
     }
     change_level_elevation(s, elevation, pos_incant);
-    printf("Incantation -> OK\n");
+    printf("Incantation -> ok\n");
     remove_incantation(s, fd);
     c_pie(s, pos_incant->x, pos_incant->y, "OK");
     return 0;

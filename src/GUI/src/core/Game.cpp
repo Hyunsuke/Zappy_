@@ -14,7 +14,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight, "game") {
+      settings(screenWidth, screenHeight, "game"),
+      cameraManager(cameraController, gameMap) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -77,8 +78,10 @@ void Game::Run() {
     }
 }
 
+
+
 void Game::Update() {
-    cameraController.Update();
+    cameraManager.Update(selectedPlayer);
     gameMap.Update();
     sky.Update();
 

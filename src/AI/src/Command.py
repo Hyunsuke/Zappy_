@@ -86,8 +86,8 @@ class Command:
             self.adjustBroadcast()
         else:
             # print("Données > " + data)
-            # print("We received " + data)
-            # print("for command" + self.responseList[0])
+            print("We received " + data)
+            print("For command " + self.responseList[0])
             self.adjustData()
             if not self.responseList:
                 return
@@ -245,6 +245,7 @@ class Command:
         # Le booléen de l'incantation doit être mis sur false
         if self.data_received == "ko":
             self.responseList.pop(1)
+            self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return
         # os._exit(0)
 

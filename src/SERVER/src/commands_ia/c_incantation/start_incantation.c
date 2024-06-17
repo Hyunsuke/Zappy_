@@ -88,13 +88,13 @@ bool start_incantation(struct_t *s, player_t *player)
         check_items_for_incantation(s, eleva, &p_pos) == false ||
         get_number_of_players_on_case(s, p_pos.x, p_pos.y)
         < eleva->nb_players || check_level_player(s, eleva, p_pos) == false) {
-        printf("Start Incantation -> KO\n");
-        dprintf(player->fd, "KO\n");
+        printf("Start Incantation -> ko\n");
+        dprintf(player->fd, "ko\n");
         return false;
     }
     nb = collect_player_ids(s->head_player, &p_pos, eleva->level_from, p_id);
     add_incantation(s, player->fd, p_id, nb);
-    printf("Start Incantation -> OK\n");
+    printf("Start Incantation -> ok\n");
     dprintf(player->fd, "Elevation underway\n");
     c_pic(p_pos, eleva->level_to, p_id);
     return true;

@@ -94,11 +94,11 @@ int c_set_obj(struct_t *s, int fd)
     int id_obj = get_resource_code(s->obj);
 
     if (remove_obj_from_player(player, id_obj) == false) {
-        dprintf(fd, "KO\n");
+        dprintf(fd, "ko\n");
         return -1;
     }
     add_obj_to_map(s, player, id_obj);
     c_pdr(s, player->id_player, id_obj);
-    dprintf(fd, "OK\n");
+    dprintf(fd, "ok\n");
     return 0;
 }

@@ -109,6 +109,8 @@ class ZappyClient:
                     if self.cmd.elevate() == True:
                         self.cmd.hasElevated = False
                         break
+                    else:
+                        continue
                 self.eat_nearest_ressource("linemate", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
                 self.rotatePlayer()
                 self.cmd.move_forward()
