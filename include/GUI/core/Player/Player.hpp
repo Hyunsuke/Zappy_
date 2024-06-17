@@ -53,6 +53,7 @@ public:
     void SetPlayerNumber(int playerNumber);
     std::shared_ptr<Model> GetModel();
     void SetOrientation(int orientation);
+    int GetOrientation() const;
     int getOBJquantity(std::string objName);
     void setOBJquantity(std::string objName, int quantity);
     int getX() const;

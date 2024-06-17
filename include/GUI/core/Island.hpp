@@ -12,8 +12,9 @@
 #include <vector>
 #include <memory>
 #include "../Utils/utils.hpp"
-#include "Player/Player.hpp"
 #include "Egg.hpp"
+
+class Player;
 
 class Island {
 public:
