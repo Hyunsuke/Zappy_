@@ -43,7 +43,6 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     }
     print_players(s);
     server->round[client_fd]++;
-    dprintf(client_fd, "Client number: %d\n", mob->id_player);
     if (s->fd_gui != -1) {
         c_pnw(s, mob->id_player, mob->level_player);
         c_pin_send(s, mob);

@@ -55,6 +55,7 @@ static void list_elements(struct_t *s, int fd)
     player_t *mob = get_player_by_fd(s, fd);
     int x = mob->x;
     int y = mob->y;
+    dprintf(fd, "x: %d y: %d view: %d\n", x, y, mob->view_direction);
 
     s->len_view = 3;
     add_in_str(s, "[");
@@ -69,5 +70,6 @@ int c_look(struct_t *s, int fd)
 {
     s->look_str = NULL;
     list_elements(s, fd);
+    print_map(s);
     return 0;
 }
