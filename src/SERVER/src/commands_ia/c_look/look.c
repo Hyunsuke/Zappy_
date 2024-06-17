@@ -69,6 +69,6 @@ int c_look(struct_t *s, int fd)
 {
     s->look_str = NULL;
     list_elements(s, fd);
-    print_map(s);
+    //print_map(s);
     return 0;
 }

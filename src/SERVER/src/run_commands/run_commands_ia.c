@@ -86,7 +86,7 @@ int run_commands_ia(struct_t *s, int fd, char *buffer)
 {
     char *command;
 
-    command = strtok(buffer, "\n");
+    command = strtok(buffer, "\r\n");
     if (command == NULL) {
         printf("ko\n");
         return -1;

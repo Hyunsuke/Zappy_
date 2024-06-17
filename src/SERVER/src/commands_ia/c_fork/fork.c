@@ -15,6 +15,6 @@ int c_fork(struct_t *s, int fd)
     int position[2] = {player->x, player->y};
 
     c_enw(s, nb_egg, player->id_player, position);
-    dprintf(fd, "OK\n");
+    dprintf(fd, "ok\n");
     return 0;
 }

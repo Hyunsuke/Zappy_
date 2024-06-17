@@ -25,7 +25,7 @@ int c_ppo(struct_t *s, char *buffer)
     parse_ppo(buffer, &id_player);
     player = get_player_by_id(s, id_player);
     if (player == NULL) {
-        dprintf(s->fd_gui, "KO\n");
+        dprintf(s->fd_gui, "ko\n");
         return -1;
     }
     dprintf(s->fd_gui, "ppo %d %d %d %d\n", id_player, player->x, player->y,
