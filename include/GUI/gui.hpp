@@ -37,6 +37,7 @@
 #include "Manager/UIManager.hpp"
 #include "Manager/RayManager.hpp"
 #include "Manager/ChatManager.hpp"
+#include "Manager/CameraManager.hpp"
 
 #include "Particles/Particle.hpp"
 #include "Particles/ParticleSystem.hpp"

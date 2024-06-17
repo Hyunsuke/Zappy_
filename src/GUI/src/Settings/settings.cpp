@@ -24,6 +24,8 @@ Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
             "E -> Down",
             "Left Click -> Select island",
             "Right Click -> Select player",
+            "P -> Select next player",
+            "O -> Select free camera",
         };
     }
 

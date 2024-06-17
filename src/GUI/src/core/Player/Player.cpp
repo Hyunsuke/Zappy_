@@ -151,6 +151,10 @@ void Player::SetOrientation(int orientation) {
     UpdateRotationAngle();
 }
 
+int Player::GetOrientation() const {
+    return orientation;
+}
+
 void Player::UpdateRotationAngle() {
     switch (orientation) {
         case 1: // North

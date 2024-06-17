@@ -18,6 +18,7 @@
 #include "../Settings/settings.hpp"
 #include "../Socket/SocketManager.hpp"
 #include "../Manager/ChatManager.hpp"
+#include "../Manager/CameraManager.hpp"
 
 #include <vector>
 #include <iostream>
@@ -59,7 +60,6 @@ private:
 
     int screenWidth;
     int screenHeight;
-    CameraController cameraController;
     Map gameMap;
     int timeUnit;
     std::vector<std::string> teamNames;
@@ -68,6 +68,8 @@ private:
     UIManager uiManager;
     RayManager rayManager;
     Settings settings;
+    CameraController cameraController;
+    CameraManager cameraManager;
     std::unique_ptr<SocketManager> socketManager;
 
     std::shared_ptr<Island> selectedIsland;
