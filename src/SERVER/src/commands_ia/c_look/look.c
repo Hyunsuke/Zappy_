@@ -58,10 +58,33 @@ static void view_line_loop(struct_t *s, player_t *mob, int *x, int *y)
             *y = save;
         process_cases(s, mob, x, y);
         adjust_new_coor(s, mob, x, y);
-        if (mob->view_direction == 0 || mob->view_direction == 1)
-            save--;
-        else
-            save++;
+        if (mob->view_direction == 0 || mob->view_direction == 1) {
+            if (mob->view_direction == 0) {
+                if (save - 1 < 0)
+                    save = s->map_width - 1;
+                else
+                    save--;
+            }
+            if (mob->view_direction == 1) {
+                if (save - 1 < 0)
+                    save = s->map_height - 1;
+                else
+                    save--;
+            }
+        } else {
+            if (mob->view_direction == 2) {
+                if (save + 1 >= s->map_width)
+                    save = 0;
+                else
+                    save++;
+            }
+            if (mob->view_direction == 3) {
+                if (save + 1 >= s->map_height)
+                    save = 0;
+                else
+                    save++;
+            }
+        }
         s->len_view += 2;
     }
 }
