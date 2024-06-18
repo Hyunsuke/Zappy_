@@ -67,6 +67,11 @@ int get_tick_for_command(struct_t *s, char *command)
         cmp_cmd = malloc(sizeof(char) * len + 1);
         cmp_cmd = "Set";
     }
+    if (strncmp(command, "Broadcast", 3) == 0) {
+        len = strlen("Broadcast");
+        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = "Broadcast";
+    }
     for (int i = 0; command_ticks[i].command != NULL; i++) {
         if (compare_until_whitespace(command, command_ticks[i].command) || strncmp(cmp_cmd, command_ticks[i].command, len)) {
             printf("Tick found: %d\n", command_ticks[i].tick);
