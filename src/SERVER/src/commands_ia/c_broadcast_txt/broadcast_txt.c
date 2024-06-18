@@ -7,7 +7,8 @@
 
 #include "all.h"
 
-int get_direct_from_angle(double angle) {
+int get_direct_from_angle(double angle)
+{
     if (angle >= 22.5 && angle < 67.5)
         return 8;
     if (angle >= 67.5 && angle < 112.5)
@@ -25,36 +26,57 @@ int get_direct_from_angle(double angle) {
     return 1;
 }
 
-double calculate_angle(int x1, int y1, int x2, int y2) {
-    double deltaY = y2 - y1;
-    double deltaX = x2 - x1;
-    double angle = atan2(deltaY, deltaX) * 180 / M_PI;
-    if (angle < 0) {
-        angle += 360;
-    }
-    return angle;
-}
+static double findAngle(struct_t *s, int x1, int y1, int x2, int y2, double orientation1)
+{
+    int vect[2];
+    double angle;
+    int x_diff = x1 - x2;
+    int y_diff = y1 - y2;
 
-int adjust_direction_for_view(int direction, int view_direction) {
-    int adjusted_direction = direction - view_direction * 2;
-    if (adjusted_direction < 1) {
-        adjusted_direction += 8;
-    }
-    return adjusted_direction;
+    vect[0] = (abs(x_diff) > s->map_width / 2) ?
+                (x_diff - (s->map_width * (x_diff / abs(x_diff)))) : x_diff;
+    vect[1] = (abs(y_diff) > s->map_height / 2) ?
+                (y_diff - (s->map_height * (y_diff / abs(y_diff)))) : y_diff;
+    angle = atan2(vect[1], vect[0]) * (180 / M_PI);
+    angle += 90;
+    if (angle < 0)
+        angle += 360;
+    angle -= orientation1;
+    if (angle < 0)
+        angle += 360;
+
+    return angle;
 }
 
 void send_to_all_players(struct_t *s, int fd)
 {
     player_t *receiver = s->head_player;
     player_t *sender = get_player_by_fd(s, fd);
+    int place = 0;
+    double orientation = 0.00;
 
     while (receiver != NULL) {
         if (receiver != sender) {
-            double angle = calculate_angle(sender->x, sender->y, receiver->x, receiver->y);
-            int direction = get_direct_from_angle(angle);
-            int adjusted_direction = adjust_direction_for_view(direction, receiver->view_direction);
-            dprintf(receiver->fd, "Message reçu de la direction %d: %s\n", adjusted_direction, s->obj);
+            if (receiver->x == sender->x && receiver->y == sender->y) {
+                place = 0;
+            } else {
+                if (receiver->view_direction == 0) {
+                    orientation = 0.00;
+                }
+                if (receiver->view_direction == 1) {
+                    orientation = 90.00;
+                }
+                if (receiver->view_direction == 2) {
+                    orientation = 180.00;
+                }
+                if (receiver->view_direction == 3) {
+                    orientation = 270.00;
+                }
+                place = get_direct_from_angle(findAngle(s, sender->x, sender->y, receiver->x, receiver->y, orientation));
+            }
+            dprintf(receiver->fd, "message %d, %s\n", place, s->obj);
         }
+        receiver = receiver->next;
     }   
 }
 

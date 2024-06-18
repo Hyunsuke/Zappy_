@@ -46,8 +46,8 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     if (s->fd_gui != -1) {
         c_pnw(s, mob->id_player, mob->level_player);
         c_pin_send(s, mob);
-        // dprintf(s->fd_gui,
-        //     "plv %d %d\n", mob->id_player, mob->level_player);
+        dprintf(s->fd_gui,
+            "plv %d %d\n", mob->id_player, mob->level_player);
     }
 }
 
@@ -74,7 +74,7 @@ static void send_info_gui(struct_t *s)
     player_t *current = s->head_player;
 
     printf("It's GUI\n");
-    // dprintf(s->fd_gui, "Server: You're a GUI\n");
+    dprintf(s->fd_gui, "Server: You're a GUI\n");
     c_msz(s, "");
     c_sgt(s, "");
     c_mct(s, "");
@@ -100,7 +100,7 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             gestion_team_name(server, s, buffer, client_fd);
         }
     } else {
-        // dprintf(client_fd, "%s", buffer);
+        dprintf(client_fd, "%s", buffer);
         gestion_function(s, buffer, client_fd);
     }
 }

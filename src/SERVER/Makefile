@@ -99,7 +99,7 @@ INCLUDEDIR = ../../include/SERVER/
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid
+CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -lm
 
 NAME	=	../../zappy_server
 
