@@ -22,7 +22,7 @@ static int count_lines(const char *buffer)
 char **split_buffer(const char *buffer, int *count)
 {
     int lines = count_lines(buffer);
-    char **buffers = my_malloc((lines + 1) * sizeof(char*));
+    char **buffers = my_malloc((lines + 1) * sizeof(char *));
     const char *start = buffer;
     int index = 0;
     int length = 0;

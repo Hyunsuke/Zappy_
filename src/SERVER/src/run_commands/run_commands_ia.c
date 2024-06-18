@@ -55,7 +55,8 @@ static int check_function(struct_t *s, int fd, char *command,
         check_bro++;
     }
     for (int i = 0; commands[i].command != NULL; i++) {
-        if (strcmp(commands[i].command, command) == 0 || (check_bro == 1 && strncmp(commands[i].command, "Broadcast ", 11) == 0)) {
+        if (strcmp(commands[i].command, command) == 0 || (check_bro == 1 &&
+            strncmp(commands[i].command, "Broadcast ", 11) == 0)) {
             printf("Running command %s for ID player %d\n",
                 commands[i].command, get_player_by_fd(s, fd)->id_player);
             return commands[i].func(s, fd);

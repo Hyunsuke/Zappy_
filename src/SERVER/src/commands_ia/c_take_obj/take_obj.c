@@ -26,7 +26,6 @@ static bool remove_take_obj(map_element_t *map_element, int id_obj)
 
 static bool remove_obj_map(map_element_t *map_element, int id_obj)
 {
-    printf("%d\n", id_obj);
     if (id_obj == 0 && map_element->food > 0) {
         map_element->food--;
         return true;
@@ -96,7 +95,7 @@ int c_take_obj(struct_t *s, int fd)
         return -1;
     }
     add_obj_inventory_player(player, id_obj);
-    //c_pgt(s, player->id_player, id_obj);
+    c_pgt(s, player->id_player, id_obj);
     dprintf(fd, "ok\n");
     return 0;
 }
