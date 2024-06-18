@@ -39,6 +39,17 @@ static void def_int_values(int ac, char **av, struct_t *s, int i)
     }
 }
 
+static void assign_max_cli(struct_t *s)
+{
+    team_t *current;
+
+    current = s->head_team;
+    while (current != NULL) {
+        current->max_cli = s->client_nb;
+        current = current->next;
+    }
+}
+
 static void parse_args(int ac, char **av, struct_t *s)
 {
     for (int i = 1; i < ac; i++) {
@@ -56,6 +67,7 @@ static void parse_args(int ac, char **av, struct_t *s)
             s->time = atoi(av[i]);
         }
     }
+    assign_max_cli(s);
 }
 
 int parsing(int ac, char **av, struct_t *s)
