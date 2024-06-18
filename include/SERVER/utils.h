@@ -31,6 +31,7 @@
     #include <sys/select.h>
     #include <arpa/inet.h>
     #include <errno.h>
+    #include <math.h>
 
 
     #include "struct.h"
