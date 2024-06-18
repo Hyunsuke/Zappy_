@@ -64,6 +64,7 @@ static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
         printf("Name team unknown\n");
+        dprintf(client_fd, "ko\n");
         return;
     }
     list_actions(server, s, client_fd, team);
