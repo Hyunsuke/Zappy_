@@ -100,7 +100,6 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             gestion_team_name(server, s, buffer, client_fd);
         }
     } else {
-        dprintf(client_fd, "%s", buffer);
         gestion_function(s, buffer, client_fd);
     }
 }
