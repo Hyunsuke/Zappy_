@@ -50,6 +50,7 @@ typedef struct team_s {
     char *name;
     int team_id;
     int *players_id;
+    int max_cli;
     position_t **position_egg;
     team_t *next;
 } team_t;
