@@ -23,19 +23,39 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
     i = names_end - 1;
 }
 
+static void check_map_dimension(int nb)
+{
+    if (nb < 10 || nb > 30) {
+        dprintf(stderr, "Invalid dimension: should be between 10 and 30\n");
+        full_free();
+        exit(84);
+    }
+}
+
+static void check_port(int port) {
+    if (port < 0 || port > 65535) {
+        dprintf(stderr, "Invalid port: should be between 0 and 65535\n");
+        full_free();
+        exit(84);
+    }
+}
+
 static void def_int_values(int ac, char **av, struct_t *s, int i)
 {
     if (strcmp(av[i], "-p") == 0 && i + 1 < ac) {
         i++;
         s->port = atoi(av[i]);
+        check_port(s->port);
     }
     if (strcmp(av[i], "-x") == 0 && i + 1 < ac) {
         i++;
         s->map_width = atoi(av[i]);
+        check_map_dimension(s->map_width);
     }
     if (strcmp(av[i], "-y") == 0 && i + 1 < ac) {
         i++;
         s->map_height = atoi(av[i]);
+        check_map_dimension(s->map_height);
     }
 }
 
@@ -50,6 +70,24 @@ static void assign_max_cli(struct_t *s)
     }
 }
 
+static void check_frequency(int frequency)
+{
+    if (frequency < 2 || frequency > 1000) {
+        dprintf(stderr, "Invalid frequency: should be between 2 and 1000\n");
+        full_free();
+        exit(84);
+    }
+}
+
+static void check_client_nbr(int client_nbr)
+{
+    if (client_nbr < 1 || client_nbr > 200) {
+        dprintf(stderr, "Invalid client_nbr: should be between 1 and 200\n");
+        full_free();
+        exit(84);
+    }
+}
+
 static void parse_args(int ac, char **av, struct_t *s)
 {
     for (int i = 1; i < ac; i++) {
@@ -61,10 +99,12 @@ static void parse_args(int ac, char **av, struct_t *s)
         if (strcmp(av[i], "-c") == 0 && i + 1 < ac) {
             i++;
             s->client_nb = atoi(av[i]);
+            check_client_nbr(s->client_nb);
         }
         if (strcmp(av[i], "-f") == 0 && i + 1 < ac) {
             i++;
             s->time = atoi(av[i]);
+            check_frequency(s->time);
         }
     }
     assign_max_cli(s);
