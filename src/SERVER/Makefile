@@ -93,13 +93,14 @@ SRC	=	src/main.c	\
 		src/utils/progress_incantation/add_progress_incantation.c \
 		src/utils/progress_incantation/get_progress_incantation.c \
 		src/utils/progress_incantation/remove_progress_incantation.c \
+		src/web_debug/web_debug.c \
 
 
 INCLUDEDIR = ../../include/SERVER/
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -lm
+CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -ljson-c -lm
 
 NAME	=	../../zappy_server
 

@@ -27,5 +27,6 @@ int c_forward(struct_t *s, int fd)
     dprintf(fd, "ok\n");
     dprintf(s->fd_gui, "ppo %d %d %d %d\n", mob->id_player, mob->x, mob->y,
         (mob->view_direction + 1));
+    dprintf(fd, "OK\n");
     return 0;
 }

@@ -19,5 +19,6 @@
     #include "commands.h"
     #include "elevation.h"
     #include "progress_incantation.h"
+    #include "web_debug.h"
 
 #endif /* !SERVER_H_ */
