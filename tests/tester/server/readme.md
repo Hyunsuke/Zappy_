@@ -2,99 +2,99 @@
 
 ## Description
 
-`test_server.js` est un programme en Node.js conçu pour se connecter à un serveur via TCP, envoyer les messages "GRAPHIC\n" et "GRAPHIC", et afficher les réponses reçues du serveur. Ce programme est utile pour tester et déboguer les connexions GUI avec le serveur.
+`test_server.js` is a Node.js program designed to connect to a server via TCP, send the messages "GRAPHIC\n" and "GRAPHIC", and display the responses received from the server. This program is useful for testing and debugging GUI connections with the server.
 
-## Prérequis
+## Prerequisites
 
-- Node.js installé sur votre machine. Vous pouvez télécharger et installer Node.js depuis [nodejs.org](https://nodejs.org/).
+- Node.js installed on your machine. You can download and install Node.js from [nodejs.org](https://nodejs.org/).
 
 ## Installation
 
-1. Clonez ce dépôt ou téléchargez le fichier `test_server.js`.
-2. Assurez-vous que Node.js est installé en exécutant la commande suivante dans votre terminal :
+1. Clone this repository or download the `test_server.js` file.
+2. Ensure Node.js is installed by running the following command in your terminal:
 
 ```sh
 node -v
 ```
 
-Cette commande devrait afficher la version de Node.js installée.
+This command should display the installed Node.js version.
 
-## Utilisation
+## Usage
 
-### Lancer le programme
+### Running the Program
 
-Pour lancer le programme, exécutez la commande suivante dans votre terminal :
+To run the program, execute the following command in your terminal:
 
 ```sh
 node test_server.js <hostname> <port>
 ```
 
-Remplacez `<hostname>` par l'adresse IP ou le nom de domaine du serveur, et `<port>` par le numéro de port. Par exemple :
+Replace `<hostname>` with the server's IP address or domain name, and `<port>` with the port number. For example:
 
 ```sh
 node test_server.js 127.0.0.1 8080
 ```
 
-### Exemple de sortie
+### Example Output
 
 ```sh
 Connected to server
-Response from server: [réponse du serveur après "GRAPHIC\n"]
-Second response from server: [réponse du serveur après "GRAPHIC"]
+Response from server: [response from server after "GRAPHIC\n"]
+Second response from server: [response from server after "GRAPHIC"]
 Connection closed
 ```
 
 ## Modification
 
-### Changer les messages envoyés
+### Changing the Sent Messages
 
-Si vous souhaitez modifier les messages envoyés au serveur, vous pouvez éditer les lignes suivantes dans `test_server.js` :
+If you want to modify the messages sent to the server, you can edit the following lines in `test_server.js`:
 
 ```javascript
-// Envoi du message "GRAPHIC\n"
+// Send the message "GRAPHIC\n"
 client.write('GRAPHIC\n');
 
-// Envoi du message "GRAPHIC"
+// Send the message "GRAPHIC"
 client.write('GRAPHIC');
 ```
 
-Remplacez `'GRAPHIC\n'` et `'GRAPHIC'` par les messages que vous souhaitez envoyer.
+Replace `'GRAPHIC\n'` and `'GRAPHIC'` with the messages you want to send.
 
-### Ajouter des étapes supplémentaires
+### Adding Additional Steps
 
-Si vous souhaitez ajouter des étapes supplémentaires après l'envoi des messages, vous pouvez le faire en ajoutant des handlers pour les événements `data` et `close` du client. Par exemple :
+If you want to add additional steps after sending the messages, you can do so by adding handlers for the client's `data` and `close` events. For example:
 
 ```javascript
 client.on('data', (data) => {
     console.log('Response from server: ' + data.toString());
 
-    // Ajoutez ici des étapes supplémentaires
+    // Add additional steps here
 
-    // Envoi du message "GRAPHIC"
+    // Send the message "GRAPHIC"
     client.write('GRAPHIC');
     
     client.on('data', (newData) => {
         console.log('Second response from server: ' + newData.toString());
         
-        // Ajoutez ici des étapes supplémentaires
+        // Add additional steps here
 
-        client.destroy(); // Fermer la connexion
+        client.destroy(); // Close the connection
     });
 });
 ```
 
-## Dépannage
+## Troubleshooting
 
-### Erreurs courantes
+### Common Errors
 
-- **ERROR: connect ECONNREFUSED** : Assurez-vous que le serveur est en cours d'exécution et que l'adresse IP et le port sont corrects.
-- **ERROR: invalid hostname/IP address** : Vérifiez que le nom d'hôte ou l'adresse IP fournis sont valides.
-- **Usage: node test_server.js <hostname> <port>** : Assurez-vous de fournir à la fois le nom d'hôte et le port lors de l'exécution du programme.
+- **ERROR: connect ECONNREFUSED**: Ensure the server is running and that the IP address and port are correct.
+- **ERROR: invalid hostname/IP address**: Check that the provided hostname or IP address is valid.
+- **Usage: node test_server.js <hostname> <port>**: Ensure you provide both the hostname and port when running the program.
 
-### Questions et contributions
+### Questions and Contributions
 
-Si vous avez des questions ou des suggestions, veuillez ouvrir une issue sur le dépôt GitHub. Les contributions sont également les bienvenues. Pour contribuer, veuillez créer une branche avec vos modifications et ouvrir une pull request.
+If you have any questions or suggestions, please open an issue on the GitHub repository. Contributions are also welcome. To contribute, please create a branch with your changes and open a pull request.
 
-## Licence
+## License
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
