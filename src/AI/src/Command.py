@@ -13,6 +13,8 @@ class Command:
     def __init__(self, socket, current_inventory, team_name):
         self.status = -1
         self.player_ready = 0
+        self.joined = False
+        self.joiner = 0
         self.player_food_ready = 0
         self.elevation = False
         self.team_name = team_name
@@ -188,9 +190,13 @@ class Command:
                     self.validateInventory(object, True)
                     # Check si on a atteint l'objectif
             elif fct == "END":
-                if self.leaderIsChosen != -1:
+                if self.leaderIsChosen == 1:
                     return
                 self.leaderIsChosen = 0 # 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
+                self.status = 11
                 # if self.positionHasBeenChanged == True:
                 #     if self.shallMove == False:
                 #         # print("Je devrais bouger vers le numéro : ", num)
@@ -209,7 +215,7 @@ class Command:
                 return
             elif fct == "ready" and object == "ready" and self.leaderIsChosen == 1:
                 self.player_ready += 1
-                if self.player_ready == 5:
+                if self.player_ready >= 5:
                     print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 return
             elif fct == "ready" and object == "food" and self.leaderIsChosen == 1:
@@ -217,6 +223,9 @@ class Command:
                 if self.player_food_ready == 5:
                     print("player_food_ready")
             elif fct == "come":
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
                 if self.positionHasBeenChanged == True:
                     if self.shallMove == False:
                         # print("Je devrais bouger vers le numéro : ", num)
@@ -225,7 +234,13 @@ class Command:
                 # else:
                 #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
             elif fct == "gather":
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
                 self.status = 10
+            elif fct == "joiner" and self.leaderIsChosen == 1:
+                print("J4AI UN POTE")
+                self.joiner += 1
 
     def elevate(self):
         return self.hasElevated
@@ -405,3 +420,6 @@ class Command:
 
     def nb_player_food_ready(self):
         return self.player_food_ready
+
+    def nb_joiner_ready(self):
+        return self.joiner
