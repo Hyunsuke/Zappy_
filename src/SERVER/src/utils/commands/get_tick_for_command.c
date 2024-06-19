@@ -51,12 +51,29 @@ int get_tick_for_command(struct_t *s, char *command)
 {
     command_t *command_ticks = s->command_ticks;
     char *tmp_command = my_strdup(command);
+    int len = 0;
+    char *cmp_cmd = NULL;
 
     for (int n = 0; tmp_command[n] != '\0'; n++)
         if (tmp_command[n] == ' ')
             tmp_command[n] = '\0';
+    if (strncmp(command, "Take", 4) == 0) {
+        len = strlen("Take");
+        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = "Take";
+    }
+    if (strncmp(command, "Set", 3) == 0) {
+        len = strlen("Set");
+        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = "Set";
+    }
+    if (strncmp(command, "Broadcast", 3) == 0) {
+        len = strlen("Broadcast");
+        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = "Broadcast";
+    }
     for (int i = 0; command_ticks[i].command != NULL; i++) {
-        if (compare_until_whitespace(command, command_ticks[i].command)) {
+        if (compare_until_whitespace(command, command_ticks[i].command) || strncmp(cmp_cmd, command_ticks[i].command, len)) {
             printf("Tick found: %d\n", command_ticks[i].tick);
             return command_ticks[i].tick;
         }
