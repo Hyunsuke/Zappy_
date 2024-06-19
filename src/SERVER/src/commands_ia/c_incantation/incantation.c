@@ -55,7 +55,7 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
     while (current_player != NULL) {
         if (current_player->x == position->x && current_player->y
             == position->y && current_player->level_player ==
-                elevation->level_from && count <= elevation->nb_players) {
+                elevation->level_from) {
                 current_player->level_player++;
                 count++;
                 dprintf(current_player->fd, "Current level: %d\n",
