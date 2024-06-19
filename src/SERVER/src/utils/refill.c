@@ -35,7 +35,7 @@ static void remove_nb_item_map(struct_t *s, map_rsc_t *rsc_map)
     }
 }
 
-static void add_item_amp(struct_t *s, map_rsc_t *rsc_map)
+static void add_item_map(struct_t *s, map_rsc_t *rsc_map)
 {
     for (; rsc_map->food > 0; rsc_map->food--)
         s->map[rand() % (s->map_height)][rand() % (s->map_width)].food++;
