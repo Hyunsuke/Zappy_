@@ -100,7 +100,7 @@ INCLUDEDIR = ../../include/SERVER/
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -ljson-c
+CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -ljson-c -lm
 
 NAME	=	../../zappy_server
 
