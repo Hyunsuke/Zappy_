@@ -23,7 +23,7 @@ static void display_map_rsc(map_rsc_t *rsc)
     printf("Thystame: %d\n", rsc->thystame);
 }
 
-static map_rsc_t *get_nb_rsc_map(struct_t *s)
+static void map_rsc_t *get_nb_rsc_map(struct_t *s)
 {
     map_rsc_t *rsc = my_malloc(sizeof(map_rsc_t));
 
@@ -75,6 +75,5 @@ void refill_map(struct_t *s)
 
     s->nb_tick_refill = 0;
     remove_nb_item_map(s, rsc_map);
-    display_map_rsc(rsc_map);
     add_item_map(s, rsc_map);
 }
