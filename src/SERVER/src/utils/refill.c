@@ -23,7 +23,7 @@ static void display_map_rsc(map_rsc_t *rsc)
     printf("Thystame: %d\n", rsc->thystame);
 }
 
-static void map_rsc_t *get_nb_rsc_map(struct_t *s)
+static map_rsc_t *get_nb_rsc_map(struct_t *s)
 {
     map_rsc_t *rsc = my_malloc(sizeof(map_rsc_t));
 
@@ -34,6 +34,7 @@ static void map_rsc_t *get_nb_rsc_map(struct_t *s)
     rsc->mendiane = s->map_width * s->map_height * 0.1;
     rsc->phiras = s->map_width * s->map_height * 0.08;
     rsc->thystame = s->map_width * s->map_height * 0.05;
+    return rsc;
 }
 
 static void remove_nb_item_map(struct_t *s, map_rsc_t *rsc_map)

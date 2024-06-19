@@ -59,17 +59,17 @@ int get_tick_for_command(struct_t *s, char *command)
             tmp_command[n] = '\0';
     if (strncmp(command, "Take", 4) == 0) {
         len = strlen("Take");
-        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = my_malloc(sizeof(char) * len + 1);
         cmp_cmd = "Take";
     }
     if (strncmp(command, "Set", 3) == 0) {
         len = strlen("Set");
-        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = my_malloc(sizeof(char) * len + 1);
         cmp_cmd = "Set";
     }
     if (strncmp(command, "Broadcast", 3) == 0) {
         len = strlen("Broadcast");
-        cmp_cmd = malloc(sizeof(char) * len + 1);
+        cmp_cmd = my_malloc(sizeof(char) * len + 1);
         cmp_cmd = "Broadcast";
     }
     for (int i = 0; command_ticks[i].command != NULL; i++) {
