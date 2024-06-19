@@ -33,7 +33,7 @@ A real-time game dashboard application featuring a dynamic map view, player info
 
 2. **Open your browser and navigate to**:
     ```
-    http://localhost:3000
+    http://localhost:3001
     ```
 
 3. **Connect to the game server**:
@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const port = 3000;
+const port = 3001;
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });

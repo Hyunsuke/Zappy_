@@ -9,7 +9,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 app.use(bodyParser.json());
-app.use(express.static('public'));  // Ensure your static files are served from 'public' directory
+app.use(express.static('public'));
 
 let client = null;
 let lastSentData = '';
@@ -62,7 +62,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// Change port to 3001
 const port = 3001;
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
