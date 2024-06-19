@@ -22,6 +22,7 @@ class ZappyClient:
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
             self.ready = False
+            self.food_ready = False
             self.updateInfos()
             self.cmd.fork()
             self.cmd.sendArrayCmd()
@@ -136,10 +137,13 @@ class ZappyClient:
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
+                    elif self.cmd.nb_player_food_ready() >= 5 and self.ready == False and self.current_inventory.current_inventory["food"] > 30:
+                        self.cmd.broadcast(f"{self.team_name}_ready_come")
                     else:
                         print("waiting for friends")
-                        self.cmd.broadcast(f"{self.team_name}_ready_come")
-                elif self.cmd.get_status() >= 0 and self.ready == False:
+                        self.cmd.broadcast(f"{self.team_name}_ready_gather")
+                        self.eat_nearest_ressource("food")
+                elif self.cmd.get_status() >= 0 and self.cmd.get_status() < 10 and self.ready == False:
                     if self.cmd.shouldMove() == True and self.cmd.positionChanged() == True:
                         self.join_leader()
                     # break
@@ -151,6 +155,13 @@ class ZappyClient:
                         self.drop_all()
                     # self.cmd.look()
                     # break
+                elif self.cmd.get_status() == 10:
+                    print("(((((((((((((((((((((((((((())))))))))))))))))))))))))))")
+                    print(self.current_inventory.current_inventory["food"])
+                    if self.current_inventory.current_inventory["food"] > 30 and self.food_ready == False:
+                        self.cmd.broadcast(f"{self.team_name}_food_ready")
+                        self.food_ready = True
+                    self.eat_nearest_ressource("food")
                 else:
                     print("---------------------------")
                     if self.current_inventory.current_inventory['food'] < 15:

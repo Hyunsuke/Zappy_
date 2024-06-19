@@ -13,6 +13,7 @@ class Command:
     def __init__(self, socket, current_inventory, team_name):
         self.status = -1
         self.player_ready = 0
+        self.player_food_ready = 0
         self.elevation = False
         self.team_name = team_name
         self.socket = socket
@@ -206,11 +207,15 @@ class Command:
                 # if object in self.current_inventory.shared_inventory:
                 #     self.current_inventory.shared_inventory[object] -= 1
                 return
-            elif fct == "ready" and self.leaderIsChosen == 1:
+            elif fct == "ready" and object == "ready" and self.leaderIsChosen == 1:
                 self.player_ready += 1
                 if self.player_ready == 5:
                     print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 return
+            elif fct == "ready" and object == "food" and self.leaderIsChosen == 1:
+                self.player_food_ready += 1
+                if self.player_food_ready == 5:
+                    print("player_food_ready")
             elif fct == "come":
                 if self.positionHasBeenChanged == True:
                     if self.shallMove == False:
@@ -219,6 +224,8 @@ class Command:
                         self.shallMove = True
                 # else:
                 #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
+            elif fct == "gather":
+                self.status = 10
 
     def elevate(self):
         return self.hasElevated
@@ -395,3 +402,6 @@ class Command:
 
     def nb_player_ready(self):
         return self.player_ready
+
+    def nb_player_food_ready(self):
+        return self.player_food_ready
