@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-void initialize_struct_defaults(struct_t *s)
+static void initialize_struct_defaults(struct_t *s)
 {
     s->obj = "";
     s->look_str = "";
@@ -35,7 +35,7 @@ static void add_object_map(json_object *json_cell, map_element_t *cell)
         json_object_new_int(cell->thystame));
 }
 
-json_object* create_json_map(struct_t *s)
+static json_object *create_json_map(struct_t *s)
 {
     json_object *json_map = json_object_new_array();
     json_object *json_row;
@@ -73,9 +73,13 @@ static void add_object_players(json_object *json_player, player_t *player)
         json_object_new_int(player->x));
     json_object_object_add(json_player, "y",
         json_object_new_int(player->y));
+    json_object_object_add(json_player, "mendiane",
+        json_object_new_int(player->mendiane));
+    json_object_object_add(json_player, "phiras",
+        json_object_new_int(player->phiras));
 }
 
-json_object* create_json_players(struct_t *s)
+static json_object *create_json_players(struct_t *s)
 {
     json_object *json_players = json_object_new_array();
     player_t *player = s->head_player;
@@ -91,10 +95,6 @@ json_object* create_json_players(struct_t *s)
             json_object_new_int(player->deraumere));
         json_object_object_add(json_player, "sibur",
             json_object_new_int(player->sibur));
-        json_object_object_add(json_player, "mendiane",
-            json_object_new_int(player->mendiane));
-        json_object_object_add(json_player, "phiras",
-            json_object_new_int(player->phiras));
         add_object_players(json_player, player);
         json_object_array_add(json_players, json_player);
         player = player->next;
@@ -102,7 +102,7 @@ json_object* create_json_players(struct_t *s)
     return json_players;
 }
 
-json_object* create_json_teams(struct_t *s)
+static json_object *create_json_teams(struct_t *s)
 {
     json_object *json_teams = json_object_new_array();
     json_object *json_team;
@@ -134,7 +134,7 @@ static void add_object_utils(json_object *json_utils, struct_t *s)
         json_object_new_string(s->look_str));
 }
 
-json_object* create_json_utils(struct_t *s)
+static json_object *create_json_utils(struct_t *s)
 {
     json_object *json_utils = json_object_new_object();
 
