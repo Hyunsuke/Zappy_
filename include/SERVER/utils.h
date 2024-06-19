@@ -33,7 +33,6 @@
     #include <errno.h>
     #include <math.h>
 
-
     #include "struct.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,13 +55,6 @@ int add_position_egg_to_team(struct_t *s, int team_id, int x, int y);
 position_t *get_and_remove_first_egg_position(struct_t *s, int team_id);
 team_t *get_team_by_id(struct_t *s, int team_id);
 team_t *get_team_by_name(struct_t *s, const char *name);
-    /////////////////////////////////
-
-    //////////////////////// MAPS ///
-void add_id_to_map_element(int **id_mob, int *size, int id_player);
-void remove_id_from_map_element(int **id_mob, int *size, int id_player);
-void remove_all_eggs_at_position_for_all_teams(struct_t *s, int x, int y);
-int get_resource_code(char *obj);
     /////////////////////////////////
 
 void init_struct(struct_t *s);
