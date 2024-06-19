@@ -96,6 +96,7 @@ typedef struct struct_s {
     bool stop_server;
     bool start_game;
     char *look_str;
+    int nb_tick_refill;
     int len_view;
     int view_num;
     map_element_t **map;

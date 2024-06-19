@@ -20,6 +20,8 @@ void remove_id_from_map_element(int **id_mob, int *size, int id_player);
 void remove_all_eggs_at_position_for_all_teams(struct_t *s, int x, int y);
 int get_resource_code(char *obj);
 
+void refill_map(struct_t *s);
+
 
 //////////// STRUCT //
 

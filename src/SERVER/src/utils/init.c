@@ -9,6 +9,8 @@
 
 void init_struct(struct_t *s)
 {
+    srand(time(0));
+    s->nb_tick_refill = 0;
     s->head_player = NULL;
     s->next_id_player = 0;
     s->fd_gui = -1;
