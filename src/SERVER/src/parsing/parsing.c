@@ -26,7 +26,7 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
 static void check_map_dimension(int nb)
 {
     if (nb < 10 || nb > 30) {
-        dprintf(stderr, "Invalid dimension: should be between 10 and 30\n");
+        dprintf(2, "Invalid dimension: should be between 10 and 30\n");
         full_free();
         exit(84);
     }
@@ -34,7 +34,7 @@ static void check_map_dimension(int nb)
 
 static void check_port(int port) {
     if (port < 0 || port > 65535) {
-        dprintf(stderr, "Invalid port: should be between 0 and 65535\n");
+        dprintf(2, "Invalid port: should be between 0 and 65535\n");
         full_free();
         exit(84);
     }
@@ -73,7 +73,7 @@ static void assign_max_cli(struct_t *s)
 static void check_frequency(int frequency)
 {
     if (frequency < 2 || frequency > 1000) {
-        dprintf(stderr, "Invalid frequency: should be between 2 and 1000\n");
+        dprintf(2, "Invalid frequency: should be between 2 and 1000\n");
         full_free();
         exit(84);
     }
@@ -82,7 +82,7 @@ static void check_frequency(int frequency)
 static void check_client_nbr(int client_nbr)
 {
     if (client_nbr < 1 || client_nbr > 200) {
-        dprintf(stderr, "Invalid client_nbr: should be between 1 and 200\n");
+        dprintf(2, "Invalid client_nbr: should be between 1 and 200\n");
         full_free();
         exit(84);
     }
