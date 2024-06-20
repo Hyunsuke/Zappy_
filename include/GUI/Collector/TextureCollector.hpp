@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <memory>
 #include "../Collector/TextureCollector.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class TextureCollector {
 public:
@@ -26,6 +27,7 @@ private:
     ~TextureCollector();
 
     std::unordered_map<std::string, std::shared_ptr<Texture2D>> textureCache;
+    RLModel rlModel;
 };
 
 #endif // TEXTURE_COLLECTOR_HPP_

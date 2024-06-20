@@ -7,15 +7,16 @@
 
 #include "gui.hpp"
 
-Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs)
+Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs, std::shared_ptr<Settings> settings)
     : screenWidth(screenWidth),
       screenHeight(screenHeight),
       timeUnit(timeUnit),
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight, "game"),
-      cameraManager(cameraController, gameMap) {
+      settings(settings),
+      cameraManager(cameraController, gameMap),
+      endMenu(screenWidth, screenHeight) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -72,18 +73,16 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
 }
 
 void Game::Run() {
-    while (!WindowShouldClose()) {
+    while (!window.WindowShouldClose()) {
         Update();
         Draw();
     }
 }
 
-
-
 void Game::Update() {
     cameraManager.Update(selectedPlayer);
     gameMap.Update();
-    sky.Update();
+    sky.Update(timeUnit);
 
     Vector3 lightPos = sky.GetLightPosition();
     Vector3 lightCol = sky.GetLightColor();
@@ -92,33 +91,39 @@ void Game::Update() {
 
     rayManager.UpdateRay(cameraController.GetCamera());
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (rlModel.IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+    if (rlModel.IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
 
-    settings.HandleMouseInput(GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
+    settings->HandleMouseInput(rlModel.GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
 
-    settings.Update();
+    settings->Update();
 
-    settings.HandleWindowResize(sky, uiManager);
+    settings->HandleWindowResize(sky, uiManager);
 }
 
 void Game::Draw() {
-    BeginDrawing();
-    ClearBackground(WHITE);
-    sky.DrawBackground();
+    window.BeginDrawing();
+    window.ClearBackground(WHITE);
 
-    BeginMode3D(cameraController.GetCamera());
+    if (gameOver) {
+        endMenu.HandleMouseInput();
+        endMenu.Draw(winningTeam);
+    } else {
+        sky.DrawBackground();
 
-    sky.DrawSunAndMoon();
-    gameMap.Draw();
-    gameMap.DrawIslandWires(selectedIsland);
-    gameMap.DrawPlayerWires(selectedPlayer);
+    window.BeginMode3D(cameraController.GetCamera());
 
-    EndMode3D();
+        sky.DrawSunAndMoon();
+        gameMap.Draw();
+        gameMap.DrawIslandWires(selectedIsland);
+        gameMap.DrawPlayerWires(selectedPlayer);
+
+    window.EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
-    settings.Draw();
+    settings->Draw();
+    }
 
-    EndDrawing();
+    window.EndDrawing();
 }

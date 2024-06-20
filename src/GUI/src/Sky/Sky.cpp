@@ -11,12 +11,14 @@ Sky::Sky(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight),
       sunPosition({0.0f, 100.0f, 0.0f}), moonPosition({0.0f, -100.0f, 0.0f}),
       lightPosition(sunPosition), lightColor(WHITE),
-      dayDuration(170.0f), currentTime(0.0f) {}
+      dayDuration(170.0f), currentTime(0.0f), timeUnitFactor(1.0f) {}
 
 Sky::~Sky() {}
 
-void Sky::Update() {
-    currentTime += GetFrameTime();
+void Sky::Update(int timeUnit) {
+    timeUnitFactor = static_cast<float>(timeUnit) / 60.0f;
+
+    currentTime += rltext.GetFrameTime() * timeUnitFactor;
     if (currentTime > dayDuration) {
         currentTime -= dayDuration;
     }
@@ -24,13 +26,13 @@ void Sky::Update() {
     float timeRatio = currentTime / dayDuration;
     float angle = timeRatio * 2.0f * PI;
 
-    sunPosition.x = 200.0f * cos(angle);
-    sunPosition.z = 100.0f * sin(angle);
-    sunPosition.y = 100.0f * sin(angle);
+    sunPosition.x = 200.0f * std::cos(angle);
+    sunPosition.z = 100.0f * std::sin(angle);
+    sunPosition.y = 100.0f * std::sin(angle);
 
-    moonPosition.x = 200.0f * cos(angle + PI);
-    moonPosition.z = 100.0f * sin(angle + PI);
-    moonPosition.y = 100.0f * sin(angle + PI);
+    moonPosition.x = 200.0f * std::cos(angle + PI);
+    moonPosition.z = 100.0f * std::sin(angle + PI);
+    moonPosition.y = 100.0f * std::sin(angle + PI);
 
     if (sunPosition.y > 0) {
         lightPosition = sunPosition;
@@ -57,15 +59,15 @@ void Sky::DrawBackground() {
     for (int y = 0; y < (screenHeight + 1); y++) {
         float t = (float)y / (float)screenHeight;
         Color color = ColorLerp(startColor, endColor, t);
-        DrawLine(0, y, screenWidth, y, color);
+        rltext.DrawLine(0, y, screenWidth, y, color);
     }
 }
 
 void Sky::DrawSunAndMoon() {
     if (sunPosition.y > 0) {
-        DrawSphere(sunPosition, 5.0f, YELLOW);
+        rltext.DrawSphere(sunPosition, 5.0f, YELLOW);
     } else {
-        DrawSphere(moonPosition, 5.0f, BLUE);
+        rltext.DrawSphere(moonPosition, 5.0f, BLUE);
     }
 }
 

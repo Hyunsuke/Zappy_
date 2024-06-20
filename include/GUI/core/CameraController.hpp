@@ -11,6 +11,7 @@
 #include "raylib.h"
 #include <memory>
 #include "Player/Player.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class CameraController {
 public:
@@ -21,6 +22,7 @@ public:
     void LockCameraOnPlayer(const std::shared_ptr<Player>& player);
     void UnlockCamera();
     void SetOriginalCameraPosition(const Vector3& position, const Vector3& target);
+    void SmoothUnlockCamera();
 
 private:
     void RotateCamera(float yaw, float pitch);
@@ -39,6 +41,7 @@ private:
     float lerpSpeed;
 
     void SmoothMoveCamera(const Vector3& targetPosition, const Vector3& targetLookAt);
+    RLModel rlModel;
 };
 
 #endif /* !CAMERACONTROLLER_HPP_ */

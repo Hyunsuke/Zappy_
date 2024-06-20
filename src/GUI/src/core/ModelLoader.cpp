@@ -19,13 +19,13 @@ void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, floa
     for (int i = 0; i < model->materialCount; i++) {
         model->materials[i].shader = shader;
     }
-    DrawModelEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
 }
 
 void ModelLoader::DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
-    glLineWidth(100.0f);
-    DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
-    glLineWidth(1.0f);
+    rlModel.SetLineWidth(100.0f);
+    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+    rlModel.SetLineWidth(1.0f);
 }
 
 void ModelLoader::SetShader(Shader newShader) {
@@ -35,7 +35,7 @@ void ModelLoader::SetShader(Shader newShader) {
 void ModelLoader::SetTexture(const std::string& texturePath) {
     std::shared_ptr<Texture2D> texture = TextureCollector::GetInstance().LoadTexture(texturePath);
     for (int i = 0; i < model->materialCount; i++) {
-        SetMaterialTexture(&model->materials[i], MATERIAL_MAP_DIFFUSE, *texture);
+        rlModel.SetMaterialTexture(model->materials[i], MATERIAL_MAP_DIFFUSE, *texture);
     }
 }
 

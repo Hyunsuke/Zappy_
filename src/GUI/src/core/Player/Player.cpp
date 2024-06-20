@@ -42,6 +42,11 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
     animationMap[Animation::ThumbsUp] = 9;
     animationMap[Animation::Walk] = 10;
 
+    if (teamName == "menu")
+        teamColor = WHITE;
+    else
+        teamColor = GetTeamColor(teamName);
+
     UpdateScaleBasedOnLevel();
     SetAnimation(Animation::Idle);
     UpdateRotationAngle();
@@ -51,28 +56,34 @@ Player::~Player() {}
 
 void Player::Draw() {
     model = modelLoader.GetModel();
-    DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, teamColor);
 }
 
+
 void Player::DrawWires() {
-    glLineWidth(5.0f);
+    rlModel.SetLineWidth(1.0f);
     model = modelLoader.GetModel();
-    DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
-    glLineWidth(1.0f);
+    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+    rlModel.SetLineWidth(1.0f);
 }
 
 void Player::UpdateAnimation() {
     if (!animations.empty() && animIndex < animations.size() && animations[animIndex] && Dead == false) {
-        float deltaTime = GetFrameTime();
+        float deltaTime = rlModel.GetFrameTime();
         animationTime += deltaTime;
 
         int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
 
-        animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        if (Dead && animIndex == animationMap[Animation::Death]) {
+            animCurrentFrame = std::min(animCurrentFrame + framesToAdvance, animations[animIndex]->frameCount - 1);
+        } else {
+            animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        }
+
         animationTime -= framesToAdvance / animationSpeed;
 
         model = modelLoader.GetModel();
-        UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
+        rlModel.UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
     }
 }
 
@@ -87,7 +98,7 @@ void Player::WaitForAnimationEnd(Player::Animation animation) {
 
 void Player::UpdatePosition() {
     if (isMoving) {
-        float currentTime = GetTime();
+        float currentTime = rlModel.GetTime();
         float t = (currentTime - moveStartTime) / moveDuration;
 
         if (t >= 1.0f) {
@@ -102,7 +113,7 @@ void Player::UpdatePosition() {
             UpdatePlayersPositionsOnIsland(newIsland);
         }
 
-        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
+        Vector3 newPos = rlModel.Vector3Lerp(startPos, endPos, t);
         SetPosition(newPos);
     } else if (island) {
         Vector3 islandPosition = island->GetPosition();
@@ -192,7 +203,7 @@ void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
     endPos = newIsland->GetPosition();
 
     moveDuration = baseDuration;
-    moveStartTime = GetTime();
+    moveStartTime = rlModel.GetTime();
     isMoving = true;
 
     SetAnimation(Animation::Jump);
@@ -212,7 +223,7 @@ void Player::UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island) {
         if (playerCount > 1) {
             offset = {radius * cos(angle), 0.0f, radius * sin(angle)};
         }
-        players[i]->SetPosition(Vector3Add(islandPos, offset));
+        players[i]->SetPosition(rlModel.Vector3Add(islandPos, offset));
     }
 }
 
@@ -280,11 +291,18 @@ std::string Player::GetTeam() const
     return teamName;
 }
 
-void Player::SetDead()
-{
+void Player::SetDead() {
     SetAnimation(Animation::Death);
-    WaitForAnimationEnd(Player::Animation::Death);
-    Dead = true;
+    // std::thread([this]() {
+    //     int totalFrames = animations[animIndex]->frameCount;
+    //     float frameDuration = animations[animIndex]->frameCount / 60.0f;
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
+    //     Dead = true;
+    // }).detach();
+}
+
+bool Player::IsDead() const {
+    return Dead;
 }
 
 void Player::SetPlayerNumber(int playerNumber)
@@ -306,4 +324,26 @@ std::shared_ptr<ModelAnimation> Player::GetCurrentAnimation() const {
 
 int Player::GetCurrentFrame() const {
     return animCurrentFrame;
+}
+
+std::vector<Color> GetPredefinedColors() {
+    std::vector<Color> predefinedColors = {
+        { 255, 0, 0, 255 },   // Red
+        { 0, 255, 0, 255 },   // Green
+        { 0, 0, 255, 255 },   // Blue
+        { 255, 255, 0, 255 }, // Yellow
+        { 255, 0, 255, 255 }, // Magenta
+        { 0, 255, 255, 255 }, // Cyan
+        { 255, 165, 0, 255 }, // Orange
+        { 128, 0, 128, 255 }  // Violet
+    };
+    return predefinedColors;
+}
+
+Color Player::GetTeamColor(const std::string& teamName) {
+    std::hash<std::string> hashFn;
+    std::size_t hash = hashFn(teamName);
+    Color color = GetPredefinedColors()[hash % GetPredefinedColors().size()];
+
+    return color;
 }

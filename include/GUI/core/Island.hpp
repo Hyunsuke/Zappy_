@@ -13,6 +13,7 @@
 #include <memory>
 #include "../Utils/utils.hpp"
 #include "Egg.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class Player;
 
@@ -70,6 +71,7 @@ private:
 
     std::vector<std::shared_ptr<Player>> players;
     std::vector<std::shared_ptr<Egg>> eggs;
+    RLModel rlModel;
 };
 
 #endif // ISLAND_HPP_

@@ -10,12 +10,12 @@
 RayManager::RayManager() {}
 
 void RayManager::UpdateRay(Camera camera) {
-    ray = GetMouseRay(GetMousePosition(), camera);
+    ray = rlModel.GetMouseRay(rlModel.GetMousePosition(), camera);
 }
 
 std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::shared_ptr<Island>>& islands) {
     for (auto& island : islands) {
-        Matrix transform = MatrixTranslate(island->GetPosition().x, island->GetPosition().y, island->GetPosition().z);
+        Matrix transform = rlModel.MatrixTranslate(island->GetPosition().x, island->GetPosition().y, island->GetPosition().z);
         if (CheckRayCollisionModel(ray, *island->GetModel(), transform)) {
             return island;
         }
@@ -25,11 +25,11 @@ std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::s
 
 std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players) {
     for (auto& player : players) {
-        BoundingBox playerBoundingBox = GetModelBoundingBox(*player->GetModel());
+        BoundingBox playerBoundingBox = rlModel.GetModelBoundingBox(*player->GetModel());
         Vector3 scale = player->GetScale();
-        Matrix transform = MatrixMultiply(MatrixScale(scale.x, scale.y, scale.z), MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z));
-        playerBoundingBox.min = Vector3Transform(playerBoundingBox.min, transform);
-        playerBoundingBox.max = Vector3Transform(playerBoundingBox.max, transform);
+        Matrix transform = rlModel.MatrixMultiply(rlModel.MatrixScale(scale.x, scale.y, scale.z), rlModel.MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z));
+        playerBoundingBox.min = rlModel.Vector3Transform(playerBoundingBox.min, transform);
+        playerBoundingBox.max = rlModel.Vector3Transform(playerBoundingBox.max, transform);
 
         if (CheckCollisionRayBox(ray, playerBoundingBox)) {
             return player;
@@ -38,26 +38,26 @@ std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::s
     return nullptr;
 }
 
-bool CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint) {
-    Vector3 edge1 = Vector3Subtract(p2, p1);
-    Vector3 edge2 = Vector3Subtract(p3, p1);
-    Vector3 pvec = Vector3CrossProduct(ray.direction, edge2);
-    float det = Vector3DotProduct(edge1, pvec);
+bool RayManager::CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint) {
+    Vector3 edge1 = rlModel.Vector3Subtract(p2, p1);
+    Vector3 edge2 = rlModel.Vector3Subtract(p3, p1);
+    Vector3 pvec = rlModel.Vector3CrossProduct(ray.direction, edge2);
+    float det = rlModel.Vector3DotProduct(edge1, pvec);
 
     if (det > -0.0001f && det < 0.0001f) return false;
     float invDet = 1.0f / det;
 
-    Vector3 tvec = Vector3Subtract(ray.position, p1);
-    float u = Vector3DotProduct(tvec, pvec) * invDet;
+    Vector3 tvec = rlModel.Vector3Subtract(ray.position, p1);
+    float u = rlModel.Vector3DotProduct(tvec, pvec) * invDet;
     if (u < 0.0f || u > 1.0f) return false;
 
-    Vector3 qvec = Vector3CrossProduct(tvec, edge1);
-    float v = Vector3DotProduct(ray.direction, qvec) * invDet;
+    Vector3 qvec = rlModel.Vector3CrossProduct(tvec, edge1);
+    float v = rlModel.Vector3DotProduct(ray.direction, qvec) * invDet;
     if (v < 0.0f || u + v > 1.0f) return false;
 
-    float t = Vector3DotProduct(edge2, qvec) * invDet;
+    float t = rlModel.Vector3DotProduct(edge2, qvec) * invDet;
     if (t > 0) {
-        if (outCollisionPoint) *outCollisionPoint = Vector3Add(ray.position, Vector3Scale(ray.direction, t));
+        if (outCollisionPoint) *outCollisionPoint = rlModel.Vector3Add(ray.position, rlModel.Vector3Scale(ray.direction, t));
         return true;
     }
 
@@ -75,9 +75,9 @@ bool RayManager::CheckRayCollisionModel(Ray ray, const Model& model, const Matri
             int index2 = j * 9 + 6;
 
             if (index0 < vertexCount * 3 && index1 < vertexCount * 3 && index2 < vertexCount * 3) {
-                Vector3 v0 = Vector3Transform(Vector3{mesh.vertices[index0], mesh.vertices[index0 + 1], mesh.vertices[index0 + 2]}, transform);
-                Vector3 v1 = Vector3Transform(Vector3{mesh.vertices[index1], mesh.vertices[index1 + 1], mesh.vertices[index1 + 2]}, transform);
-                Vector3 v2 = Vector3Transform(Vector3{mesh.vertices[index2], mesh.vertices[index2 + 1], mesh.vertices[index2 + 2]}, transform);
+                Vector3 v0 = rlModel.Vector3Transform(Vector3{mesh.vertices[index0], mesh.vertices[index0 + 1], mesh.vertices[index0 + 2]}, transform);
+                Vector3 v1 = rlModel.Vector3Transform(Vector3{mesh.vertices[index1], mesh.vertices[index1 + 1], mesh.vertices[index1 + 2]}, transform);
+                Vector3 v2 = rlModel.Vector3Transform(Vector3{mesh.vertices[index2], mesh.vertices[index2 + 1], mesh.vertices[index2 + 2]}, transform);
 
                 if (CheckCollisionRayTriangle(ray, v0, v1, v2, nullptr)) {
                     return true;

@@ -7,15 +7,10 @@
 
 #include "gui.hpp"
 
-RLWindow::RLWindow(int width, int height, const std::string& title)
-    : width(width), height(height), title(title) {
-    InitWindow(width, height, title.c_str());
-    SetTargetFPS(60);
-}
+RLWindow::RLWindow() {}
 
-RLWindow::~RLWindow() {
-    CloseWindow();
-}
+
+RLWindow::~RLWindow() {}
 
 void RLWindow::BeginDrawing() {
     ::BeginDrawing();
@@ -41,4 +36,15 @@ void RLWindow::ClearBackground(Color color) {
     ::ClearBackground(color);
 }
 
+void RLWindow::InitWindow(int width, int height, const std::string& title) {
+    ::InitWindow(width, height, title.c_str());
+}
+
+void RLWindow::SetTargetFPS(int fps) {
+    ::SetTargetFPS(fps);
+}
+
+void RLWindow::CloseWindow() {
+    ::CloseWindow();
+}
 

@@ -10,6 +10,7 @@
 
 #include <raylib.h>
 #include <string>
+#include "../Wrapper/Raylib/RLShader.hpp"
 
 class ShaderManager {
 public:
@@ -26,6 +27,7 @@ private:
 
     std::string vertexPath;
     std::string fragmentPath;
+    RLShader rlShader;
 };
 
 #endif // SHADERMANAGER_HPP_

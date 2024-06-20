@@ -17,6 +17,7 @@ class Island;
 #include <vector>
 #include "raylib.h"
 #include <GL/gl.h>
+#include "../../Wrapper/Raylib/RLModel.hpp"
 
 class Player {
 public:
@@ -62,6 +63,7 @@ public:
     void SetLevel(int level);
     std::string GetTeam() const;
     void SetDead();
+    bool IsDead() const;
     Vector3 GetScale() const;
     std::shared_ptr<ModelAnimation> GetCurrentAnimation() const;
     int GetCurrentFrame() const;
@@ -73,13 +75,13 @@ public:
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
     int animCount;
-    unsigned int animIndex;
-    unsigned int animCurrentFrame;
+    std::size_t animIndex;
+    int animCurrentFrame;
     Vector3 position;
     Vector3 scale;
     Vector3 rotationAxis;
     float rotationAngle = 0.0f;
-    std::unordered_map<Animation, unsigned int> animationMap;
+    std::unordered_map<Animation, std::size_t> animationMap;
 
     int playerNumber;
     std::string teamName;
@@ -115,6 +117,10 @@ private:
     float moveDuration;
     bool isMoving = false;
     bool Dead = false;
+    Color teamColor;
+
+    RLModel rlModel;
+    static Color GetTeamColor(const std::string& teamName);
 };
 
 #endif // PLAYER_HPP

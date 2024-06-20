@@ -8,23 +8,49 @@
 #ifndef RLMODEL_HPP_
 #define RLMODEL_HPP_
 
-#include "raylib.h"
+#include <raylib.h>
+#include <raymath.h>
 #include <string>
+#include <memory>
 
 class RLModel {
 public:
-    RLModel(const std::string& modelPath, const std::string& texturePath);
-    ~RLModel();
+    static Model LoadModel(const std::string& filePath);
+    static void UnloadModel(Model& model);
+    static Texture2D LoadTexture(const std::string& filePath);
+    static void UnloadTexture(Texture2D& texture);
 
-    void Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
-    void DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint);
-    BoundingBox GetBoundingBox() const;
-    void SetShader(Shader shader);
-    void SetTexture(const std::string& texturePath);
+    static void DrawModelEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
+    static void SetLineWidth(float width);
+    static void DrawModelWiresEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
 
-private:
-    Model model;
-    Shader shader;
+    static float GetFrameTime();
+    static double GetTime();
+
+    static void UpdateModelAnimation(Model& model, ModelAnimation& anim, int frame);
+    static Vector3 Vector3Lerp(Vector3 start, Vector3 end, float amount);
+    static Vector3 Vector3Add(Vector3 v1, Vector3 v2);
+    static Vector3 Vector3Normalize(Vector3 v);
+    static Vector3 Vector3Subtract(Vector3 v1, Vector3 v2);
+    static Matrix MatrixRotate(Vector3 axis, float angle);
+    static Vector3 Vector3Transform(Vector3 v, Matrix mat);
+    static Vector3 Vector3CrossProduct(Vector3 v1, Vector3 v2);
+    static Vector3 Vector3Scale(Vector3 v, float scale);
+    static float Vector3DotProduct(Vector3 v1, Vector3 v2);
+
+    static Vector2 GetMousePosition();
+    static bool IsMouseButtonDown(int button);
+    static bool IsMouseButtonPressed(int button);
+    static bool IsKeyDown(int key);
+
+    static void SetMaterialTexture(Material& material, int mapType, Texture2D& texture);
+
+    static BoundingBox GetModelBoundingBox(const Model& model);
+    static Matrix MatrixTranslate(float x, float y, float z);
+    static Matrix MatrixMultiply(Matrix left, Matrix right);
+    static Matrix MatrixScale(float x, float y, float z);
+    static Ray GetMouseRay(Vector2 mousePosition, Camera camera);
+    static float Vector3Distance(Vector3 v1, Vector3 v2);
 };
 
 #endif // RLMODEL_HPP_

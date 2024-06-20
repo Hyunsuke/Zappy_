@@ -14,11 +14,14 @@
 #include "../Manager/ShaderManager.hpp"
 #include "../Manager/UIManager.hpp"
 #include "../Manager/RayManager.hpp"
-#include "../Particles/ParticleSystem.hpp"
 #include "../Settings/settings.hpp"
 #include "../Socket/SocketManager.hpp"
 #include "../Manager/ChatManager.hpp"
 #include "../Manager/CameraManager.hpp"
+
+#include "../Wrapper/Raylib/RLWindow.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
+#include "../Menu/endMenu.hpp"
 
 #include <vector>
 #include <iostream>
@@ -29,10 +32,15 @@
 #include <sstream>
 #include <set>
 #include <algorithm>
+#include <memory>
+#include <future>
+#include <chrono>
+
+class Settings;
 
 class Game {
 public:
-    Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs);
+    Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs, std::shared_ptr<Settings> settings);
     ~Game();
     void Run();
     void SetSocketManager(std::unique_ptr<SocketManager> socketManager);
@@ -46,6 +54,7 @@ public:
     void RequestPlayerInventory(int playerNumber);
     void RequestTimeUnit();
     void SetTimeUnit(int timeUnit);
+    int GetTimeUnit() const;
 
 private:
     void Update();
@@ -67,13 +76,19 @@ private:
     std::unique_ptr<ShaderManager> shaderManager;
     UIManager uiManager;
     RayManager rayManager;
-    Settings settings;
+    std::shared_ptr<Settings> settings;
     CameraController cameraController;
     CameraManager cameraManager;
     std::unique_ptr<SocketManager> socketManager;
 
     std::shared_ptr<Island> selectedIsland;
     std::shared_ptr<Player> selectedPlayer;
+    RLWindow window;
+    RLModel rlModel;
+
+    bool gameOver = false;
+    std::string winningTeam;
+    EndMenu endMenu;
 };
 
 #endif /* !GAME_HPP_ */

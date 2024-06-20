@@ -88,7 +88,7 @@ void Game::HandleServerMessage(const std::string& message) {
         iss >> n >> message;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
-            settings.SendMessage(n, player, message);
+            settings->SendMessage(n, player, message);
         }
     } else if (command == "pic") {
         int x, y, l;
@@ -164,7 +164,8 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "seg") {
         std::string teamName;
         iss >> teamName;
-        // Handle end of game
+        gameOver = true;
+        winningTeam = teamName;
     } else if (command == "smg") {
         std::string message;
         iss >> message;
@@ -226,6 +227,10 @@ void Game::RequestTimeUnit() {
 
 void Game::SetTimeUnit(int timeUnit) {
     std::string command = "sst " + std::to_string(timeUnit) + "\n";
-    std::string response = socketManager->SendCommand(command);
-    HandleServerMessage(response);
+    socketManager->SendMessage(command);
+    this->timeUnit = timeUnit;
+}
+
+int Game::GetTimeUnit() const {
+    return timeUnit;
 }
