@@ -32,7 +32,8 @@ static void check_map_dimension(int nb)
     }
 }
 
-static void check_port(int port) {
+static void check_port(int port)
+{
     if (port < 0 || port > 65535) {
         dprintf(2, "Invalid port: should be between 0 and 65535\n");
         full_free();

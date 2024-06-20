@@ -19,6 +19,14 @@ static int count_lines(const char *buffer)
     return lines;
 }
 
+void add_line(char **buffers, int *index, const char *start, int length)
+{
+    buffers[*index] = my_malloc(length + 1);
+    strncpy(buffers[*index], start, length);
+    buffers[*index][length] = '\0';
+    (*index)++;
+}
+
 char **split_buffer(const char *buffer, int *count)
 {
     int lines = count_lines(buffer);
@@ -30,16 +38,12 @@ char **split_buffer(const char *buffer, int *count)
     for (int i = 0; buffer[i]; i++) {
         if (buffer[i] == '\n') {
             length = &buffer[i] - start;
-            buffers[index] = my_malloc(length + 1);
-            strncpy(buffers[index], start, length);
-            buffers[index][length] = '\0';
+            add_line(buffers, &index, start, length);
             start = &buffer[i + 1];
-            index++;
         }
     }
     if (start != &buffer[strlen(buffer)]) {
-        buffers[index] = my_strdup(start);
-        index++;
+        add_line(buffers, &index, start, strlen(start));
     }
     *count = index;
     return buffers;

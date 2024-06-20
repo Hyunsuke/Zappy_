@@ -10,7 +10,7 @@
 static int execute_command_dashboard(struct_t *s, char *command, char *buffer)
 {
     command_struct_gui_t commands[] = {
-        {"sst", c_sst_dashboard},{NULL, NULL}
+        {"sst", c_sst_dashboard}, {NULL, NULL}
     };
 
     for (int i = 0; commands[i].command != NULL; i++) {

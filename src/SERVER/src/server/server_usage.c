@@ -75,7 +75,6 @@ void server_usage(server_t *server, struct_t *s)
     int nb_tick_tiredness = 0;
     double **ticks = my_malloc(sizeof(double *) * 2);
 
-
     server->addrlen = sizeof(server->serv_adr);
     while (s->stop_server == false) {
         server->tmp_fdtab = server->fd_tab;
