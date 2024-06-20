@@ -7,6 +7,7 @@
 
 #include "gui.hpp"
 #include <future>
+#include <chrono>
 
 void init_Window(int screenWidth, int screenHeight, const char* title) {
     InitWindow(screenWidth, screenHeight, title);
@@ -36,16 +37,21 @@ bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketMa
     return true;
 }
 
-bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 15) {
+bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, LoadingScreen& loadingScreen, int timeoutSeconds = 15) {
     auto start = std::chrono::steady_clock::now();
 
     while (true) {
         auto now = std::chrono::steady_clock::now();
-        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
-        if (elapsed > timeoutSeconds) {
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+
+        float progress = std::min(1.0f, static_cast<float>(elapsed) / 1500.0f);
+        loadingScreen.Draw("Loading...", progress);
+
+        if (elapsed > timeoutSeconds * 1000) {
             std::exit(84);
             throw GameException("Timeout waiting for initial server messages");
         }
+
         std::string message;
         if (!socketManager.TryReceiveMessage(message)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -69,7 +75,7 @@ bool processInitialServerMessages(SocketManager& socketManager, std::string& map
             eggs.push_back(message);
         }
 
-        if (!mapSize.empty() && timeUnit > 0 && !teamNames.empty() && !mapContent.empty() && elapsed > 1) {
+        if (!mapSize.empty() && timeUnit > 0 && !teamNames.empty() && !mapContent.empty() && elapsed > 1000) {
             Utils::removeDuplicates(mapContent);
             Utils::removeDuplicates(eggs);
             Utils::removeDuplicates(teamNames);
@@ -127,20 +133,26 @@ int main(int ac, char** av) {
         int screenHeight = 1080;
         init_Window(screenWidth, screenHeight, "Zappy GUI");
 
+        LoadingMenu loadingMenu(screenWidth, screenHeight);
+        loadingMenu.Draw();
+
         if (runMenu(screenWidth, screenHeight, host, port)) {
             std::unique_ptr<SocketManager> socketManager;
 
             if (connectToServer(host, port, socketManager)) {
+                LoadingScreen loadingScreen(screenWidth, screenHeight);
+
                 std::string mapSize;
                 int timeUnit = 0;
                 std::vector<std::string> teamNames;
                 std::vector<std::string> mapContent;
                 std::vector<std::string> eggs;
 
-                if (processInitialServerMessages(*socketManager, mapSize, timeUnit, teamNames, mapContent, eggs)) {
+                if (processInitialServerMessages(*socketManager, mapSize, timeUnit, teamNames, mapContent, eggs, loadingScreen)) {
                     runGame(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs, socketManager);
-                } else
+                } else {
                     std::cout << "Failed to process initial server messages" << std::endl;
+                }
             }
         }
     } catch (const ArgumentException& e) {

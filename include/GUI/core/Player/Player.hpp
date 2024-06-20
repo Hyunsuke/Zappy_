@@ -61,6 +61,7 @@ public:
     void SetLevel(int level);
     std::string GetTeam() const;
     void SetDead();
+    bool IsDead() const;
     Vector3 GetScale() const;
     std::shared_ptr<ModelAnimation> GetCurrentAnimation() const;
     int GetCurrentFrame() const;
@@ -72,13 +73,13 @@ public:
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
     int animCount;
-    unsigned int animIndex;
-    unsigned int animCurrentFrame;
+    int animIndex;
+    int animCurrentFrame;
     Vector3 position;
     Vector3 scale;
     Vector3 rotationAxis;
     float rotationAngle = 0.0f;
-    std::unordered_map<Animation, unsigned int> animationMap;
+    std::unordered_map<Animation, int> animationMap;
 
     int playerNumber;
     std::string teamName;
