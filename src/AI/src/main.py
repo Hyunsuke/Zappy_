@@ -127,6 +127,8 @@ class ZappyClient:
             while True:
                 self.blockingBuffer()
                 self.update_inventory()
+                if self.cmd.get_reset == True:
+                    self.reset_main()
                 # print(self.cmd.get_status())
                 if self.cmd.get_status() == -2:
                     if self.ready == True:
@@ -389,6 +391,21 @@ class ZappyClient:
         self.dropped = True
 
 
+    def reset_main(self):
+        self.drop_all(True)
+        self.buffer = ""
+        self.priorityList = ["food", "thystame", "linemate"]
+        self.current_inventory = InventoryManager()
+        self.cmd = Command(self.socket, self.current_inventory, self.team_name)
+        self.ready = False
+        self.food_ready = False
+        self.updateInfos()
+        self.cmd.fork()
+        self.cmd.sendArrayCmd()
+        self.dropped = False
+        self.printReady = True
+
+        self.cmd.reset = False
 
 if __name__ == "__main__":
     client = ZappyClient()

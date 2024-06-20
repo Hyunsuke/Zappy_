@@ -12,6 +12,7 @@ import os
 class Command:
     def __init__(self, socket, current_inventory, team_name):
         self.status = -1
+        self.reset = False
         self.player_ready = 0
         self.inventory_valid = False
         self.joined = False
@@ -246,6 +247,8 @@ class Command:
                 self.joiner += 1
             elif fct == "os":
                 os._exit(1)
+            elif fct == "reset":
+                self.reset_command()
 
     def elevate(self):
         return self.hasElevated
@@ -271,8 +274,9 @@ class Command:
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
         if self.data_received == "ko":
-            # if (self.leaderIsChosen == 1):
-            #     os._exit(0)
+            if (self.leaderIsChosen == 1):
+                self.broadcast(f"{self.team_name}_reset_reset")
+                self.reset_command()
             self.responseList.pop(1)
             self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return
@@ -422,6 +426,32 @@ class Command:
         else:
             raise ValueError("from_inventory must be either 'current' or 'shared' or 'objective'")
 
+    def reset_command(self):
+        self.status = -1
+        self.reset = False
+        self.player_ready = 0
+        self.inventory_valid = False
+        self.joined = False
+        self.joiner = 0
+        self.player_food_ready = 0
+        self.elevation = False
+        self.data_received = ""
+        self.commandWaitingRoom = 0
+        self.dataIndex = 0
+        self.debug = 0
+        self.lookString = ""
+        self.shallMove = False
+        self.positionHasBeenChanged = False
+        self.forwardIndex = 0
+        self.isLookUpdated = False
+        self.inventoryString = ""
+        self.isInventoryUpdated = False
+        self.hasElevated = False
+        self.commandList = []
+        self.responseList = []
+
+        self.reset = True
+
     def get_status(self):
         return self.status
 
@@ -433,3 +463,6 @@ class Command:
 
     def nb_joiner_ready(self):
         return self.joiner
+
+    def get_reset(self):
+        return self.reset
