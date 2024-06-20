@@ -50,8 +50,11 @@ static int check_function(struct_t *s, int fd, char *command,
     command_struct_ia_t commands[])
 {
     for (int i = 0; commands[i].command != NULL; i++) {
-        if (strcmp(commands[i].command, command) == 0)
+        if (strcmp(commands[i].command, command) == 0) {
+            printf("Running command %s for ID player %d\n",
+                commands[i].command, get_player_by_fd(s, fd)->id_player);
             return commands[i].func(s, fd);
+        }
     }
     printf("Run_commands_IA -> Unknown command: %s\n", command);
     return -1;

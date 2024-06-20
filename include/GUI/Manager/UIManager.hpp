@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 #include "../core/Island.hpp"
+#include "../Wrapper/Raylib/RLText.hpp"
 
 class UIManager {
 public:
@@ -38,7 +39,7 @@ private:
     Color closeButtonColor;
 
     void UpdateButtonPositions();
-    void UpdateTextSizes();
+    RLText rlText;
 };
 
 #endif // UIMANAGER_HPP_

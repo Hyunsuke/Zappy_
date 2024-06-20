@@ -18,5 +18,6 @@ int c_left(struct_t *s, int fd)
     player->view_direction--;
     if (player->view_direction == -1)
         player->view_direction = 3;
+    dprintf(fd, "OK\n");
     return 0;
 }

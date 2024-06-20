@@ -8,19 +8,16 @@
 #ifndef RLSHADER_HPP_
 #define RLSHADER_HPP_
 
-#include "raylib.h"
+#include <raylib.h>
 #include <string>
 
 class RLShader {
 public:
-    RLShader(const std::string& vertexPath, const std::string& fragmentPath);
-    ~RLShader();
-
-    Shader GetShader() const;
-    void SetShaderValue(const std::string& uniformName, const void* value, int uniformType);
-
-private:
-    Shader shader;
+    static Shader LoadShader(const std::string& vsFileName, const std::string& fsFileName);
+    static void UnloadShader(Shader shader);
+    static void BeginShaderMode(Shader shader);
+    static void SetShaderValue(Shader shader, int uniformLoc, const void* value, int uniformType);
+    static int GetShaderLocation(Shader shader, const std::string& uniformName);
 };
 
 #endif // RLSHADER_HPP_

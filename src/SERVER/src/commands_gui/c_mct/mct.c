@@ -12,6 +12,8 @@ int c_mct(struct_t *s, char *buffer)
     map_element_t *element;
 
     (void)buffer;
+    if (s->fd_gui == -1)
+        return -1;
     for (int y = 0; y < s->map_height; y++) {
         for (int x = 0; x < s->map_width; x++) {
             element = &s->map[y][x];

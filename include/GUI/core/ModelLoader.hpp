@@ -7,6 +7,7 @@
 #include <float.h>
 #include "../Collector/ModelCollector.hpp"
 #include <GL/gl.h>
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class ModelLoader {
 public:
@@ -18,12 +19,13 @@ public:
     std::shared_ptr<Model> GetModel() const { return model; }
     void SetTexture(const std::string& texturePath);
     Matrix GetTransform() const { return model->transform; }
-    BoundingBox GetBoundingBox() const;  // Add this method
+    BoundingBox GetBoundingBox() const;
 
 private:
     std::shared_ptr<Model> model;
     Shader shader;
-    std::vector<Color> objectColors; // Couleurs des matériaux
+    std::vector<Color> objectColors;
+    RLModel rlModel;
 };
 
 #endif // MODEL_LOADER_H

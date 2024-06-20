@@ -17,6 +17,7 @@ class Island;
 #include <vector>
 #include "raylib.h"
 #include <GL/gl.h>
+#include "../../Wrapper/Raylib/RLModel.hpp"
 
 class Player {
 public:
@@ -53,6 +54,7 @@ public:
     void SetPlayerNumber(int playerNumber);
     std::shared_ptr<Model> GetModel();
     void SetOrientation(int orientation);
+    int GetOrientation() const;
     int getOBJquantity(std::string objName);
     void setOBJquantity(std::string objName, int quantity);
     int getX() const;
@@ -115,6 +117,8 @@ private:
     float moveDuration;
     bool isMoving = false;
     bool Dead = false;
+
+    RLModel rlModel;
 };
 
 #endif // PLAYER_HPP

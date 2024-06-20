@@ -15,6 +15,7 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include "../Wrapper/Raylib/RLText.hpp"
 
 class ChatManager {
 public:
@@ -40,6 +41,7 @@ private:
     std::vector<ChatMessage> messages;
 
     void UpdateChatBoxAndTextSize();
+    RLText rlText;
 };
 
 #endif // CHATMANAGER_HPP

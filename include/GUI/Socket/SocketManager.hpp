@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <cstddef>
+#include "../Wrapper/SocketWrapper.hpp"
 
 class SocketManager {
 public:
@@ -53,6 +54,7 @@ private:
     bool running;
     bool waitingForResponse;
     std::string response;
+    SocketWrapper socketWrapper;
 };
 
 #endif // SOCKET_MANAGER_HPP_

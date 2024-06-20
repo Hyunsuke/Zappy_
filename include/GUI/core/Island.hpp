@@ -12,8 +12,10 @@
 #include <vector>
 #include <memory>
 #include "../Utils/utils.hpp"
-#include "Player/Player.hpp"
 #include "Egg.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
+
+class Player;
 
 class Island {
 public:
@@ -69,6 +71,7 @@ private:
 
     std::vector<std::shared_ptr<Player>> players;
     std::vector<std::shared_ptr<Egg>> eggs;
+    RLModel rlModel;
 };
 
 #endif // ISLAND_HPP_

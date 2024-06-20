@@ -88,7 +88,7 @@ void Game::HandleServerMessage(const std::string& message) {
         iss >> n >> message;
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
-            settings.SendMessage(n, player, message);
+            settings->SendMessage(n, player, message);
         }
     } else if (command == "pic") {
         int x, y, l;
@@ -132,6 +132,7 @@ void Game::HandleServerMessage(const std::string& message) {
         // Handle player death
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
+            std::cout << "Player " << n << " died" << std::endl;
             player->SetDead();
         }
     } else if (command == "enw") {
@@ -227,6 +228,10 @@ void Game::RequestTimeUnit() {
 
 void Game::SetTimeUnit(int timeUnit) {
     std::string command = "sst " + std::to_string(timeUnit) + "\n";
-    std::string response = socketManager->SendCommand(command);
-    HandleServerMessage(response);
+    socketManager->SendMessage(command);
+    this->timeUnit = timeUnit;
+}
+
+int Game::GetTimeUnit() const {
+    return timeUnit;
 }

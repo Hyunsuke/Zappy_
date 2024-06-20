@@ -8,6 +8,16 @@ Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
 
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
     fpsOptions = { 30, 60, 120 };
+    timeUnitOptions = { 5, 10, 20, 40, 80, 160, 320, 640, 1280};
+
+    int currentFPS = 60;
+    for (std::size_t i = 0; i < fpsOptions.size(); ++i) {
+        if (fpsOptions[i] == currentFPS) {
+            selectedFPSIndex = i;
+            tempFPSIndex = i;
+            break;
+        }
+    }
 
     if (InstanceName == "menu") {
         keyBindingsDescriptions = {
@@ -24,6 +34,8 @@ Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
             "E -> Down",
             "Left Click -> Select island",
             "Right Click -> Select player",
+            "P -> Select next player",
+            "O -> Select free camera",
         };
     }
 
@@ -60,15 +72,21 @@ int Settings::GetFPS() const {
 void Settings::ApplySettings() {
     selectedResolutionIndex = tempResolutionIndex;
     selectedFPSIndex = tempFPSIndex;
+    selectedTimeUnitIndex = tempTimeUnitIndex;
     screenWidth = resolutions[selectedResolutionIndex].x;
     screenHeight = resolutions[selectedResolutionIndex].y;
     fps = fpsOptions[selectedFPSIndex];
     SetWindowSize(screenWidth, screenHeight);
     SetTargetFPS(fps);
+    if (instanceName != "menu") {
+        int newTimeUnit = timeUnitOptions[selectedTimeUnitIndex];
+        game->SetTimeUnit(newTimeUnit);
+    }
 }
 
 void Settings::Update() {
     if (!open) return;
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (CheckCollisionPointRec(GetMousePosition(), applyButton)) {
             ApplySettings();
@@ -125,6 +143,12 @@ void Settings::Draw() {
     std::vector<std::string> fpsOptionsText = { "30", "60", "120" };
     DrawDropDown(fpsOptionsText, tempFPSIndex, fpsBox);
 
+    if (instanceName != "menu") {
+        DrawText("Time Unit:", timeUnitBox.x - 100, timeUnitBox.y + 5, 20, BLACK);
+        std::vector<std::string> timeUnitOptionsText = { "5", "10", "20", "40", "80", "160", "320", "640", "1280" };
+        DrawDropDown(timeUnitOptionsText, tempTimeUnitIndex, timeUnitBox);
+    }
+
     DrawText("Key Bindings:", keyBindingsBox.x - 150, keyBindingsBox.y - 25, 20, BLACK);
 
     for (const auto& description : keyBindingsDescriptions) {
@@ -147,9 +171,17 @@ void Settings::UpdateLayout(int screenWidth, int screenHeight) {
 
     resolutionBox = { (float)(centerX - 100), (float)(baseY), 200, 30 };
     fpsBox = { (float)(centerX - 100), (float)(baseY + spacing), 200, 30 };
-    keyBindingsBox = { (float)(centerX - 100), (float)(baseY + 2 * spacing), 200, (float)keyBindingHeight };
-    applyButton = { (float)(centerX - 110), (float)(baseY + 3 * spacing + keyBindingHeight), 100, 40 };
-    closeButton = { (float)(centerX + 10), (float)(baseY + 3 * spacing + keyBindingHeight), 100, 40 };
+
+    if (instanceName != "menu") {
+        timeUnitBox = { (float)(centerX - 100), (float)(baseY + 2 * spacing), 200, 30 };
+        keyBindingsBox = { (float)(centerX - 100), (float)(baseY + 3 * spacing), 200, (float)keyBindingHeight };
+        applyButton = { (float)(centerX - 110), (float)(baseY + 4 * spacing + keyBindingHeight), 100, 40 };
+        closeButton = { (float)(centerX + 10), (float)(baseY + 4 * spacing + keyBindingHeight), 100, 40 };
+    } else {
+        keyBindingsBox = { (float)(centerX - 100), (float)(baseY + 2 * spacing), 200, (float)keyBindingHeight };
+        applyButton = { (float)(centerX - 110), (float)(baseY + 3 * spacing + keyBindingHeight), 100, 40 };
+        closeButton = { (float)(centerX + 10), (float)(baseY + 3 * spacing + keyBindingHeight), 100, 40 };
+    }
 }
 
 void Settings::DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box) {
@@ -165,4 +197,8 @@ void Settings::DrawDropDown(const std::vector<std::string>& options, int& select
 void Settings::SendMessage(int n, std::shared_ptr<Player> Player, std::string message)
 {
     chat.AddMessage(n, Player->GetTeam(), message);
+}
+
+void Settings::SetGameInstance(std::shared_ptr<Game> gameInstance) {
+    this->game = gameInstance;
 }

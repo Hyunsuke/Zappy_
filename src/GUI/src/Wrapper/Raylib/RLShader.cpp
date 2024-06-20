@@ -7,19 +7,22 @@
 
 #include "gui.hpp"
 
-RLShader::RLShader(const std::string& vertexPath, const std::string& fragmentPath) {
-    shader = LoadShader(vertexPath.c_str(), fragmentPath.c_str());
+Shader RLShader::LoadShader(const std::string& vsFileName, const std::string& fsFileName) {
+    return ::LoadShader(vsFileName.c_str(), fsFileName.c_str());
 }
 
-RLShader::~RLShader() {
-    UnloadShader(shader);
+void RLShader::UnloadShader(Shader shader) {
+    ::UnloadShader(shader);
 }
 
-Shader RLShader::GetShader() const {
-    return shader;
+void RLShader::BeginShaderMode(Shader shader) {
+    ::BeginShaderMode(shader);
 }
 
-void RLShader::SetShaderValue(const std::string& uniformName, const void* value, int uniformType) {
-    int loc = GetShaderLocation(shader, uniformName.c_str());
-    ::SetShaderValue(shader, loc, value, uniformType);
+void RLShader::SetShaderValue(Shader shader, int uniformLoc, const void* value, int uniformType) {
+    ::SetShaderValue(shader, uniformLoc, value, uniformType);
+}
+
+int RLShader::GetShaderLocation(Shader shader, const std::string& uniformName) {
+    return ::GetShaderLocation(shader, uniformName.c_str());
 }

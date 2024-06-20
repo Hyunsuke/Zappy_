@@ -14,14 +14,14 @@ std::shared_ptr<ModelAnimation> AnimationCollector::LoadAnimation(const std::str
         return it->second;
     }
 
-    ModelAnimation* rawAnimations = ::LoadModelAnimations(filePath.c_str(), animCount);
+    ModelAnimation* rawAnimations = rlAnimation.LoadModelAnimations(filePath.c_str(), animCount);
     if (*animCount == 0) {
         throw GameException("Failed to load animations: " + filePath);
     }
 
     int animCountValue = *animCount;
-    std::shared_ptr<ModelAnimation> animations(rawAnimations, [animCountValue](ModelAnimation* anims) {
-        ::UnloadModelAnimations(anims, animCountValue);
+    std::shared_ptr<ModelAnimation> animations(rawAnimations, [animCountValue, this](ModelAnimation* anims) {
+        rlAnimation.UnloadModelAnimations(anims, animCountValue);
     });
 
     animationCache[filePath] = animations;
