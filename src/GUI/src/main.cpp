@@ -134,7 +134,16 @@ int main(int ac, char** av) {
         init_Window(screenWidth, screenHeight, "Zappy GUI");
 
         LoadingMenu loadingMenu(screenWidth, screenHeight);
-        loadingMenu.Draw();
+        const float minimumDisplayTime = 1.0f;
+        float elapsedTime = 0.0f;
+
+        while (!WindowShouldClose() && elapsedTime < minimumDisplayTime) {
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            loadingMenu.Draw();
+            EndDrawing();
+            elapsedTime += GetFrameTime();
+        }
 
         if (runMenu(screenWidth, screenHeight, host, port)) {
             std::unique_ptr<SocketManager> socketManager;

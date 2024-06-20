@@ -11,7 +11,7 @@ class EndMenu {
 public:
     EndMenu(int screenWidth, int screenHeight);
     void Draw(const std::string& winningTeam);
-    void HandleMouseInput(Vector2 mousePosition);
+    void HandleMouseInput();
 
 private:
     int screenWidth;

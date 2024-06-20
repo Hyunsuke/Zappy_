@@ -23,7 +23,7 @@ void EndMenu::Draw(const std::string& winningTeam) {
     EndDrawing();
 }
 
-void EndMenu::HandleMouseInput(Vector2 mousePosition) {
+void EndMenu::HandleMouseInput() {
     Rectangle CloseButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (IsMouseOverButton(CloseButton)) {

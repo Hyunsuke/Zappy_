@@ -107,7 +107,7 @@ void Game::Draw() {
     ClearBackground(WHITE);
 
     if (gameOver) {
-        endMenu.HandleMouseInput(GetMousePosition());
+        endMenu.HandleMouseInput();
         endMenu.Draw(winningTeam);
     } else {
         sky.DrawBackground();
