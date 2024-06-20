@@ -30,8 +30,5 @@ fclean: clean
 	make -C src/SERVER/ fclean
 
 re: fclean all
-#	make -C src/AI/ re
-#	make -C src/GUI/ re
-#	make -C src/SERVER/ re
 
 .PHONY: all clean fclean re AI GUI SERVER
