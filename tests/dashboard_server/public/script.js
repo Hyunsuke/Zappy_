@@ -2,6 +2,8 @@ const socket = io();
 let selectedElement = null;
 let selectedPlayer = null;
 let selectedTeam = null;
+let responseTimes = [];
+let chart = null;
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
@@ -18,13 +20,39 @@ function connectToServer() {
         socket.emit('connect_to_server', { hostname, port });
         socket.emit('send_message', { message: 'DASHBOARD\n', timestamp: Date.now() });
     } else {
-        alert('Please enter both IP address and port.');
+        showPopup('error', 'Please enter both IP address and port.');
     }
 }
 
+function showPopup(status, message) {
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popup-message');
+    popupMessage.textContent = message;
+    popup.classList.remove('success', 'error');
+    popup.classList.add(status);
+    popup.style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+socket.on('connection_status', (data) => {
+    if (data.status === 'success') {
+        showPopup('success', data.message);
+        showSection('map');
+    } else {
+        showPopup('error', data.message);
+    }
+});
+
 socket.on('server_response', (data) => {
     const response = JSON.parse(data.response);
+    const responseTime = Date.now() - data.timestamp;
+    responseTimes.push(responseTime);
+    if (responseTimes.length > 20) responseTimes.shift();
     updateDashboard(response);
+    updateChart();
 });
 
 function updateDashboard(data) {
@@ -163,29 +191,77 @@ function showTeamDetails(team) {
 }
 
 function updateUtils(utils) {
-    const utilsData = document.getElementById('utils-data');
-    utilsData.innerHTML = `
-        <p>Port: ${utils.port !== undefined ? utils.port : "N/A"}</p>
-        <p>Map Width: ${utils.map_width !== undefined ? utils.map_width : "N/A"}</p>
-        <p>Map Height: ${utils.map_height !== undefined ? utils.map_height : "N/A"}</p>
-        <p>Client Number: ${utils.client_nb !== undefined ? utils.client_nb : "N/A"}</p>
-        <p>Time: ${utils.time !== undefined ? utils.time : "N/A"}</p>
-        <p>fd_gui: ${utils.fd_gui !== undefined ? utils.fd_gui : "N/A"}</p>
-        <p>fd_web_debug: ${utils.fd_web_debug !== undefined ? utils.fd_web_debug : "N/A"}</p>
-        <p>Object: ${utils.obj !== undefined ? utils.obj : "N/A"}</p>
-        <p>Stop Server: ${utils.stop_server !== undefined ? utils.stop_server : "N/A"}</p>
-        <p>Start Game: ${utils.start_game !== undefined ? utils.start_game : "N/A"}</p>
-        <p>Look String: ${utils.look_str !== undefined ? utils.look_str : "N/A"}</p>
-        <p>Length of View: ${utils.len_view !== undefined ? utils.len_view : "N/A"}</p>
-        <p>View Number: ${utils.view_num !== undefined ? utils.view_num : "N/A"}</p>
-        <p>Next Player ID: ${utils.next_id_player !== undefined ? utils.next_id_player : "N/A"}</p>
-        <p>Next Team ID: ${utils.next_id_team !== undefined ? utils.next_id_team : "N/A"}</p>
-        <p>Clock: ${utils.clock !== undefined ? utils.clock : "N/A"}</p>
-    `;
+    const utilsLeft = document.getElementById('utils-left');
+    utilsLeft.innerHTML = '';
+
+    const utilsData = [
+        { label: 'Port', value: utils.port !== undefined ? utils.port : "N/A" },
+        { label: 'Map Width', value: utils.map_width !== undefined ? utils.map_width : "N/A" },
+        { label: 'Map Height', value: utils.map_height !== undefined ? utils.map_height : "N/A" },
+        { label: 'Client Number', value: utils.client_nb !== undefined ? utils.client_nb : "N/A" },
+        { label: 'Time', value: utils.time !== undefined ? utils.time : "N/A" },
+        { label: 'fd_gui', value: utils.fd_gui !== undefined ? utils.fd_gui : "N/A" },
+        { label: 'fd_web_debug', value: utils.fd_web_debug !== undefined ? utils.fd_web_debug : "N/A" },
+        { label: 'Object', value: utils.obj !== undefined ? utils.obj : "N/A" },
+        { label: 'Stop Server', value: utils.stop_server !== undefined ? utils.stop_server : "N/A" },
+        { label: 'Start Game', value: utils.start_game !== undefined ? utils.start_game : "N/A" },
+        { label: 'Look String', value: utils.look_str !== undefined ? utils.look_str : "N/A" },
+        { label: 'Length of View', value: utils.len_view !== undefined ? utils.len_view : "N/A" },
+        { label: 'View Number', value: utils.view_num !== undefined ? utils.view_num : "N/A" },
+        { label: 'Next Player ID', value: utils.next_id_player !== undefined ? utils.next_id_player : "N/A" },
+        { label: 'Next Team ID', value: utils.next_id_team !== undefined ? utils.next_id_team : "N/A" },
+        { label: 'Clock', value: utils.clock !== undefined ? utils.clock : "N/A" }
+    ];
+
+    utilsData.forEach(data => {
+        const row = document.createElement('div');
+        row.className = 'utils-row';
+        row.innerHTML = `<span>${data.label}:</span> <span>${data.value}</span>`;
+        utilsLeft.appendChild(row);
+    });
+}
+
+function changeFrequency() {
+    const frequencyInput = document.getElementById('frequency-input').value;
+    if (frequencyInput && frequencyInput >= 0) {
+        socket.emit('send_message', { message: `sst ${frequencyInput}\n`, timestamp: Date.now() });
+    } else {
+        showPopup('error', 'Please enter a valid non-negative frequency.');
+    }
+}
+
+function updateChart() {
+    if (!chart) {
+        const ctx = document.getElementById('responseTimeChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(responseTimes.length).fill(''),
+                datasets: [{
+                    label: 'Response Time (ms)',
+                    data: responseTimes,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } else {
+        chart.data.labels = Array(responseTimes.length).fill('');
+        chart.data.datasets[0].data = responseTimes;
+        chart.update();
+    }
 }
 
 function refreshData() {
-    console.log("Refreshing data...");
+    socket.emit('send_message', { message: 'DASHBOARD\n', timestamp: Date.now() });
 }
 
 function toggleMode() {

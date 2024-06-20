@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 let client = null;
-let lastSentData = '';
 
 io.on('connection', (socket) => {
     console.log('New client connected');
@@ -21,25 +20,24 @@ io.on('connection', (socket) => {
         client = new net.Socket();
         client.connect(port, hostname, () => {
             console.log('Connected to server');
+            socket.emit('connection_status', { status: 'success', message: 'Connected to server' });
             socket.emit('receive_message', { message: 'Connected to server' });
         });
 
         client.on('data', (data) => {
-            const dataString = data.toString().replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\0/g, '\\0');
-            if (dataString !== lastSentData) {
-                lastSentData = dataString;
-                socket.emit('server_response', { response: dataString, timestamp: Date.now() });
-            }
+            socket.emit('server_response', { response: data.toString().replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\0/g, '\\0'), timestamp: Date.now() });
         });
 
         client.on('error', (err) => {
             console.error('Connection error: ', err);
+            socket.emit('connection_status', { status: 'error', message: 'Connection error: ' + err.message });
             socket.emit('receive_message', { message: 'Connection error: ' + err.message });
         });
     });
 
     socket.on('send_message', ({ message, timestamp }) => {
         if (client) {
+            // Replace '\n' in the message with the actual newline character
             const formattedMessage = message.replace(/\\n/g, '\n');
             client.write(formattedMessage, (err) => {
                 if (err) {
@@ -54,6 +52,14 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('typing', () => {
+        socket.broadcast.emit('typing');
+    });
+
+    socket.on('stop_typing', () => {
+        socket.broadcast.emit('stop_typing');
+    });
+
     socket.on('disconnect', () => {
         console.log('Client disconnected');
         if (client) {
@@ -62,7 +68,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const port = 3001;
+const port = 3002;
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });

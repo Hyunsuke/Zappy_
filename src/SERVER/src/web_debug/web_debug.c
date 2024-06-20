@@ -4,7 +4,6 @@
 ** File description:
 ** Function
 */
-
 #include "all.h"
 
 static void initialize_struct_defaults(struct_t *s)
@@ -122,8 +121,8 @@ static json_object *create_json_teams(struct_t *s)
 
 static void add_object_utils(json_object *json_utils, struct_t *s)
 {
-    json_object_object_add(json_utils, "fd_web_debug",
-        json_object_new_int(s->fd_web_debug));
+    json_object_object_add(json_utils, "fd_dashboard",
+        json_object_new_int(s->fd_dashboard));
     json_object_object_add(json_utils, "obj",
         json_object_new_string(s->obj));
     json_object_object_add(json_utils, "stop_server",
@@ -132,6 +131,10 @@ static void add_object_utils(json_object *json_utils, struct_t *s)
         json_object_new_boolean(s->start_game));
     json_object_object_add(json_utils, "look_str",
         json_object_new_string(s->look_str));
+    json_object_object_add(json_utils, "ram_usage",
+        json_object_new_double(s->dashboard->ram_usage));
+    json_object_object_add(json_utils, "cpu_usage",
+        json_object_new_double(s->dashboard->cpu_usage));
 }
 
 static json_object *create_json_utils(struct_t *s)
@@ -158,9 +161,12 @@ void send_info_web_debug(struct_t *s)
 {
     json_object *json_root;
     const char *json_str;
+    time_t curre_time = time(NULL);
 
-    if (s->fd_web_debug == -1)
+    if (s->fd_dashboard == -1 || difftime(curre_time, s->dashboard->clock) < 1)
         return;
+    s->dashboard->clock = curre_time;
+    get_usage(s);
     initialize_struct_defaults(s);
     json_root = json_object_new_object();
     json_object_object_add(json_root, "map", create_json_map(s));
@@ -168,6 +174,6 @@ void send_info_web_debug(struct_t *s)
     json_object_object_add(json_root, "teams", create_json_teams(s));
     json_object_object_add(json_root, "utils", create_json_utils(s));
     json_str = json_object_to_json_string(json_root);
-    write(s->fd_web_debug, json_str, strlen(json_str));
+    write(s->fd_dashboard, json_str, strlen(json_str));
     json_object_put(json_root);
 }
