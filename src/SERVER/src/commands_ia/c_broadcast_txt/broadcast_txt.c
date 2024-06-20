@@ -46,7 +46,7 @@ double find_angle(struct_t *s, player_t *sender, player_t *receiver,
     double angle;
     int inter_x = sender->x - receiver->x;
     int inter_y = sender->y - receiver->y;
-    int *part = malloc(sizeof(int) * 2);
+    int *part = my_malloc(sizeof(int) * 2);
 
     if (abs(inter_x) > s->map_width / 2) {
         part[0] = inter_x - (s->map_width * (inter_x / abs(inter_x)));

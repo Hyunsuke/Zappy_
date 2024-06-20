@@ -63,6 +63,7 @@ int c_bct(struct_t *s, char *buffer);
 int c_mct(struct_t *s, char *buffer);
 int c_tna(struct_t *s, char *buffer);
 int c_ppo(struct_t *s, char *buffer);
+int c_ppo_rotate(struct_t *s, int fd_player);
 int c_plv(struct_t *s, char *buffer);
 int c_pin(struct_t *s, char *buffer);
 int c_pin_send(struct_t *s, player_t *player);

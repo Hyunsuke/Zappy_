@@ -78,6 +78,7 @@ void server_usage(server_t *server, struct_t *s)
     server->addrlen = sizeof(server->serv_adr);
     while (s->stop_server == false) {
         server->tmp_fdtab = server->fd_tab;
+        tick_interval = 1.0 / s->time;
         handle_activity(server);
         handle_new_client(server);
         handling_cmd(server, s);

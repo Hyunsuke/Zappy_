@@ -32,3 +32,16 @@ int c_ppo(struct_t *s, char *buffer)
         player->view_direction);
     return 0;
 }
+
+int c_ppo_rotate(struct_t *s, int fd_player)
+{
+    player_t *player = get_player_by_fd(s, fd_player);
+
+    if (player == NULL) {
+        dprintf(s->fd_gui, "ko\n");
+        return -1;
+    }
+    dprintf(s->fd_gui, "ppo %d %d %d %d\n", fd_player, player->x, player->y,
+        player->view_direction);
+    return 0;
+}

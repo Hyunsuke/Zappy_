@@ -19,5 +19,6 @@ int c_left(struct_t *s, int fd)
     if (player->view_direction == -1)
         player->view_direction = 3;
     dprintf(fd, "ok\n");
+    c_ppo_rotate(s, fd);
     return 0;
 }
