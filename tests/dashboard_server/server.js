@@ -37,7 +37,6 @@ io.on('connection', (socket) => {
 
     socket.on('send_message', ({ message, timestamp }) => {
         if (client) {
-            // Replace '\n' in the message with the actual newline character
             const formattedMessage = message.replace(/\\n/g, '\n');
             client.write(formattedMessage, (err) => {
                 if (err) {
