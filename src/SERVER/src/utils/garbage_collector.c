@@ -23,7 +23,7 @@ void *my_malloc(size_t size_malloc)
     pointer = malloc(size_malloc);
     node = malloc(sizeof(GCNode_t));
     if (pointer == NULL || node == NULL) {
-        dprintf(stderr, "Error allocating memory (my_malloc)\n");
+        dprintf(2, "Error allocating memory (my_malloc)\n");
         exit(84);
     }
     node->pointer = pointer;
