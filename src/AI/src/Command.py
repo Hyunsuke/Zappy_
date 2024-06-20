@@ -111,7 +111,7 @@ class Command:
 
             except socket.error as e:
                 print(f"Erreur lors de la réception des données : {e}")
-                os._exit(0)
+                os._exit(84)
 
     def adjustData(self):
         if not self.responseList:
@@ -242,6 +242,8 @@ class Command:
             elif fct == "joiner" and self.leaderIsChosen == 1:
                 print("J4AI UN POTE")
                 self.joiner += 1
+            elif fct == "os":
+                os._exit(1)
 
     def elevate(self):
         return self.hasElevated
@@ -267,8 +269,8 @@ class Command:
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
         if self.data_received == "ko":
-            if (self.leaderIsChosen == 1):
-                os._exit(0)
+            # if (self.leaderIsChosen == 1):
+            #     os._exit(0)
             self.responseList.pop(1)
             self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return
@@ -284,10 +286,10 @@ class Command:
             return
 
     def validateInventory(self, objectTaken, broadcast=False):
-        if self.check_inventory() == True and self.inventory_valid == False:
+        if self.check_inventory() == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
             self.broadcastMaterial(objectTaken, "END")
-            self.inventory_valid = True
+            # self.inventory_valid = True
             # self.pop_item(objectTaken)
             # self.status = -3
             return True

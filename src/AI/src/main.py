@@ -134,14 +134,14 @@ class ZappyClient:
                         print(self.cmd.nb_player_ready())
                         self.cmd.incantation()
                         self.cmd.responseList.append("Current level")
-                    elif self.cmd.nb_player_ready() == self.cmd.nb_joiner_ready() and self.ready == False:
+                    elif self.cmd.nb_player_ready() == self.cmd.nb_player_food_ready() and self.cmd.nb_player_food_ready() >= 5 and self.ready == False:
                         print("EVERYONE'S READY TO PLAY")
-                        print(self.cmd.nb_joiner_ready())
-                        print(self.cmd.nb_player_ready())
+                        # self.cmd.broadcast(f"{self.team_name}_ready_os")
+                        # os._exit(1)
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
-                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.ready == False:
+                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_come")
                     elif self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_gather")
