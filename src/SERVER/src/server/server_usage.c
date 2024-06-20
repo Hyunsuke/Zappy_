@@ -25,17 +25,34 @@ static bool start_game(struct_t *s)
     return true;
 }
 
-static bool end_game(struct_t *s)
+static void check_remove(struct_t *s, server_t *server, int fd)
+{
+    if (FD_ISSET(fd, &server->fd_tab)) {
+        if (fd != s->fd_gui && fd != server->server_fd) {
+            close(fd);
+            FD_CLR(fd, &server->fd_tab);
+        }
+    }
+}
+
+static void close_all_fd(struct_t *s, server_t *server)
+{
+    for (int fd = 0; fd < FD_SETSIZE; fd++) {
+        check_remove(s, server, fd);
+    }
+}
+
+static bool end_game(struct_t *s, server_t *server)
 {
     player_t *current_player = s->head_player;
 
     while (current_player != NULL) {
         if (current_player->level_player >= 8) {
             c_seg(s, get_team_by_id(s, current_player->id_team)->name);
-            s->start_game = false;
-            // TODO: venir deconnecter tout les joueurs (sauf GUI)
             printf("WIN THE GAME - TEAM -> %s",
                 get_team_by_id(s, current_player->id_team)->name);
+            s->stop_server = true;
+            close_all_fd(s, server);
             return true;
         }
         current_player = current_player->next;
@@ -57,7 +74,7 @@ static void update_ticks_and_check_tiredness(struct_t *s, server_t *server,
         *start_time = current_time;
         (*nb_tick_tiredness)++;
         s->nb_tick_refill++;
-        if (end_game(s))
+        if (end_game(s, server))
             return;
     }
     if (s->nb_tick_refill >= 20)

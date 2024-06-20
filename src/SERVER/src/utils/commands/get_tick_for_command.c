@@ -55,16 +55,17 @@ static char *get_base_command(char *command, int *len)
         *len = strlen("Take");
         cmp_cmd = my_malloc(sizeof(char) * (*len) + 1);
         strcpy(cmp_cmd, "Take");
-    } else if (strncmp(command, "Set", 3) == 0) {
+    }
+    if (strncmp(command, "Set", 3) == 0) {
         *len = strlen("Set");
         cmp_cmd = my_malloc(sizeof(char) * (*len) + 1);
         strcpy(cmp_cmd, "Set");
-    } else if (strncmp(command, "Broadcast", 9) == 0) {
+    }
+    if (strncmp(command, "Broadcast", 9) == 0) {
         *len = strlen("Broadcast");
         cmp_cmd = my_malloc(sizeof(char) * (*len) + 1);
         strcpy(cmp_cmd, "Broadcast");
     }
-
     return cmp_cmd;
 }
 
