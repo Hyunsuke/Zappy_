@@ -43,9 +43,11 @@ static bool end_game(struct_t *s)
     return false;
 }
 
-static void update_ticks_and_check_tiredness(struct_t *s, double *start_time,
-    int *nb_tick_tiredness, double tick_interval)
+static void update_ticks_and_check_tiredness(struct_t *s, server_t *server,
+    double **ticks, double tick_interval)
 {
+    double *start_time = ticks[0];
+    int *nb_tick_tiredness = (int *)ticks[1];
     double current_time = (double)clock() / CLOCKS_PER_SEC;
     double elapsed_time = current_time - *start_time;
 
@@ -62,7 +64,7 @@ static void update_ticks_and_check_tiredness(struct_t *s, double *start_time,
         refill_map(s);
     if (*nb_tick_tiredness >= 126) {
         *nb_tick_tiredness = 0;
-        tiredness(s);
+        tiredness(s, server);
     }
 }
 
@@ -71,6 +73,8 @@ void server_usage(server_t *server, struct_t *s)
     double tick_interval = 1.0 / s->time;
     double start_time = (double)clock() / CLOCKS_PER_SEC;
     int nb_tick_tiredness = 0;
+    double **ticks = my_malloc(sizeof(double *) * 2);
+
 
     server->addrlen = sizeof(server->serv_adr);
     while (s->stop_server == false) {
@@ -78,11 +82,11 @@ void server_usage(server_t *server, struct_t *s)
         handle_activity(server);
         handle_new_client(server);
         handling_cmd(server, s);
-        send_info_web_debug(s);
         if (s->start_game == false)
             start_game(s);
-        if (s->start_game == true)
-        update_ticks_and_check_tiredness(s, &start_time, &nb_tick_tiredness,
-            tick_interval);
+        ticks[0] = &start_time;
+        ticks[1] = (double *)&nb_tick_tiredness;
+        update_ticks_and_check_tiredness(s, server, ticks, tick_interval);
+        send_info_web_debug(s);
     }
 }

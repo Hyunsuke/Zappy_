@@ -10,8 +10,10 @@
 static void def_data_tab(server_t *server)
 {
     server->round = my_malloc(sizeof(int) * FD_SETSIZE);
-    if (server->round == NULL)
+    if (server->round == NULL) {
+        full_free();
         exit(EXIT_FAILURE);
+    }
     for (int i = 0; i < FD_SETSIZE; i++)
         server->round[i] = 0;
 }

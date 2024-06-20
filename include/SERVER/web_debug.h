@@ -17,8 +17,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 void send_info_web_debug(struct_t *s);
+int c_sst_dashboard(struct_t *s, char *buffer);
+
 
 #define INITIAL_BUFFER_SIZE 10000
+
 
 typedef struct buffer_info_s {
     size_t buffer_size;

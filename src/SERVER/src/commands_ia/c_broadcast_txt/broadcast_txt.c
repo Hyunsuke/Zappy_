@@ -48,30 +48,38 @@ double find_angle(struct_t *s, player_t *sender, player_t *receiver,
     return angle;
 }
 
+static int rec_place(struct_t *s, player_t *receiver, player_t *sender)
+{
+    int place = 0;
+    double orientation = 0.00;
+
+    if (receiver->x == sender->x && receiver->y == sender->y) {
+        place = 0;
+    } else {
+        if (receiver->view_direction == 0)
+            orientation = 0.00;
+        if (receiver->view_direction == 1)
+            orientation = 90.00;
+        if (receiver->view_direction == 2)
+            orientation = 180.00;
+        if (receiver->view_direction == 3)
+            orientation = 270.00;
+        place = get_sound_from_angle(find_angle(s, sender, receiver,
+        orientation));
+    }
+    return place;
+}
+
 void send_to_all_players(struct_t *s, int fd)
 {
     player_t *receiver = s->head_player;
     player_t *sender = get_player_by_fd(s, fd);
-    int place = 0;
-    double orientation = 0.00;
+    int nb = 0;
 
     while (receiver != NULL) {
         if (receiver != sender) {
-            if (receiver->x == sender->x && receiver->y == sender->y) {
-                place = 0;
-            } else {
-                if (receiver->view_direction == 0)
-                    orientation = 0.00;
-                if (receiver->view_direction == 1)
-                    orientation = 90.00;
-                if (receiver->view_direction == 2)
-                    orientation = 180.00;
-                if (receiver->view_direction == 3)
-                    orientation = 270.00;
-                place = get_sound_from_angle(find_angle(s, sender, receiver,
-                orientation));
-            }
-            dprintf(receiver->fd, "message %d, %s\n", place, s->obj);
+            nb = rec_place(s, receiver, sender);
+            dprintf(receiver->fd, "message %d, %s\n", nb, s->obj);
         }
         receiver = receiver->next;
     }

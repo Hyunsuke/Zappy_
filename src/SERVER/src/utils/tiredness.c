@@ -7,7 +7,7 @@
 
 #include "all.h"
 
-static void dead_player(struct_t *s, player_t *player)
+static void dead_player(struct_t *s, server_t *server, player_t *player)
 {
     printf("Dead player: %d [ID team -> %d]\n", player->id_player,
         player->id_team);
@@ -16,16 +16,17 @@ static void dead_player(struct_t *s, player_t *player)
     // close(player->fd); Venir fermer le FD & Enlever du tableau de FD
     remove_player_from_team(s, player->id_team, player->id_player);
     remove_player(s, player->fd);
+    FD_CLR(player->fd, &server->fd_tab);
 }
 
-static void process_player_food(struct_t *s, player_t **current,
-    player_t **prev)
+static void process_player_food(struct_t *s, server_t *server,
+    player_t **current, player_t **prev)
 {
     player_t *next = (*current)->next;
 
     (*current)->food--;
     if ((*current)->food <= 0) {
-        dead_player(s, *current);
+        dead_player(s, server, *current);
         if (*prev == NULL)
             s->head_player = next;
         else
@@ -36,11 +37,11 @@ static void process_player_food(struct_t *s, player_t **current,
     *current = next;
 }
 
-void tiredness(struct_t *s)
+void tiredness(struct_t *s, server_t *server)
 {
     player_t *current = s->head_player;
     player_t *prev = NULL;
 
     while (current != NULL)
-        process_player_food(s, &current, &prev);
+        process_player_food(s, server, &current, &prev);
 }
