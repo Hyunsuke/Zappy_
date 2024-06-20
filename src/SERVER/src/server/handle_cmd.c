@@ -25,7 +25,7 @@ static void gestion_function(struct_t *s, char *buffer, int client_fd)
 {
     if (client_fd == s->fd_gui && s->fd_gui != -1)
         run_commands_gui(s, client_fd, buffer);
-    else if (s->fd_web_debug == client_fd)
+    else if (s->fd_dashboard == client_fd)
         c_sst(s, buffer);
     else
         add_multiple_command(s, client_fd, buffer);
@@ -102,10 +102,10 @@ static void gestion_cmd(server_t *server, struct_t *s, char *buffer,
             return;
         }
         if (strcmp(buffer, "DASHBOARD\n") == 0) {
-            s->fd_web_debug = client_fd;
+            s->fd_dashboard = client_fd;
             return;
         }
-        if (client_fd == s->fd_web_debug) {
+        if (client_fd == s->fd_dashboard) {
             c_sst_dashboard(s, buffer);
         } else {
             gestion_team_name(server, s, buffer, client_fd);

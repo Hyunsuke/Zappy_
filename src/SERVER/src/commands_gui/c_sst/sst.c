@@ -31,16 +31,6 @@ int c_sst(struct_t *s, char *buffer)
     return 0;
 }
 
-static void parse_sst_dashboard(const char *input, int *n)
-{
-    int result;
-
-    *n = 0;
-    result = sscanf(input, "sst %d\n", n);
-    if (result < 1)
-        *n = -1;
-}
-
 int c_sst_dashboard(struct_t *s, char *buffer)
 {
     int unit_time;
