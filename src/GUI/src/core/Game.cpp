@@ -123,6 +123,7 @@ void Game::Draw() {
     window.EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
     settings->Draw();
+    }
 
     window.EndDrawing();
 }

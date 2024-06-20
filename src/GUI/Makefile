@@ -30,6 +30,9 @@ SRC = 	$(SRCDIR)/main.cpp \
         $(SRCDIR)/Manager/UIManager.cpp \
         $(SRCDIR)/Menu/Button.cpp \
         $(SRCDIR)/Menu/menu.cpp \
+        $(SRCDIR)/Menu/endMenu.cpp \
+        $(SRCDIR)/Menu/loading.cpp \
+        $(SRCDIR)/Menu/LoadingMenu.cpp \
         $(SRCDIR)/Settings/settings.cpp \
         $(SRCDIR)/Sky/Sky.cpp \
         $(SRCDIR)/Socket/SocketManager.cpp \
