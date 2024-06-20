@@ -94,7 +94,7 @@ class Command:
             print("We received " + data)
             if not self.responseList:
                 return
-            print("For command " + self.responseList[0])
+            # print("For command " + self.responseList[0])
             self.adjustData()
             if self.responseList[0] != "Incantation":
                 self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
