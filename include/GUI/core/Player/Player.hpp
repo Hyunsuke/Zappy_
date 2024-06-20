@@ -116,8 +116,10 @@ private:
     float moveDuration;
     bool isMoving = false;
     bool Dead = false;
+    Color teamColor;
 
     RLModel rlModel;
+    static Color GetTeamColor(const std::string& teamName);
 };
 
 #endif // PLAYER_HPP

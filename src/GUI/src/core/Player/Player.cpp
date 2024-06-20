@@ -42,6 +42,11 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
     animationMap[Animation::ThumbsUp] = 9;
     animationMap[Animation::Walk] = 10;
 
+    if (teamName == "menu")
+        teamColor = WHITE;
+    else
+        teamColor = GetTeamColor(teamName);
+
     UpdateScaleBasedOnLevel();
     SetAnimation(Animation::Idle);
     UpdateRotationAngle();
@@ -51,13 +56,14 @@ Player::~Player() {}
 
 void Player::Draw() {
     model = modelLoader.GetModel();
-    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, teamColor);
 }
 
+
 void Player::DrawWires() {
-    rlModel.SetLineWidth(5.0f);
+    rlModel.SetLineWidth(1.0f);
     model = modelLoader.GetModel();
-    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
+    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
     rlModel.SetLineWidth(1.0f);
 }
 
@@ -306,4 +312,26 @@ std::shared_ptr<ModelAnimation> Player::GetCurrentAnimation() const {
 
 int Player::GetCurrentFrame() const {
     return animCurrentFrame;
+}
+
+std::vector<Color> GetPredefinedColors() {
+    std::vector<Color> predefinedColors = {
+        { 255, 0, 0, 255 },   // Red
+        { 0, 255, 0, 255 },   // Green
+        { 0, 0, 255, 255 },   // Blue
+        { 255, 255, 0, 255 }, // Yellow
+        { 255, 0, 255, 255 }, // Magenta
+        { 0, 255, 255, 255 }, // Cyan
+        { 255, 165, 0, 255 }, // Orange
+        { 128, 0, 128, 255 }  // Violet
+    };
+    return predefinedColors;
+}
+
+Color Player::GetTeamColor(const std::string& teamName) {
+    std::hash<std::string> hashFn;
+    std::size_t hash = hashFn(teamName);
+    Color color = GetPredefinedColors()[hash % GetPredefinedColors().size()];
+
+    return color;
 }

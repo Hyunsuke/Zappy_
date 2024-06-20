@@ -132,7 +132,6 @@ void Game::HandleServerMessage(const std::string& message) {
         // Handle player death
         auto player = gameMap.GetPlayerByNumber(n);
         if (player) {
-            std::cout << "Player " << n << " died" << std::endl;
             player->SetDead();
         }
     } else if (command == "enw") {
