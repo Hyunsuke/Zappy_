@@ -87,9 +87,6 @@ void Player::UpdateAnimation() {
     }
 }
 
-
-
-
 void Player::WaitForAnimationEnd(Player::Animation animation) {
     std::thread([this, animation]() {
         int totalFrames = animations[animIndex]->frameCount;
@@ -296,12 +293,12 @@ std::string Player::GetTeam() const
 
 void Player::SetDead() {
     SetAnimation(Animation::Death);
-    std::thread([this]() {
-        int totalFrames = animations[animIndex]->frameCount;
-        float frameDuration = animations[animIndex]->frameCount / 60.0f;
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
-        Dead = true;
-    }).detach();
+    // std::thread([this]() {
+    //     int totalFrames = animations[animIndex]->frameCount;
+    //     float frameDuration = animations[animIndex]->frameCount / 60.0f;
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
+    //     Dead = true;
+    // }).detach();
 }
 
 bool Player::IsDead() const {

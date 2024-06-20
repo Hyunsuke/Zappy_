@@ -75,13 +75,13 @@ public:
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
     int animCount;
-    int animIndex;
+    std::size_t animIndex;
     int animCurrentFrame;
     Vector3 position;
     Vector3 scale;
     Vector3 rotationAxis;
     float rotationAngle = 0.0f;
-    std::unordered_map<Animation, int> animationMap;
+    std::unordered_map<Animation, std::size_t> animationMap;
 
     int playerNumber;
     std::string teamName;
