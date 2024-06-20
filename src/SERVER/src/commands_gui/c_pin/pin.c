@@ -22,6 +22,8 @@ int c_pin(struct_t *s, char *buffer)
     int nb_player;
     player_t *player;
 
+    if (s->fd_gui == -1)
+        return -1;
     parse_pin(buffer, &nb_player);
     player = get_player_by_id(s, nb_player);
     dprintf(s->fd_gui, "pin %d %d %d %d %d %d %d %d %d %d\n",
@@ -40,6 +42,8 @@ int c_pin(struct_t *s, char *buffer)
 
 int c_pin_send(struct_t *s, player_t *player)
 {
+    if (s->fd_gui == -1)
+        return -1;
     dprintf(s->fd_gui, "pin %d %d %d %d %d %d %d %d %d %d\n",
         player->id_player,
         player->x,

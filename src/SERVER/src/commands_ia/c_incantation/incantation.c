@@ -100,7 +100,7 @@ int c_incantation(struct_t *s, int fd)
     if (incantation == NULL)
         return print_incantation_ko(s, fd, pos_incant);
     else
-        pos_incant = &incantation->position;
+        pos_incant = incantation->position;
     if (!check_incantation_conditions(s, elevation, pos_incant)) {
         remove_incantation(s, fd);
         return print_incantation_ko(s, fd, pos_incant);

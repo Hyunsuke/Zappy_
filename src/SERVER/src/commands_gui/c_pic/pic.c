@@ -7,11 +7,13 @@
 
 #include "all.h"
 
-int c_pic(position_t position, int level, int *player)
+int c_pic(struct_t *s, position_t position, int level, int *player)
 {
-    printf("pic %d %d %d", position.x, position.y, level);
+    if (s->fd_gui == -1)
+        return -1;
+    dprintf(s->fd_gui, "pic %d %d %d", position.x, position.y, level);
     for (int n = 0; player[n] != -1; n++)
-        printf(" %d", player[n]);
-    printf("\n");
+        dprintf(s->fd_gui, " %d", player[n]);
+    dprintf(s->fd_gui, "\n");
     return 0;
 }

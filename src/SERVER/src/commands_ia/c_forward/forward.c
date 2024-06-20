@@ -25,7 +25,8 @@ int c_forward(struct_t *s, int fd)
     moove_left(s, mob, x, y);
     printf("x position: %d: y position: %d\n", mob->x, mob->y);
     dprintf(fd, "ok\n");
-    dprintf(s->fd_gui, "ppo %d %d %d %d\n", mob->id_player, mob->x, mob->y,
-        (mob->view_direction + 1));
+    if (s->fd_gui != -1)
+        dprintf(s->fd_gui, "ppo %d %d %d %d\n", mob->id_player, mob->x, mob->y,
+            (mob->view_direction + 1));
     return 0;
 }

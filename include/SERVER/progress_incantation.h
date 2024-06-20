@@ -28,7 +28,7 @@ typedef struct incantation_s {
     int *player_ids;  // Tableau des IDs des joueurs concernés
     int num_players;  // Nombre de joueurs concernés
     int fd;           // File descriptor du joueur réalisant l'incantation
-    position_t position; // Position Incantation
+    position_t *position; // Position Incantation
     struct incantation_s *next;
 } incantation_t;
 

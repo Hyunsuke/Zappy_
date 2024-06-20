@@ -9,6 +9,8 @@
 
 int c_suc(struct_t *s)
 {
+    if (s->fd_gui == -1)
+        return -1;
     dprintf(s->fd_gui, "suc\n");
     return 0;
 }

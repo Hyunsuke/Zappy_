@@ -20,8 +20,9 @@ void add_incantation(struct_t *s, int fd, int *player_ids, int num_players)
     new_incantation->num_players = num_players;
     new_incantation->fd = fd;
     new_incantation->next = s->head_progress_incantation;
-    new_incantation->position.x = player->x;
-    new_incantation->position.y = player->y;
+    new_incantation->position = my_malloc(sizeof(struct position_s));
+    new_incantation->position->x = player->x;
+    new_incantation->position->y = player->y;
     s->head_progress_incantation = new_incantation;
 }
 
