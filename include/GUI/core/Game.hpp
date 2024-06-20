@@ -21,6 +21,7 @@
 
 #include "../Wrapper/Raylib/RLWindow.hpp"
 #include "../Wrapper/Raylib/RLModel.hpp"
+#include "../Menu/endMenu.hpp"
 
 #include <vector>
 #include <iostream>
@@ -84,6 +85,10 @@ private:
     std::shared_ptr<Player> selectedPlayer;
     RLWindow window;
     RLModel rlModel;
+
+    bool gameOver = false;
+    std::string winningTeam;
+    EndMenu endMenu;
 };
 
 #endif /* !GAME_HPP_ */

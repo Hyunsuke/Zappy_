@@ -164,7 +164,8 @@ void Game::HandleServerMessage(const std::string& message) {
     } else if (command == "seg") {
         std::string teamName;
         iss >> teamName;
-        // Handle end of game
+        gameOver = true;
+        winningTeam = teamName;
     } else if (command == "smg") {
         std::string message;
         iss >> message;

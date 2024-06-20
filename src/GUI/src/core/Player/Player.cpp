@@ -74,13 +74,21 @@ void Player::UpdateAnimation() {
 
         int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
 
-        animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        if (Dead && animIndex == animationMap[Animation::Death]) {
+            animCurrentFrame = std::min(animCurrentFrame + framesToAdvance, animations[animIndex]->frameCount - 1);
+        } else {
+            animCurrentFrame = (animCurrentFrame + framesToAdvance) % animations[animIndex]->frameCount;
+        }
+
         animationTime -= framesToAdvance / animationSpeed;
 
         model = modelLoader.GetModel();
         rlModel.UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
     }
 }
+
+
+
 
 void Player::WaitForAnimationEnd(Player::Animation animation) {
     std::thread([this, animation]() {
@@ -286,11 +294,18 @@ std::string Player::GetTeam() const
     return teamName;
 }
 
-void Player::SetDead()
-{
+void Player::SetDead() {
     SetAnimation(Animation::Death);
-    WaitForAnimationEnd(Player::Animation::Death);
-    Dead = true;
+    std::thread([this]() {
+        int totalFrames = animations[animIndex]->frameCount;
+        float frameDuration = animations[animIndex]->frameCount / 60.0f;
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDuration * 1000 * totalFrames)));
+        Dead = true;
+    }).detach();
+}
+
+bool Player::IsDead() const {
+    return Dead;
 }
 
 void Player::SetPlayerNumber(int playerNumber)

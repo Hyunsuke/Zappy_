@@ -45,6 +45,9 @@
 
 #include "Menu/menu.hpp"
 #include "Menu/Button.hpp"
+#include "Menu/endMenu.hpp"
+#include "Menu/loading.hpp"
+#include "Menu/LoadingMenu.hpp"
 
 #include "Settings/settings.hpp"
 

@@ -15,7 +15,8 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
       settings(settings),
-      cameraManager(cameraController, gameMap) {
+      cameraManager(cameraController, gameMap),
+      endMenu(screenWidth, screenHeight) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -105,18 +106,24 @@ void Game::Update() {
 void Game::Draw() {
     window.BeginDrawing();
     window.ClearBackground(WHITE);
-    sky.DrawBackground();
+
+    if (gameOver) {
+        endMenu.HandleMouseInput();
+        endMenu.Draw(winningTeam);
+    } else {
+        sky.DrawBackground();
 
     window.BeginMode3D(cameraController.GetCamera());
 
-    sky.DrawSunAndMoon();
-    gameMap.Draw();
-    gameMap.DrawIslandWires(selectedIsland);
-    gameMap.DrawPlayerWires(selectedPlayer);
+        sky.DrawSunAndMoon();
+        gameMap.Draw();
+        gameMap.DrawIslandWires(selectedIsland);
+        gameMap.DrawPlayerWires(selectedPlayer);
 
     window.EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
     settings->Draw();
+    }
 
     window.EndDrawing();
 }
