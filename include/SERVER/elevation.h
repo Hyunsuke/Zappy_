@@ -7,8 +7,7 @@
 
 #ifndef ELEVATION_H
     #define ELEVATION_H
-
-#include "struct.h"
+    #include "struct.h"
 
 ////////////////////////////////////
 ////// ELEVATION //////////////////

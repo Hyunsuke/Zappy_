@@ -31,9 +31,9 @@ int add_player_to_team(struct_t *s, int team_id, int player_id, int fd)
         while (team->players_id[player_count] != -1)
             player_count++;
     }
-    slot_available = s->client_nb - player_count;
+    slot_available = team->max_cli - player_count;
     dprintf(fd, "%d\n%d %d\n", slot_available, s->map_width, s->map_height);
-    if (player_count >= s->client_nb)
+    if (player_count >= team->max_cli)
         return -1;
     if (add_in_team_list(player_id, team, player_count) == -1)
         return -1;

@@ -12,7 +12,7 @@
 ////// PLAYERS && TEAMS ///////////
 //////////////////////////////////
 
-#define MAX_COMMANDS 10
+    #define MAX_COMMANDS 10
 
 typedef struct player_s player_t;
 typedef struct position_s position_t;
@@ -50,6 +50,7 @@ typedef struct team_s {
     char *name;
     int team_id;
     int *players_id;
+    int max_cli;
     position_t **position_egg;
     team_t *next;
 } team_t;
@@ -82,6 +83,7 @@ typedef struct position_s {
 //////////////////////////////////
 
 typedef struct elevation_s elevation_t;
+typedef struct dashboard_s dashboard_t;
 
 typedef struct struct_s {
     int port;
@@ -90,10 +92,12 @@ typedef struct struct_s {
     int client_nb;
     int time;
     int fd_gui;
+    int fd_dashboard;
     char *obj;
     bool stop_server;
     bool start_game;
     char *look_str;
+    int nb_tick_refill;
     int len_view;
     int view_num;
     map_element_t **map;
@@ -101,10 +105,11 @@ typedef struct struct_s {
     int next_id_player; // For incrementation id_player
     team_t *head_team;
     int next_id_team; // For incrementation id_team
-    elevation_t *head_elevation; // Information about incantation of player (INFO)
+    elevation_t *head_elevation; // Information about incantation (INFO)
     clock_t clock;  // Time for runner commands
     command_t *command_ticks; // Command with tick (INFO)
     incantation_t *head_progress_incantation; // Incantation in progress
+    dashboard_t *dashboard;
 } struct_t;
 
 

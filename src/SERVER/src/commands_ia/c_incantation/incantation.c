@@ -55,7 +55,7 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
     while (current_player != NULL) {
         if (current_player->x == position->x && current_player->y
             == position->y && current_player->level_player ==
-                elevation->level_from && count <= elevation->nb_players) {
+                elevation->level_from) {
                 current_player->level_player++;
                 count++;
                 dprintf(current_player->fd, "Current level: %d\n",
@@ -100,7 +100,7 @@ int c_incantation(struct_t *s, int fd)
     if (incantation == NULL)
         return print_incantation_ko(s, fd, pos_incant);
     else
-        pos_incant = &incantation->position;
+        pos_incant = incantation->position;
     if (!check_incantation_conditions(s, elevation, pos_incant)) {
         remove_incantation(s, fd);
         return print_incantation_ko(s, fd, pos_incant);

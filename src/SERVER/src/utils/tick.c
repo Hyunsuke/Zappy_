@@ -23,6 +23,7 @@ static void decrement_first_command_tick(struct_t *s)
 static void new_tick_for_player(struct_t *s, player_t *current_player)
 {
     command_t *command = get_oldest_command(current_player);
+
     if (command == NULL)
         return;
     print_all_commands(current_player);

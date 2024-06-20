@@ -12,8 +12,10 @@ static void define_obj(struct_t *s, char *command, int inter, int len)
     int j = 0;
 
     s->obj = my_malloc(sizeof(char) * (len + 1));
-    if (!s->obj)
+    if (!s->obj) {
+        full_free();
         exit(0);
+    }
     for (j = 0; j < len; j++)
         s->obj[j] = command[inter + j];
     s->obj[len] = '\0';
@@ -49,8 +51,14 @@ static void check_cmd_with_obj(struct_t *s, char *command)
 static int check_function(struct_t *s, int fd, char *command,
     command_struct_ia_t commands[])
 {
+    int check_bro = 0;
+
+    if (strncmp(command, "Broadcast ", 10) == 0) {
+        check_bro++;
+    }
     for (int i = 0; commands[i].command != NULL; i++) {
-        if (strcmp(commands[i].command, command) == 0) {
+        if (strcmp(commands[i].command, command) == 0 || (check_bro == 1 &&
+            strncmp(commands[i].command, "Broadcast ", 11) == 0)) {
             printf("Running command %s for ID player %d\n",
                 commands[i].command, get_player_by_fd(s, fd)->id_player);
             return commands[i].func(s, fd);
@@ -69,7 +77,7 @@ static int execute_command_ia(struct_t *s, int fd, char *command)
         {"Set linemate", c_set_obj}, {"Set deraumere", c_set_obj},
         {"Set sibur", c_set_obj}, {"Set mendiane", c_set_obj},
         {"Set phiras", c_set_obj}, {"Set thystame", c_set_obj},
-        {"Broadcast text", c_broadcast_txt}, {"Fork", c_fork},
+        {"Broadcast ", c_broadcast_txt}, {"Fork", c_fork},
         {"Connect_nbr", c_connect_nbr}, {"Eject", c_eject},
         {"Take food", c_take_obj}, {"Take linemate", c_take_obj},
         {"Take deraumere", c_take_obj}, {"Take sibur", c_take_obj},

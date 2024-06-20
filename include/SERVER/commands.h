@@ -51,7 +51,7 @@ command_t *get_oldest_command(player_t *player);
 int get_command_count(player_t *player);
 int remove_oldest_command(player_t *player);
 int get_tick_for_command(struct_t *s, char *command);
-command_t *initialize_command_ticks();
+command_t *initialize_command_ticks(void);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,6 +63,7 @@ int c_bct(struct_t *s, char *buffer);
 int c_mct(struct_t *s, char *buffer);
 int c_tna(struct_t *s, char *buffer);
 int c_ppo(struct_t *s, char *buffer);
+int c_ppo_rotate(struct_t *s, int fd_player);
 int c_plv(struct_t *s, char *buffer);
 int c_pin(struct_t *s, char *buffer);
 int c_pin_send(struct_t *s, player_t *player);
@@ -72,7 +73,7 @@ int c_sst(struct_t *s, char *buffer);
 int c_pnw(struct_t *s, int id_player, int incantation_level);
 int c_pex(struct_t *s, int id_player);
 int c_pbc(struct_t *s, int id_player, char *name_team);
-int c_pic(position_t position, int level, int *player);
+int c_pic(struct_t *s, position_t position, int level, int *player);
 int c_pie(struct_t *s, int x, int y, char *incantation_result);
 int c_pfk(struct_t *s, int id_player);
 int c_pdr(struct_t *s, int id_player, int id_rsc);

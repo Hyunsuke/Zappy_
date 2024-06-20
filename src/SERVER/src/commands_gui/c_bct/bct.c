@@ -26,6 +26,8 @@ int c_bct(struct_t *s, char *buffer)
     int y;
     map_element_t *element;
 
+    if (s->fd_gui == -1)
+        return -1;
     parse_bct(buffer, &x, &y);
     if (x < 0 || x >= s->map_width || y < 0 || y >= s->map_height)
         return -1;

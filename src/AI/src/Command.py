@@ -93,6 +93,7 @@ class Command:
             # print("Données > " + data)
             print("We received " + data)
             print("For command " + self.responseList[0])
+            print("For command " + self.responseList[0])
             self.adjustData()
             if not self.responseList:
                 return
