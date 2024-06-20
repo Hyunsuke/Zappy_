@@ -141,7 +141,7 @@ class ZappyClient:
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
-                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.ready == False and self.current_inventory.current_inventory["food"] > 30:
+                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_come")
                     elif self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_gather")
@@ -176,7 +176,7 @@ class ZappyClient:
                         # os._exit(0)
                     self.eat_nearest_ressource("food")
                 else:
-                    print("---------------------------")
+                    print("-------------------------------------------------------------------------------------------")
                     if self.current_inventory.current_inventory['food'] < 15:
                         self.eat_nearest_ressource("food", False)
                     else:

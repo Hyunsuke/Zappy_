@@ -13,6 +13,7 @@ class Command:
     def __init__(self, socket, current_inventory, team_name):
         self.status = -1
         self.player_ready = 0
+        self.inventory_valid = False
         self.joined = False
         self.joiner = 0
         self.player_food_ready = 0
@@ -266,6 +267,8 @@ class Command:
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
         if self.data_received == "ko":
+            if (self.leaderIsChosen == 1):
+                os._exit(0)
             self.responseList.pop(1)
             self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return
@@ -281,9 +284,10 @@ class Command:
             return
 
     def validateInventory(self, objectTaken, broadcast=False):
-        if self.check_inventory() == True:
+        if self.check_inventory() == True and self.inventory_valid == False:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
             self.broadcastMaterial(objectTaken, "END")
+            self.inventory_valid = True
             # self.pop_item(objectTaken)
             # self.status = -3
             return True
