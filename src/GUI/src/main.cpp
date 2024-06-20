@@ -25,13 +25,26 @@ bool runMenu(int& screenWidth, int& screenHeight, std::string& host, int& port) 
     return false;
 }
 
+
 bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketManager>& socketManager) {
     socketManager = std::make_unique<SocketManager>(host, port);
-    socketManager->Connect();
-    if (!socketManager->IsRunning()) {
+
+    auto connectFuture = std::async(std::launch::async, [&socketManager]() {
+        socketManager->Connect();
+        return socketManager->IsRunning();
+    });
+
+    if (connectFuture.wait_for(std::chrono::seconds(2)) == std::future_status::timeout) {
+        std::cerr << "Failed to connect to the server: timeout" << std::endl;
+        socketManager->Disconnect();
+        exit(84);
+    }
+
+    if (!connectFuture.get()) {
         std::cerr << "Failed to connect to the server" << std::endl;
         return false;
     }
+
     return true;
 }
 
@@ -79,9 +92,11 @@ bool processInitialServerMessages(std::unique_ptr<SocketManager>& socketManager,
 }
 
 void runGame(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs, std::unique_ptr<SocketManager>& socketManager) {
-    Game game(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs);
-    game.SetSocketManager(std::move(socketManager));
-    game.Run();
+    auto settings = std::make_shared<Settings>(screenWidth, screenHeight, "game");
+    auto game = std::make_shared<Game>(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs, settings);
+    settings->SetGameInstance(game);
+    game->SetSocketManager(std::move(socketManager));
+    game->Run();
 }
 
 void printUsage() {

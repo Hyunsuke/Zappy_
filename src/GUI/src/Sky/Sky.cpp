@@ -11,12 +11,14 @@ Sky::Sky(int screenWidth, int screenHeight)
     : screenWidth(screenWidth), screenHeight(screenHeight),
       sunPosition({0.0f, 100.0f, 0.0f}), moonPosition({0.0f, -100.0f, 0.0f}),
       lightPosition(sunPosition), lightColor(WHITE),
-      dayDuration(170.0f), currentTime(0.0f) {}
+      dayDuration(170.0f), currentTime(0.0f), timeUnitFactor(1.0f) {}
 
 Sky::~Sky() {}
 
-void Sky::Update() {
-    currentTime += rltext.GetFrameTime();
+void Sky::Update(int timeUnit) {
+    timeUnitFactor = static_cast<float>(timeUnit) / 60.0f;
+
+    currentTime += rltext.GetFrameTime() * timeUnitFactor;
     if (currentTime > dayDuration) {
         currentTime -= dayDuration;
     }

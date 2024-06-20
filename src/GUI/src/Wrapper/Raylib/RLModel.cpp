@@ -123,3 +123,7 @@ Matrix RLModel::MatrixScale(float x, float y, float z) {
 Ray RLModel::GetMouseRay(Vector2 mousePosition, Camera camera) {
     return ::GetMouseRay(mousePosition, camera);
 }
+
+float RLModel::Vector3Distance(Vector3 v1, Vector3 v2) {
+    return ::Vector3Distance(v1, v2);
+}

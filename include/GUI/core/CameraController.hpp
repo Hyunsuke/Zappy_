@@ -22,6 +22,7 @@ public:
     void LockCameraOnPlayer(const std::shared_ptr<Player>& player);
     void UnlockCamera();
     void SetOriginalCameraPosition(const Vector3& position, const Vector3& target);
+    void SmoothUnlockCamera();
 
 private:
     void RotateCamera(float yaw, float pitch);

@@ -7,14 +7,14 @@
 
 #include "gui.hpp"
 
-Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs)
+Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int timeUnit, const std::vector<std::string>& teamNames, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs, std::shared_ptr<Settings> settings)
     : screenWidth(screenWidth),
       screenHeight(screenHeight),
       timeUnit(timeUnit),
       teamNames(teamNames),
       sky(screenWidth, screenHeight),
       uiManager(screenWidth, screenHeight),
-      settings(screenWidth, screenHeight, "game"),
+      settings(settings),
       cameraManager(cameraController, gameMap) {
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
@@ -81,7 +81,7 @@ void Game::Run() {
 void Game::Update() {
     cameraManager.Update(selectedPlayer);
     gameMap.Update();
-    sky.Update();
+    sky.Update(timeUnit);
 
     Vector3 lightPos = sky.GetLightPosition();
     Vector3 lightCol = sky.GetLightColor();
@@ -95,11 +95,11 @@ void Game::Update() {
     if (rlModel.IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
 
-    settings.HandleMouseInput(rlModel.GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
+    settings->HandleMouseInput(rlModel.GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
 
-    settings.Update();
+    settings->Update();
 
-    settings.HandleWindowResize(sky, uiManager);
+    settings->HandleWindowResize(sky, uiManager);
 }
 
 void Game::Draw() {
@@ -116,7 +116,7 @@ void Game::Draw() {
 
     window.EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
-    settings.Draw();
+    settings->Draw();
 
     window.EndDrawing();
 }

@@ -9,6 +9,8 @@
 #include "../Manager/UIManager.hpp"
 #include "../Manager/ChatManager.hpp"
 
+class Game;
+
 class Settings {
 public:
     Settings(int screenWidth, int screenHeight, std::string InstanceName);
@@ -25,6 +27,7 @@ public:
     void HandleMouseInput(Vector2 mousePosition, Rectangle settingsButton, Rectangle closeButton);
     void HandleWindowResize(Sky& sky, UIManager& uiManager);
     void SendMessage(int n, std::shared_ptr<Player> Player, std::string message);
+    void SetGameInstance(std::shared_ptr<Game> gameInstance);
 
 private:
     void DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box);
@@ -47,8 +50,14 @@ private:
     Rectangle applyButton;
     Rectangle closeButton;
 
+    int selectedTimeUnitIndex;
+    int tempTimeUnitIndex;
+    std::vector<int> timeUnitOptions;
+    Rectangle timeUnitBox;
+
 
     ChatManager chat;
+    std::shared_ptr<Game> game;
 };
 
 #endif // SETTINGS_HPP

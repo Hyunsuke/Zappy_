@@ -17,7 +17,7 @@ public:
     Sky(int screenWidth, int screenHeight);
     ~Sky();
 
-    void Update();
+    void Update(int timeUnit = 1);
     void DrawBackground();
     void DrawSunAndMoon();
     Vector3 GetLightPosition() const;
@@ -39,6 +39,7 @@ private:
     Color ColorLerp(Color start, Color end, float amount);
     Vector3 ColorToVector3(Color color);
     RLText rltext;
+    float timeUnitFactor;
 };
 
 #endif // SKY_HPP_

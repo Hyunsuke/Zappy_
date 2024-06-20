@@ -50,6 +50,7 @@ public:
     static Matrix MatrixMultiply(Matrix left, Matrix right);
     static Matrix MatrixScale(float x, float y, float z);
     static Ray GetMouseRay(Vector2 mousePosition, Camera camera);
+    static float Vector3Distance(Vector3 v1, Vector3 v2);
 };
 
 #endif // RLMODEL_HPP_

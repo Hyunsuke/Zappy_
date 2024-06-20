@@ -31,8 +31,24 @@ void CameraController::RotateCamera(float yaw, float pitch) {
     camera.target = rlModel.Vector3Add(camera.position, forward);
 }
 
+void CameraController::SmoothUnlockCamera() {
+    float lerpFactor = rlModel.GetFrameTime() * lerpSpeed;
+    camera.position = rlModel.Vector3Lerp(currentCameraPosition, originalPosition, lerpFactor);
+    camera.target = rlModel.Vector3Lerp(currentCameraTarget, originalTarget, lerpFactor);
+
+    currentCameraPosition = camera.position;
+    currentCameraTarget = camera.target;
+    if (rlModel.Vector3Distance(camera.position, originalPosition) < 0.01f &&
+        rlModel.Vector3Distance(camera.target, originalTarget) < 0.01f) {
+        isLocked = false;
+    }
+}
+
 void CameraController::Update() {
-    if (isLocked) return;
+     if (isLocked) {
+        SmoothUnlockCamera();
+        return;
+    }
 
     Vector2 mousePosition = rlModel.GetMousePosition();
     if (firstMouseMove) {
@@ -131,11 +147,8 @@ void CameraController::LockCameraOnPlayer(const std::shared_ptr<Player>& player)
 }
 
 void CameraController::UnlockCamera() {
-    isLocked = false;
-    camera.position = originalPosition;
-    camera.target = originalTarget;
-    currentCameraPosition = camera.position;
-    currentCameraTarget = camera.target;
+    isLocked = true;
+    SmoothUnlockCamera();
 }
 
 void CameraController::SetOriginalCameraPosition(const Vector3& position, const Vector3& target) {

@@ -24,20 +24,18 @@ void SocketManager::Connect() {
     struct sockaddr_in serv_addr;
     sockfd = socketWrapper.Socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        std::cerr << "Error creating socket" << std::endl;
+        throw GameException("Error creating socket");
         return;
     }
-
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = socketWrapper.Htons(port);
-
     if (socketWrapper.InetPton(AF_INET, host.c_str(), &serv_addr.sin_addr) <= 0) {
-        std::cerr << "Invalid address/ Address not supported" << std::endl;
+        throw GameException("Invalid address/ Address not supported");
         return;
     }
 
     if (socketWrapper.Connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        std::cerr << "Connection Failed" << std::endl;
+        throw GameException("Connection Failed");
         return;
     }
 
