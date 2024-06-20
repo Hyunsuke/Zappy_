@@ -83,6 +83,7 @@ typedef struct position_s {
 //////////////////////////////////
 
 typedef struct elevation_s elevation_t;
+typedef struct dashboard_s dashboard_t;
 
 typedef struct struct_s {
     int port;
@@ -91,7 +92,7 @@ typedef struct struct_s {
     int client_nb;
     int time;
     int fd_gui;
-    int fd_web_debug;
+    int fd_dashboard;
     char *obj;
     bool stop_server;
     bool start_game;
@@ -108,6 +109,7 @@ typedef struct struct_s {
     clock_t clock;  // Time for runner commands
     command_t *command_ticks; // Command with tick (INFO)
     incantation_t *head_progress_incantation; // Incantation in progress
+    dashboard_t *dashboard;
 } struct_t;
 
 

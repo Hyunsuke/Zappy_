@@ -3,7 +3,11 @@ let selectedElement = null;
 let selectedPlayer = null;
 let selectedTeam = null;
 let responseTimes = [];
-let chart = null;
+let ramUsage = [];
+let cpuUsage = [];
+
+// Maximum number of data points to display on the charts
+const MAX_DATA_POINTS = 20;
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
@@ -49,10 +53,21 @@ socket.on('connection_status', (data) => {
 socket.on('server_response', (data) => {
     const response = JSON.parse(data.response);
     const responseTime = Date.now() - data.timestamp;
+
+    // Manage response times array
     responseTimes.push(responseTime);
-    if (responseTimes.length > 20) responseTimes.shift();
+    if (responseTimes.length > MAX_DATA_POINTS) responseTimes.shift();
+
+    // Manage RAM usage array
+    ramUsage.push(response.utils.ram_usage);
+    if (ramUsage.length > MAX_DATA_POINTS) ramUsage.shift();
+
+    // Manage CPU usage array
+    cpuUsage.push(response.utils.cpu_usage);
+    if (cpuUsage.length > MAX_DATA_POINTS) cpuUsage.shift();
+
     updateDashboard(response);
-    updateChart();
+    updateCharts();
 });
 
 function updateDashboard(data) {
@@ -206,11 +221,8 @@ function updateUtils(utils) {
         { label: 'Stop Server', value: utils.stop_server !== undefined ? utils.stop_server : "N/A" },
         { label: 'Start Game', value: utils.start_game !== undefined ? utils.start_game : "N/A" },
         { label: 'Look String', value: utils.look_str !== undefined ? utils.look_str : "N/A" },
-        { label: 'Length of View', value: utils.len_view !== undefined ? utils.len_view : "N/A" },
-        { label: 'View Number', value: utils.view_num !== undefined ? utils.view_num : "N/A" },
-        { label: 'Next Player ID', value: utils.next_id_player !== undefined ? utils.next_id_player : "N/A" },
-        { label: 'Next Team ID', value: utils.next_id_team !== undefined ? utils.next_id_team : "N/A" },
-        { label: 'Clock', value: utils.clock !== undefined ? utils.clock : "N/A" }
+        { label: 'RAM Usage', value: utils.ram_usage !== undefined ? utils.ram_usage : "N/A" },
+        { label: 'CPU Usage', value: utils.cpu_usage !== undefined ? utils.cpu_usage : "N/A" }
     ];
 
     utilsData.forEach(data => {
@@ -230,34 +242,48 @@ function changeFrequency() {
     }
 }
 
-function updateChart() {
-    if (!chart) {
-        const ctx = document.getElementById('responseTimeChart').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array(responseTimes.length).fill(''),
-                datasets: [{
-                    label: 'Response Time (ms)',
-                    data: responseTimes,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+function updateCharts() {
+    updateChart(responseTimes, 'responseTimeChart', 'Response Time (ms)');
+    updateChart(ramUsage, 'ramUsageChart', 'RAM Usage (%)');
+    updateChart(cpuUsage, 'cpuUsageChart', 'CPU Usage (%)');
+}
+
+function updateChart(dataArray, chartId, label) {
+    const layout = {
+        title: {
+            text: label,
+            font: {
+                color: '#e0e0e0'
             }
-        });
-    } else {
-        chart.data.labels = Array(responseTimes.length).fill('');
-        chart.data.datasets[0].data = responseTimes;
-        chart.update();
-    }
+        },
+        paper_bgcolor: '#2c2c2c',
+        plot_bgcolor: '#2c2c2c',
+        xaxis: {
+            title: 'Time',
+            showgrid: false,
+            zeroline: false,
+            color: '#e0e0e0'
+        },
+        yaxis: {
+            title: label,
+            showline: false,
+            color: '#e0e0e0'
+        },
+        margin: {
+            l: 40, r: 40, t: 40, b: 40
+        },
+        width: document.querySelector('.chart-container').clientWidth / 3 - 20,
+        height: 200,
+    };
+
+    const trace = {
+        x: Array.from({ length: dataArray.length }, (_, i) => i + 1),
+        y: dataArray,
+        type: 'scatter',
+        line: { color: '#00FF00' }
+    };
+
+    Plotly.newPlot(chartId, [trace], layout);
 }
 
 function refreshData() {
@@ -269,10 +295,13 @@ function toggleMode() {
     body.classList.toggle('dark-mode');
     body.classList.toggle('light-mode');
 
-    const modeBtn = document.getElementById('mode-btn');
+    const modeBtn = document.getElementById('toggle-theme');
     if (body.classList.contains('dark-mode')) {
         modeBtn.textContent = 'Light Mode';
     } else {
         modeBtn.textContent = 'Dark Mode';
     }
+
+    // Update charts to match the new mode
+    updateCharts();
 }
