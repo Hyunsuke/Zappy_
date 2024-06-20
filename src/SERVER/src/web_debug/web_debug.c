@@ -4,6 +4,7 @@
 ** File description:
 ** Function
 */
+
 #include "all.h"
 
 static void initialize_struct_defaults(struct_t *s)

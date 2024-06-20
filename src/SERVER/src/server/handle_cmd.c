@@ -53,20 +53,37 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     }
 }
 
+static bool sanitize_buffer(char *buffer)
+{
+    size_t len = strlen(buffer);
+
+    if (len > 1 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r') {
+        buffer[len - 2] = '\0';
+        buffer[len - 1] = '\0';
+    }
+    if (strlen(buffer) == 0) {
+        dprintf(2, "Buffer is empty after processing\n");
+        return false;
+    }
+    return true;
+}
+
 static void gestion_team_name(server_t *server, struct_t *s, char *buffer,
     int client_fd)
 {
-    size_t len = strlen(buffer);
     team_t *team = NULL;
     char *team_name;
 
-    if (len > 0 && buffer[len - 1] == '\n' && buffer[len - 2] == '\r')
-        buffer[len - 2] = '\0';
+    if (!sanitize_buffer(buffer))
+        return;
     team_name = strtok(buffer, "\n");
+    if (team_name == NULL) {
+        dprintf(2, "No team name provided\n");
+        return;
+    }
     team = get_team_by_name(s, team_name);
     if (team == NULL) {
-        printf("Name team unknown\n");
-        dprintf(client_fd, "ko\n");
+        dprintf(2, "Team name unknown: %s\n", team_name);
         return;
     }
     list_actions(server, s, client_fd, team);
