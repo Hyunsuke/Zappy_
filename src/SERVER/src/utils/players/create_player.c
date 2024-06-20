@@ -65,10 +65,11 @@ void add_player(struct_t *s, int fd, int id_team)
 {
     player_t *new_player = my_malloc(sizeof(player_t));
 
+    srand(time(NULL));
     init_ressource_player(new_player);
     init_command_player(new_player);
     new_player->fd = fd;
-    new_player->view_direction = 0;
+    new_player->view_direction = rand() % 4;
     s->next_id_player++;
     new_player->id_player = s->next_id_player;
     new_player->id_team = id_team;
