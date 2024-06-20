@@ -22,6 +22,7 @@ class ZappyClient:
             self.current_inventory = InventoryManager()
             self.cmd = Command(self.socket, self.current_inventory, self.team_name)
             self.ready = False
+            self.food_ready = False
             self.updateInfos()
             self.cmd.fork()
             self.cmd.sendArrayCmd()
@@ -126,20 +127,37 @@ class ZappyClient:
             while True:
                 self.blockingBuffer()
                 self.update_inventory()
+                if self.cmd.get_reset == True:
+                    self.reset_main()
                 # print(self.cmd.get_status())
                 if self.cmd.get_status() == -2:
                     if self.ready == True:
+                        print(self.cmd.nb_joiner_ready())
+                        print(self.cmd.nb_player_ready())
                         self.cmd.incantation()
                         self.cmd.responseList.append("Current level")
-                    elif self.cmd.nb_player_ready() >= 5 and self.ready == False:
+                    elif self.cmd.nb_player_ready() == self.cmd.nb_player_food_ready() and self.cmd.nb_player_food_ready() >= 5 and self.ready == False:
                         print("EVERYONE'S READY TO PLAY")
+                        # self.cmd.broadcast(f"{self.team_name}_ready_os")
+                        # os._exit(1)
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
+                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
+                        self.cmd.broadcast(f"{self.team_name}_ready_come")
+                    elif self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
+                        self.cmd.broadcast(f"{self.team_name}_ready_gather")
+                        self.eat_nearest_ressource("food")
+                        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                        print(self.current_inventory.current_inventory["food"])
+                        print(self.cmd.nb_joiner_ready())
+                        print(self.cmd.nb_player_food_ready())
                     else:
                         print("waiting for friends")
-                        self.cmd.broadcast(f"{self.team_name}_ready_come")
-                elif self.cmd.get_status() >= 0 and self.ready == False:
+                        self.eat_nearest_ressource("food")
+                        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+                        print(self.current_inventory.current_inventory["food"])
+                elif self.cmd.get_status() >= 0 and self.cmd.get_status() < 10 and self.ready == False:
                     if self.cmd.shouldMove() == True and self.cmd.positionChanged() == True:
                         self.join_leader()
                     # break
@@ -151,8 +169,16 @@ class ZappyClient:
                         self.drop_all()
                     # self.cmd.look()
                     # break
+                elif self.cmd.get_status() >= 10:
+                    print("(((((((((((((((((((((((((((())))))))))))))))))))))))))))")
+                    print(self.current_inventory.current_inventory["food"])
+                    if self.current_inventory.current_inventory["food"] > 30 and self.food_ready == False and self.cmd.get_status() == 10:
+                        self.cmd.broadcast(f"{self.team_name}_food_ready")
+                        self.food_ready = True
+                        # os._exit(0)
+                    self.eat_nearest_ressource("food")
                 else:
-                    print("---------------------------")
+                    print("-------------------------------------------------------------------------------------------")
                     if self.current_inventory.current_inventory['food'] < 15:
                         self.eat_nearest_ressource("food", False)
                     else:
@@ -365,6 +391,21 @@ class ZappyClient:
         self.dropped = True
 
 
+    def reset_main(self):
+        self.drop_all(True)
+        self.buffer = ""
+        self.priorityList = ["food", "thystame", "linemate"]
+        self.current_inventory = InventoryManager()
+        self.cmd = Command(self.socket, self.current_inventory, self.team_name)
+        self.ready = False
+        self.food_ready = False
+        self.updateInfos()
+        self.cmd.fork()
+        self.cmd.sendArrayCmd()
+        self.dropped = False
+        self.printReady = True
+
+        self.cmd.reset = False
 
 if __name__ == "__main__":
     client = ZappyClient()

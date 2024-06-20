@@ -12,7 +12,12 @@ import os
 class Command:
     def __init__(self, socket, current_inventory, team_name):
         self.status = -1
+        self.reset = False
         self.player_ready = 0
+        self.inventory_valid = False
+        self.joined = False
+        self.joiner = 0
+        self.player_food_ready = 0
         self.elevation = False
         self.team_name = team_name
         self.socket = socket
@@ -87,7 +92,8 @@ class Command:
         else:
             # print("Données > " + data)
             print("We received " + data)
-            # print("For command " + self.responseList[0])
+            print("For command " + self.responseList[0])
+            print("For command " + self.responseList[0])
             self.adjustData()
             if not self.responseList:
                 return
@@ -107,7 +113,7 @@ class Command:
 
             except socket.error as e:
                 print(f"Erreur lors de la réception des données : {e}")
-                os._exit(0)
+                os._exit(84)
 
     def adjustData(self):
         if not self.responseList:
@@ -173,6 +179,8 @@ class Command:
         # print(num)
         # print(broadcastMessage)
         team_name, object, fct = self.getBroadcastMessage(broadcastMessage)
+        if team_name == None or object == None or fct == None:
+            return
         print("Name : " + team_name + " object : " + object + " fct : " + fct + " num : " + str(num))
         if team_name == self.team_name:
             if fct == "Take":
@@ -187,9 +195,13 @@ class Command:
                     self.validateInventory(object, True)
                     # Check si on a atteint l'objectif
             elif fct == "END":
-                if self.leaderIsChosen != -1:
+                if self.leaderIsChosen == 1:
                     return
                 self.leaderIsChosen = 0 # 0 si c'est quelqu'un d'autre le leader, 1 si c'est moi
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
+                self.status = 11
                 # if self.positionHasBeenChanged == True:
                 #     if self.shallMove == False:
                 #         # print("Je devrais bouger vers le numéro : ", num)
@@ -206,12 +218,19 @@ class Command:
                 # if object in self.current_inventory.shared_inventory:
                 #     self.current_inventory.shared_inventory[object] -= 1
                 return
-            elif fct == "ready" and self.leaderIsChosen == 1:
+            elif fct == "ready" and object == "ready" and self.leaderIsChosen == 1:
                 self.player_ready += 1
-                if self.player_ready == 5:
+                if self.player_ready >= 5:
                     print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 return
+            elif fct == "ready" and object == "food" and self.leaderIsChosen == 1:
+                self.player_food_ready += 1
+                if self.player_food_ready == 5:
+                    print("player_food_ready")
             elif fct == "come":
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
                 if self.positionHasBeenChanged == True:
                     if self.shallMove == False:
                         # print("Je devrais bouger vers le numéro : ", num)
@@ -219,6 +238,18 @@ class Command:
                         self.shallMove = True
                 # else:
                 #     print("Je ne bouge pas, j'attends la réponse de la commande : ", self.status)
+            elif fct == "gather":
+                if self.joined == False:
+                    self.broadcast(f"{self.team_name}_ready_joiner")
+                    self.joined = True
+                self.status = 10
+            elif fct == "joiner" and self.leaderIsChosen == 1:
+                print("J4AI UN POTE")
+                self.joiner += 1
+            elif fct == "os":
+                os._exit(1)
+            elif fct == "reset":
+                self.reset_command()
 
     def elevate(self):
         return self.hasElevated
@@ -244,6 +275,9 @@ class Command:
     def adjustIncantation(self):
         # Le booléen de l'incantation doit être mis sur false
         if self.data_received == "ko":
+            if (self.leaderIsChosen == 1):
+                self.broadcast(f"{self.team_name}_reset_reset")
+                self.reset_command()
             self.responseList.pop(1)
             self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return
@@ -262,6 +296,7 @@ class Command:
         if self.check_inventory() == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
             self.broadcastMaterial(objectTaken, "END")
+            # self.inventory_valid = True
             # self.pop_item(objectTaken)
             # self.status = -3
             return True
@@ -344,8 +379,10 @@ class Command:
 
     def getBroadcastMessage(self, response):
         parts = response.split('_')
+        print("Get broadcast message||||||||||||||||||||||||||||||||||||||||||||")
+        print(response)
         if len(parts) != 3:
-            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object_fct'")
+            return None, None, None
         # On récupère le nom de l'équipe et l'objet
         team_name = parts[0]
         object_name = parts[1]
@@ -390,8 +427,43 @@ class Command:
         else:
             raise ValueError("from_inventory must be either 'current' or 'shared' or 'objective'")
 
+    def reset_command(self):
+        self.status = -1
+        self.reset = False
+        self.player_ready = 0
+        self.inventory_valid = False
+        self.joined = False
+        self.joiner = 0
+        self.player_food_ready = 0
+        self.elevation = False
+        self.data_received = ""
+        self.commandWaitingRoom = 0
+        self.dataIndex = 0
+        self.debug = 0
+        self.lookString = ""
+        self.shallMove = False
+        self.positionHasBeenChanged = False
+        self.forwardIndex = 0
+        self.isLookUpdated = False
+        self.inventoryString = ""
+        self.isInventoryUpdated = False
+        self.hasElevated = False
+        self.commandList = []
+        self.responseList = []
+
+        self.reset = True
+
     def get_status(self):
         return self.status
 
     def nb_player_ready(self):
         return self.player_ready
+
+    def nb_player_food_ready(self):
+        return self.player_food_ready
+
+    def nb_joiner_ready(self):
+        return self.joiner
+
+    def get_reset(self):
+        return self.reset
