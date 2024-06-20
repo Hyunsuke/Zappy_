@@ -106,8 +106,9 @@ int c_incantation(struct_t *s, int fd)
         return print_incantation_ko(s, fd, pos_incant);
     }
     change_level_elevation(s, elevation, pos_incant);
-    printf("Incantation -> ok\n");
     remove_incantation(s, fd);
-    c_pie(s, pos_incant->x, pos_incant->y, "OK");
+    dprintf(s->fd_gui, "pie %d %d %d\n", pos_incant->x, pos_incant->y,
+    player->level_player);
+    dprintf(s->fd_gui, "plv %d %d\n",player->id_player, player->level_player);
     return 0;
 }
