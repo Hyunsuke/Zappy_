@@ -10,6 +10,7 @@
 
 #include <raylib.h>
 #include <cmath>
+#include "../Wrapper/Raylib/RLText.hpp"
 
 class Sky {
 public:
@@ -21,7 +22,7 @@ public:
     void DrawSunAndMoon();
     Vector3 GetLightPosition() const;
     Vector3 GetLightColor();
-    void OnWindowResized(int newScreenWidth, int newScreenHeight); // Nouvelle méthode
+    void OnWindowResized(int newScreenWidth, int newScreenHeight);
 
 private:
     int screenWidth;
@@ -37,6 +38,7 @@ private:
 
     Color ColorLerp(Color start, Color end, float amount);
     Vector3 ColorToVector3(Color color);
+    RLText rltext;
 };
 
 #endif // SKY_HPP_

@@ -12,6 +12,7 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class ModelCollector {
 public:
@@ -25,6 +26,7 @@ private:
     ~ModelCollector();
 
     std::unordered_map<std::string, std::shared_ptr<Model>> modelCache;
+    RLModel rlModel;
 };
 
 #endif // MODEL_COLLECTOR_HPP_

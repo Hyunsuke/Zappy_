@@ -7,54 +7,119 @@
 
 #include "gui.hpp"
 
-RLModel::RLModel(const std::string& modelPath, const std::string& texturePath) {
-    model = LoadModel(modelPath.c_str());
-    shader = {0, 0};
-    SetTexture(texturePath);
+Model RLModel::LoadModel(const std::string& filePath) {
+    return ::LoadModel(filePath.c_str());
 }
 
-RLModel::~RLModel() {
-    UnloadModel(model);
-    if (shader.id != 0) UnloadShader(shader);
+void RLModel::UnloadModel(Model& model) {
+    ::UnloadModel(model);
 }
 
-void RLModel::Draw(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
-    for (int i = 0; i < model.materialCount; i++) {
-        model.materials[i].shader = shader;
-    }
-    DrawModelEx(model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+Texture2D RLModel::LoadTexture(const std::string& filePath) {
+    return ::LoadTexture(filePath.c_str());
 }
 
-void RLModel::DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
-    DrawModelWiresEx(model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+void RLModel::UnloadTexture(Texture2D& texture) {
+    ::UnloadTexture(texture);
 }
 
-BoundingBox RLModel::GetBoundingBox() const {
-    BoundingBox bbox = { {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
-    Mesh mesh = model.meshes[0];
-    if (mesh.vertexCount > 0) {
-        bbox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
-        bbox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
-        for (int i = 0; i < mesh.vertexCount; i++) {
-            Vector3 v = { mesh.vertices[i*3 + 0], mesh.vertices[i*3 + 1], mesh.vertices[i*3 + 2] };
-            if (v.x < bbox.min.x) bbox.min.x = v.x;
-            if (v.y < bbox.min.y) bbox.min.y = v.y;
-            if (v.z < bbox.min.z) bbox.min.z = v.z;
-            if (v.x > bbox.max.x) bbox.max.x = v.x;
-            if (v.y > bbox.max.y) bbox.max.y = v.y;
-            if (v.z > bbox.max.z) bbox.max.z = v.z;
-        }
-    }
-    return bbox;
+void RLModel::DrawModelEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
+    ::DrawModelEx(model, position, rotationAxis, rotationAngle, scale, tint);
 }
 
-void RLModel::SetShader(Shader newShader) {
-    shader = newShader;
+void RLModel::SetLineWidth(float width) {
+    ::glLineWidth(width);
 }
 
-void RLModel::SetTexture(const std::string& texturePath) {
-    Texture2D texture = LoadTexture(texturePath.c_str());
-    for (int i = 0; i < model.materialCount; i++) {
-        SetMaterialTexture(&model.materials[i], MATERIAL_MAP_DIFFUSE, texture);
-    }
+void RLModel::DrawModelWiresEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
+    ::DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, tint);
+}
+
+float RLModel::GetFrameTime() {
+    return ::GetFrameTime();
+}
+
+double RLModel::GetTime() {
+    return ::GetTime();
+}
+
+void RLModel::UpdateModelAnimation(Model& model, ModelAnimation& anim, int frame) {
+    ::UpdateModelAnimation(model, anim, frame);
+}
+
+Vector3 RLModel::Vector3Lerp(Vector3 start, Vector3 end, float amount) {
+    return ::Vector3Lerp(start, end, amount);
+}
+
+Vector3 RLModel::Vector3Add(Vector3 v1, Vector3 v2) {
+    return ::Vector3Add(v1, v2);
+}
+
+Vector3 RLModel::Vector3Normalize(Vector3 v) {
+    return ::Vector3Normalize(v);
+}
+
+Vector3 RLModel::Vector3Subtract(Vector3 v1, Vector3 v2) {
+    return ::Vector3Subtract(v1, v2);
+}
+
+float RLModel::Vector3DotProduct(Vector3 v1, Vector3 v2) {
+    return ::Vector3DotProduct(v1, v2);
+}
+
+Matrix RLModel::MatrixRotate(Vector3 axis, float angle) {
+    return ::MatrixRotate(axis, angle);
+}
+
+Vector3 RLModel::Vector3Transform(Vector3 v, Matrix mat) {
+    return ::Vector3Transform(v, mat);
+}
+
+Vector3 RLModel::Vector3CrossProduct(Vector3 v1, Vector3 v2) {
+    return ::Vector3CrossProduct(v1, v2);
+}
+
+Vector3 RLModel::Vector3Scale(Vector3 v, float scale) {
+    return ::Vector3Scale(v, scale);
+}
+
+Vector2 RLModel::GetMousePosition() {
+    return ::GetMousePosition();
+}
+
+bool RLModel::IsMouseButtonDown(int button) {
+    return ::IsMouseButtonDown(button);
+}
+
+bool RLModel::IsMouseButtonPressed(int button) {
+    return ::IsMouseButtonPressed(button);
+}
+
+bool RLModel::IsKeyDown(int key) {
+    return ::IsKeyDown(key);
+}
+
+
+void RLModel::SetMaterialTexture(Material& material, int mapType, Texture2D& texture) {
+    ::SetMaterialTexture(&material, mapType, texture);
+}
+
+BoundingBox RLModel::GetModelBoundingBox(const Model& model) {
+    return ::GetModelBoundingBox(model);
+}
+
+Matrix RLModel::MatrixTranslate(float x, float y, float z) {
+    return ::MatrixTranslate(x, y, z);
+}
+
+Matrix RLModel::MatrixMultiply(Matrix left, Matrix right) {
+    return ::MatrixMultiply(left, right);
+}
+
+Matrix RLModel::MatrixScale(float x, float y, float z) {
+    return ::MatrixScale(x, y, z);
+}
+
+Ray RLModel::GetMouseRay(Vector2 mousePosition, Camera camera) {
+    return ::GetMouseRay(mousePosition, camera);
 }

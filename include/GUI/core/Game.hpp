@@ -14,11 +14,13 @@
 #include "../Manager/ShaderManager.hpp"
 #include "../Manager/UIManager.hpp"
 #include "../Manager/RayManager.hpp"
-#include "../Particles/ParticleSystem.hpp"
 #include "../Settings/settings.hpp"
 #include "../Socket/SocketManager.hpp"
 #include "../Manager/ChatManager.hpp"
 #include "../Manager/CameraManager.hpp"
+
+#include "../Wrapper/Raylib/RLWindow.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 #include <vector>
 #include <iostream>
@@ -74,6 +76,8 @@ private:
 
     std::shared_ptr<Island> selectedIsland;
     std::shared_ptr<Player> selectedPlayer;
+    RLWindow window;
+    RLModel rlModel;
 };
 
 #endif /* !GAME_HPP_ */

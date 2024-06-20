@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <vector>
 #include "raylib.h"
+#include "../Wrapper/Raylib/RLAnimation.hpp"
 
 class AnimationCollector {
 public:
@@ -29,6 +30,7 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<ModelAnimation>> animationCache;
     std::unordered_map<std::string, int> animCountCache;
+    RLAnimation rlAnimation;
 };
 
 #endif // ANIMATIONCOLLECTOR_HPP

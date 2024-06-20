@@ -72,13 +72,11 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
 }
 
 void Game::Run() {
-    while (!WindowShouldClose()) {
+    while (!window.WindowShouldClose()) {
         Update();
         Draw();
     }
 }
-
-
 
 void Game::Update() {
     cameraManager.Update(selectedPlayer);
@@ -92,12 +90,12 @@ void Game::Update() {
 
     rayManager.UpdateRay(cameraController.GetCamera());
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (rlModel.IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         selectedIsland = rayManager.GetIslandUnderMouse(gameMap.GetIslands());
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+    if (rlModel.IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         selectedPlayer = rayManager.GetPlayerUnderMouse(gameMap.GetPlayers());
 
-    settings.HandleMouseInput(GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
+    settings.HandleMouseInput(rlModel.GetMousePosition(), uiManager.settingsButton, uiManager.closeButton);
 
     settings.Update();
 
@@ -105,20 +103,20 @@ void Game::Update() {
 }
 
 void Game::Draw() {
-    BeginDrawing();
-    ClearBackground(WHITE);
+    window.BeginDrawing();
+    window.ClearBackground(WHITE);
     sky.DrawBackground();
 
-    BeginMode3D(cameraController.GetCamera());
+    window.BeginMode3D(cameraController.GetCamera());
 
     sky.DrawSunAndMoon();
     gameMap.Draw();
     gameMap.DrawIslandWires(selectedIsland);
     gameMap.DrawPlayerWires(selectedPlayer);
 
-    EndMode3D();
+    window.EndMode3D();
     uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
     settings.Draw();
 
-    EndDrawing();
+    window.EndDrawing();
 }

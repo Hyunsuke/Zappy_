@@ -13,7 +13,7 @@
 
 class RLWindow {
 public:
-    RLWindow(int width, int height, const std::string& title);
+    RLWindow();
     ~RLWindow();
 
     void BeginDrawing();
@@ -22,11 +22,11 @@ public:
     void EndMode3D();
     bool WindowShouldClose();
     void ClearBackground(Color color);
+    void InitWindow(int width, int height, const std::string& title);
+    void SetTargetFPS(int fps);
+    void CloseWindow();
 
 private:
-    int width;
-    int height;
-    std::string title;
 };
 
 #endif // RLWINDOW_HPP_

@@ -11,6 +11,7 @@
 #include "raylib.h"
 #include <memory>
 #include "Player/Player.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class CameraController {
 public:
@@ -39,6 +40,7 @@ private:
     float lerpSpeed;
 
     void SmoothMoveCamera(const Vector3& targetPosition, const Vector3& targetLookAt);
+    RLModel rlModel;
 };
 
 #endif /* !CAMERACONTROLLER_HPP_ */

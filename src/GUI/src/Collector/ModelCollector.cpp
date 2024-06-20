@@ -18,7 +18,7 @@ std::shared_ptr<Model> ModelCollector::LoadModel(const std::string& filePath) {
         return it->second;
     }
 
-    Model rawModel = ::LoadModel(filePath.c_str());
+    Model rawModel = rlModel.LoadModel(filePath.c_str());
     if (rawModel.meshCount == 0) {
         throw GameException("Failed to load model: " + filePath);
     }
@@ -30,7 +30,7 @@ std::shared_ptr<Model> ModelCollector::LoadModel(const std::string& filePath) {
 
 void ModelCollector::UnloadAllModels() {
     for (auto& entry : modelCache) {
-        ::UnloadModel(*entry.second);
+        rlModel.UnloadModel(*entry.second);
     }
     modelCache.clear();
 }

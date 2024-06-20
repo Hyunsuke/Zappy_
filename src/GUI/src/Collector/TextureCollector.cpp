@@ -18,7 +18,7 @@ std::shared_ptr<Texture2D> TextureCollector::LoadTexture(const std::string& file
         return it->second;
     }
 
-    Texture2D rawTexture = ::LoadTexture(filePath.c_str());
+    Texture2D rawTexture = rlModel.LoadTexture(filePath.c_str());
     if (rawTexture.id == 0) {
         throw GameException("Failed to load texture: " + filePath);
     }
@@ -30,7 +30,7 @@ std::shared_ptr<Texture2D> TextureCollector::LoadTexture(const std::string& file
 
 void TextureCollector::UnloadAllTextures() {
     for (auto& entry : textureCache) {
-        ::UnloadTexture(*entry.second);
+        rlModel.UnloadTexture(*entry.second);
     }
     textureCache.clear();
 }

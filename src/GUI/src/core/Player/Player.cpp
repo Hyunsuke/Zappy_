@@ -51,19 +51,19 @@ Player::~Player() {}
 
 void Player::Draw() {
     model = modelLoader.GetModel();
-    DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
 }
 
 void Player::DrawWires() {
-    glLineWidth(5.0f);
+    rlModel.SetLineWidth(5.0f);
     model = modelLoader.GetModel();
-    DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
-    glLineWidth(1.0f);
+    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, MAROON);
+    rlModel.SetLineWidth(1.0f);
 }
 
 void Player::UpdateAnimation() {
     if (!animations.empty() && animIndex < animations.size() && animations[animIndex] && Dead == false) {
-        float deltaTime = GetFrameTime();
+        float deltaTime = rlModel.GetFrameTime();
         animationTime += deltaTime;
 
         int framesToAdvance = static_cast<int>(animationTime * animationSpeed);
@@ -72,7 +72,7 @@ void Player::UpdateAnimation() {
         animationTime -= framesToAdvance / animationSpeed;
 
         model = modelLoader.GetModel();
-        UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
+        rlModel.UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
     }
 }
 
@@ -87,7 +87,7 @@ void Player::WaitForAnimationEnd(Player::Animation animation) {
 
 void Player::UpdatePosition() {
     if (isMoving) {
-        float currentTime = GetTime();
+        float currentTime = rlModel.GetTime();
         float t = (currentTime - moveStartTime) / moveDuration;
 
         if (t >= 1.0f) {
@@ -102,7 +102,7 @@ void Player::UpdatePosition() {
             UpdatePlayersPositionsOnIsland(newIsland);
         }
 
-        Vector3 newPos = Vector3Lerp(startPos, endPos, t);
+        Vector3 newPos = rlModel.Vector3Lerp(startPos, endPos, t);
         SetPosition(newPos);
     } else if (island) {
         Vector3 islandPosition = island->GetPosition();
@@ -192,7 +192,7 @@ void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
     endPos = newIsland->GetPosition();
 
     moveDuration = baseDuration;
-    moveStartTime = GetTime();
+    moveStartTime = rlModel.GetTime();
     isMoving = true;
 
     SetAnimation(Animation::Jump);
@@ -212,7 +212,7 @@ void Player::UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island) {
         if (playerCount > 1) {
             offset = {radius * cos(angle), 0.0f, radius * sin(angle)};
         }
-        players[i]->SetPosition(Vector3Add(islandPos, offset));
+        players[i]->SetPosition(rlModel.Vector3Add(islandPos, offset));
     }
 }
 

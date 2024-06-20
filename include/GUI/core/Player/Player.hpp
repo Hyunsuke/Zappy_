@@ -17,6 +17,7 @@ class Island;
 #include <vector>
 #include "raylib.h"
 #include <GL/gl.h>
+#include "../../Wrapper/Raylib/RLModel.hpp"
 
 class Player {
 public:
@@ -115,6 +116,8 @@ private:
     float moveDuration;
     bool isMoving = false;
     bool Dead = false;
+
+    RLModel rlModel;
 };
 
 #endif // PLAYER_HPP

@@ -56,7 +56,7 @@ void Island::Draw() {
         }
     }
     for (auto& egg: eggs) {
-        DrawModelEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
+        rlModel.DrawModelEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
     }
 }
 
@@ -68,24 +68,24 @@ void Island::DrawWires() {
         }
     }
     for (auto& egg: eggs) {
-        DrawModelWiresEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
+        rlModel.DrawModelWiresEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
     }
 }
 
 void Island::Move(Vector3 newPosition) {
-    Vector3 delta = Vector3Subtract(newPosition, position);
+    Vector3 delta = rlModel.Vector3Subtract(newPosition, position);
     position = newPosition;
     for (auto& obj : objects) {
         if (obj == thystame) {
             thystameAngle += 0.01f;
             float distance = 5.0f;
             Vector3 thystamePos = {
-                position.x + distance * cos(thystameAngle),
+                position.x + distance * std::cos(thystameAngle),
                 position.y + 5.0f,
-                position.z + distance * sin(thystameAngle)
+                position.z + distance * std::sin(thystameAngle)
             };
             obj->Move(thystamePos);
-            Vector3 direction = Vector3Normalize(Vector3Subtract(position, thystamePos));
+            Vector3 direction = rlModel.Vector3Normalize(rlModel.Vector3Subtract(position, thystamePos));
             float rotationAngle = std::atan2(direction.z, direction.x) * (180.0f / PI);
             obj->SetRotation({0.0f, 1.0f, 0.0f}, -rotationAngle);
         } else {

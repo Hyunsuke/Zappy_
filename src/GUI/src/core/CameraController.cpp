@@ -14,27 +14,27 @@ CameraController::CameraController() : firstMouseMove(true), isLocked(false), le
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
-    previousMousePosition = GetMousePosition();
+    previousMousePosition = rlModel.GetMousePosition();
     currentCameraPosition = camera.position;
     currentCameraTarget = camera.target;
 }
 
 void CameraController::RotateCamera(float yaw, float pitch) {
-    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
-    Matrix rotationMatrix = MatrixRotate(camera.up, yaw);
-    forward = Vector3Transform(forward, rotationMatrix);
+    Vector3 forward = rlModel.Vector3Normalize(rlModel.Vector3Subtract(camera.target, camera.position));
+    Matrix rotationMatrix = rlModel.MatrixRotate(camera.up, yaw);
+    forward = rlModel.Vector3Transform(forward, rotationMatrix);
 
-    Vector3 right = Vector3Normalize(Vector3CrossProduct(forward, camera.up));
-    rotationMatrix = MatrixRotate(right, pitch);
-    forward = Vector3Transform(forward, rotationMatrix);
+    Vector3 right = rlModel.Vector3Normalize(rlModel.Vector3CrossProduct(forward, camera.up));
+    rotationMatrix = rlModel.MatrixRotate(right, pitch);
+    forward = rlModel.Vector3Transform(forward, rotationMatrix);
 
-    camera.target = Vector3Add(camera.position, forward);
+    camera.target = rlModel.Vector3Add(camera.position, forward);
 }
 
 void CameraController::Update() {
     if (isLocked) return;
 
-    Vector2 mousePosition = GetMousePosition();
+    Vector2 mousePosition = rlModel.GetMousePosition();
     if (firstMouseMove) {
         previousMousePosition = mousePosition;
         firstMouseMove = false;
@@ -44,7 +44,7 @@ void CameraController::Update() {
     previousMousePosition = mousePosition;
 
     float mouseSensitivity = 0.003f;
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+    if (rlModel.IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         RotateCamera(-mouseDelta.x * mouseSensitivity, -mouseDelta.y * mouseSensitivity);
     }
 
@@ -53,30 +53,30 @@ void CameraController::Update() {
     float pitch = 0.0f;
     float keyboardSensitivity = 0.03f;
 
-    if (IsKeyDown(KEY_RIGHT)) yaw -= keyboardSensitivity * GetFrameTime() * speedcam;
-    if (IsKeyDown(KEY_LEFT)) yaw += keyboardSensitivity * GetFrameTime() * speedcam;
-    if (IsKeyDown(KEY_UP)) pitch += keyboardSensitivity * GetFrameTime() * speedcam;
-    if (IsKeyDown(KEY_DOWN)) pitch -= keyboardSensitivity * GetFrameTime() * speedcam;
+    if (rlModel.IsKeyDown(KEY_RIGHT)) yaw -= keyboardSensitivity * rlModel.GetFrameTime() * speedcam;
+    if (rlModel.IsKeyDown(KEY_LEFT)) yaw += keyboardSensitivity * rlModel.GetFrameTime() * speedcam;
+    if (rlModel.IsKeyDown(KEY_UP)) pitch += keyboardSensitivity * rlModel.GetFrameTime() * speedcam;
+    if (rlModel.IsKeyDown(KEY_DOWN)) pitch -= keyboardSensitivity * rlModel.GetFrameTime() * speedcam;
 
     RotateCamera(yaw, pitch);
 
-    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
-    Vector3 right = Vector3Normalize(Vector3CrossProduct(forward, camera.up));
+    Vector3 forward = rlModel.Vector3Normalize(rlModel.Vector3Subtract(camera.target, camera.position));
+    Vector3 right = rlModel.Vector3Normalize(rlModel.Vector3CrossProduct(forward, camera.up));
 
-    float deltaTime = GetFrameTime();
+    float deltaTime = rlModel.GetFrameTime();
     int speed = 150;
 
     Vector3 movement = { 0.0f, 0.0f, 0.0f };
-    if (IsKeyDown(KEY_LEFT_SHIFT)) speed = 300;
-    if (IsKeyDown(KEY_W)) movement = Vector3Add(movement, Vector3Scale(forward, 0.2f * speed * deltaTime));
-    if (IsKeyDown(KEY_S)) movement = Vector3Add(movement, Vector3Scale(forward, -0.2f * speed * deltaTime));
-    if (IsKeyDown(KEY_A)) movement = Vector3Add(movement, Vector3Scale(right, -0.2f * speed * deltaTime));
-    if (IsKeyDown(KEY_D)) movement = Vector3Add(movement, Vector3Scale(right, 0.2f * speed * deltaTime));
-    if (IsKeyDown(KEY_Q)) movement.y += 0.2f * deltaTime * speed;
-    if (IsKeyDown(KEY_E)) movement.y -= 0.2f * deltaTime * speed;
+    if (rlModel.IsKeyDown(KEY_LEFT_SHIFT)) speed = 300;
+    if (rlModel.IsKeyDown(KEY_W)) movement = rlModel.Vector3Add(movement, rlModel.Vector3Scale(forward, 0.2f * speed * deltaTime));
+    if (rlModel.IsKeyDown(KEY_S)) movement = rlModel.Vector3Add(movement, rlModel.Vector3Scale(forward, -0.2f * speed * deltaTime));
+    if (rlModel.IsKeyDown(KEY_A)) movement = rlModel.Vector3Add(movement, rlModel.Vector3Scale(right, -0.2f * speed * deltaTime));
+    if (rlModel.IsKeyDown(KEY_D)) movement = rlModel.Vector3Add(movement, rlModel.Vector3Scale(right, 0.2f * speed * deltaTime));
+    if (rlModel.IsKeyDown(KEY_Q)) movement.y += 0.2f * deltaTime * speed;
+    if (rlModel.IsKeyDown(KEY_E)) movement.y -= 0.2f * deltaTime * speed;
 
-    camera.position = Vector3Add(camera.position, movement);
-    camera.target = Vector3Add(camera.target, movement);
+    camera.position = rlModel.Vector3Add(camera.position, movement);
+    camera.target = rlModel.Vector3Add(camera.target, movement);
 
     currentCameraPosition = camera.position;
     currentCameraTarget = camera.target;
@@ -106,16 +106,16 @@ void CameraController::UpdateLockedCamera(const std::shared_ptr<Player>& player)
             break;
     }
 
-    Vector3 targetPosition = Vector3Add(playerPosition, offset);
+    Vector3 targetPosition = rlModel.Vector3Add(playerPosition, offset);
     Vector3 targetLookAt = playerPosition;
 
     SmoothMoveCamera(targetPosition, targetLookAt);
 }
 
 void CameraController::SmoothMoveCamera(const Vector3& targetPosition, const Vector3& targetLookAt) {
-    float lerpFactor = GetFrameTime() * lerpSpeed;
-    camera.position = Vector3Lerp(currentCameraPosition, targetPosition, lerpFactor);
-    camera.target = Vector3Lerp(currentCameraTarget, targetLookAt, lerpFactor);
+    float lerpFactor = rlModel.GetFrameTime() * lerpSpeed;
+    camera.position = rlModel.Vector3Lerp(currentCameraPosition, targetPosition, lerpFactor);
+    camera.target = rlModel.Vector3Lerp(currentCameraTarget, targetLookAt, lerpFactor);
 
     currentCameraPosition = camera.position;
     currentCameraTarget = camera.target;

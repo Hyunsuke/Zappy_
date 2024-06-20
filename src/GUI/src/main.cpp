@@ -6,11 +6,10 @@
 */
 
 #include "gui.hpp"
-#include <future>
 
-void init_Window(int screenWidth, int screenHeight, const char* title) {
-    InitWindow(screenWidth, screenHeight, title);
-    SetTargetFPS(60);
+void init_Window(int screenWidth, int screenHeight, const char* title, RLWindow& window) {
+    window.InitWindow(screenWidth, screenHeight, title);
+    window.SetTargetFPS(60);
 }
 
 bool runMenu(int& screenWidth, int& screenHeight, std::string& host, int& port) {
@@ -36,7 +35,7 @@ bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketMa
     return true;
 }
 
-bool processInitialServerMessages(SocketManager& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 15) {
+bool processInitialServerMessages(std::unique_ptr<SocketManager>& socketManager, std::string& mapSize, int& timeUnit, std::vector<std::string>& teamNames, std::vector<std::string>& mapContent, std::vector<std::string>& eggs, int timeoutSeconds = 15) {
     auto start = std::chrono::steady_clock::now();
 
     while (true) {
@@ -47,7 +46,7 @@ bool processInitialServerMessages(SocketManager& socketManager, std::string& map
             throw GameException("Timeout waiting for initial server messages");
         }
         std::string message;
-        if (!socketManager.TryReceiveMessage(message)) {
+        if (!socketManager->TryReceiveMessage(message)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
@@ -117,6 +116,7 @@ void parseArguments(int ac, char** av, std::string& host, int& port) {
 }
 
 int main(int ac, char** av) {
+    RLWindow window;
     try {
         std::string host;
         int port;
@@ -125,7 +125,7 @@ int main(int ac, char** av) {
 
         int screenWidth = 1920;
         int screenHeight = 1080;
-        init_Window(screenWidth, screenHeight, "Zappy GUI");
+        init_Window(screenWidth, screenHeight, "Zappy GUI", window);
 
         if (runMenu(screenWidth, screenHeight, host, port)) {
             std::unique_ptr<SocketManager> socketManager;
@@ -137,7 +137,7 @@ int main(int ac, char** av) {
                 std::vector<std::string> mapContent;
                 std::vector<std::string> eggs;
 
-                if (processInitialServerMessages(*socketManager, mapSize, timeUnit, teamNames, mapContent, eggs)) {
+                if (processInitialServerMessages(socketManager, mapSize, timeUnit, teamNames, mapContent, eggs)) {
                     runGame(screenWidth, screenHeight, mapSize, timeUnit, teamNames, mapContent, eggs, socketManager);
                 } else
                     std::cout << "Failed to process initial server messages" << std::endl;
@@ -149,9 +149,9 @@ int main(int ac, char** av) {
         return 84;
     } catch (const GameException& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        CloseWindow();
+        window.CloseWindow();
         return 84;
     }
-    CloseWindow();
+    window.CloseWindow();
     return 0;
 }

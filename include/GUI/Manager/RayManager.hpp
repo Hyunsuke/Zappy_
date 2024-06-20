@@ -12,6 +12,7 @@
 #include "../core/Island.hpp"
 #include <vector>
 #include <memory>
+#include "../Wrapper/Raylib/RLModel.hpp"
 
 class RayManager {
 public:
@@ -23,7 +24,9 @@ public:
 private:
     bool CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform);
     bool CheckCollisionRayBox(Ray ray, BoundingBox box);
+    bool CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint);
     Ray ray;
+    RLModel rlModel;
 };
 
 #endif // RAYMANAGER_HPP_

@@ -22,21 +22,21 @@ SocketManager::~SocketManager() {
 
 void SocketManager::Connect() {
     struct sockaddr_in serv_addr;
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socketWrapper.Socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         std::cerr << "Error creating socket" << std::endl;
         return;
     }
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(port);
+    serv_addr.sin_port = socketWrapper.Htons(port);
 
-    if (inet_pton(AF_INET, host.c_str(), &serv_addr.sin_addr) <= 0) {
+    if (socketWrapper.InetPton(AF_INET, host.c_str(), &serv_addr.sin_addr) <= 0) {
         std::cerr << "Invalid address/ Address not supported" << std::endl;
         return;
     }
 
-    if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    if (socketWrapper.Connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         std::cerr << "Connection Failed" << std::endl;
         return;
     }
@@ -53,7 +53,7 @@ bool SocketManager::IsRunning() const {
 void SocketManager::Disconnect() {
     if (running) {
         running = false;
-        close(sockfd);
+        socketWrapper.Close(sockfd);
         if (receiveThread.joinable()) {
             receiveThread.join();
         }
