@@ -26,25 +26,39 @@ int get_sound_from_angle(double angle)
     return 1;
 }
 
-double find_angle(struct_t *s, player_t *sender, player_t *receiver,
-    double orientation1)
+double define_angle(int *part, double orientation1)
 {
-    int vect[2];
     double angle;
-    int x_diff = sender->x - receiver->x;
-    int y_diff = sender->y - receiver->y;
 
-    vect[0] = (abs(x_diff) > s->map_width / 2) ?
-                (x_diff - (s->map_width * (x_diff / abs(x_diff)))) : x_diff;
-    vect[1] = (abs(y_diff) > s->map_height / 2) ?
-                (y_diff - (s->map_height * (y_diff / abs(y_diff)))) : y_diff;
-    angle = atan2(vect[1], vect[0]) * (180 / M_PI);
+    angle = atan2(part[1], part[0]) * (180 / M_PI);
     angle += 90;
     if (angle < 0)
         angle += 360;
     angle -= orientation1;
     if (angle < 0)
         angle += 360;
+    return angle;
+}
+
+double find_angle(struct_t *s, player_t *sender, player_t *receiver,
+    double orientation1)
+{
+    double angle;
+    int inter_x = sender->x - receiver->x;
+    int inter_y = sender->y - receiver->y;
+    int *part = malloc(sizeof(int) * 2);
+
+    if (abs(inter_x) > s->map_width / 2) {
+        part[0] = inter_x - (s->map_width * (inter_x / abs(inter_x)));
+    } else {
+        part[0] = inter_x;
+    }
+    if (abs(inter_y) > s->map_height / 2) {
+        part[1] = inter_y - (s->map_height * (inter_y / abs(inter_y)));
+    } else {
+        part[1] = inter_y;
+    }
+    angle = define_angle(part, orientation1);
     return angle;
 }
 
