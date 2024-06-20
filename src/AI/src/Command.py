@@ -177,6 +177,8 @@ class Command:
         # print(num)
         # print(broadcastMessage)
         team_name, object, fct = self.getBroadcastMessage(broadcastMessage)
+        if team_name == None or object == None or fct == None:
+            return
         print("Name : " + team_name + " object : " + object + " fct : " + fct + " num : " + str(num))
         if team_name == self.team_name:
             if fct == "Take":
@@ -372,8 +374,10 @@ class Command:
 
     def getBroadcastMessage(self, response):
         parts = response.split('_')
+        print("Get broadcast message||||||||||||||||||||||||||||||||||||||||||||")
+        print(response)
         if len(parts) != 3:
-            raise ValueError("La chaîne d'entrée n'est pas au format 'teamname_object_fct'")
+            return None, None, None
         # On récupère le nom de l'équipe et l'objet
         team_name = parts[0]
         object_name = parts[1]
