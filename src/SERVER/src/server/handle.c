@@ -15,6 +15,7 @@ void handle_activity(server_t *server)
         &server->tmp_fdtab, NULL, NULL, &timeout);
     if ((server->activity < 0) && (errno != EINTR)) {
         perror("select error");
+        full_free();
         exit(84);
     }
 }
@@ -28,6 +29,7 @@ void handle_new_client(server_t *server)
             (struct sockaddr *) &server->serv_adr, &server->addrlen);
         if (new_socket < 0) {
             perror("accept");
+            full_free();
             exit(84);
         }
         dprintf(new_socket, "WELCOME\n");

@@ -60,8 +60,6 @@ team_t *get_team_by_name(struct_t *s, const char *name);
 void init_struct(struct_t *s);
 void signal_handler(int signum);
 
-void tiredness(struct_t *s);
-
 char **split_buffer(const char *buffer, int *count);
 
 ///////////////////////////////////////////////////////////////////////////////

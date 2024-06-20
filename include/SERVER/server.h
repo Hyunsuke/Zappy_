@@ -28,4 +28,6 @@ void handle_new_client(server_t *server);
 void handle_activity(server_t *server);
 void handling_cmd(server_t *server, struct_t *s);
 
+void tiredness(struct_t *s, server_t *server);
+
 #endif /* !SERVER_H */
