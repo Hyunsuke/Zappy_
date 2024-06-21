@@ -153,12 +153,12 @@ int main(int ac, char** av) {
         const float minimumDisplayTime = 1.0f;
         float elapsedTime = 0.0f;
 
-        while (!WindowShouldClose() && elapsedTime < minimumDisplayTime) {
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
+        while (!window.WindowShouldClose() && elapsedTime < minimumDisplayTime) {
+            window.BeginDrawing();
+            window.ClearBackground(RAYWHITE);
             loadingMenu.Draw();
-            EndDrawing();
-            elapsedTime += GetFrameTime();
+            window.EndDrawing();
+            elapsedTime += window.GetFrameTime();
         }
 
         if (runMenu(screenWidth, screenHeight, host, port)) {

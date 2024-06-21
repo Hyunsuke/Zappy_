@@ -21,7 +21,9 @@ void Map::AddIsland(std::shared_ptr<Island> island) {
 }
 
 void Map::AddPlayer(std::shared_ptr<Player> player) {
+    while (playersLock.test_and_set(std::memory_order_acquire)) {}
     players.push_back(player);
+    playersLock.clear(std::memory_order_release);
 }
 
 
@@ -62,12 +64,14 @@ void Map::Update() {
         position.y = offset;
         island->Move(position);
     }
+    while (playersLock.test_and_set(std::memory_order_acquire)) {}
     for (auto& player : players) {
         if (player) {
             player->UpdateAnimation();
             player->UpdatePosition();
         }
     }
+    playersLock.clear(std::memory_order_release);
 }
 
 
@@ -109,4 +113,15 @@ void Map::RemoveEgg(int eggId) {
     for (auto& island : islands) {
         island->RemoveEgg(eggId);
     }
+}
+
+Map& Map::operator=(const Map& other) {
+    if (this != &other) {
+        width = other.width;
+        height = other.height;
+        islands = other.islands;
+        players = other.players;
+        playersLock.clear();
+    }
+    return *this;
 }

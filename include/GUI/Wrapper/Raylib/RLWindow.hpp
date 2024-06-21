@@ -25,6 +25,7 @@ public:
     void InitWindow(int width, int height, const std::string& title);
     void SetTargetFPS(int fps);
     void CloseWindow();
+    float GetFrameTime();
 
 private:
 };
