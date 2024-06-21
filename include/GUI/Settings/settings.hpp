@@ -8,6 +8,7 @@
 #include "../Sky/Sky.hpp"
 #include "../Manager/UIManager.hpp"
 #include "../Manager/ChatManager.hpp"
+#include "../Wrapper/Raylib/RLWindow.hpp"
 
 class Game;
 
@@ -58,6 +59,10 @@ private:
 
     ChatManager chat;
     std::shared_ptr<Game> game;
+
+    RLWindow window;
+    RLModel rlModel;
+    RLText rlText;
 };
 
 #endif // SETTINGS_HPP

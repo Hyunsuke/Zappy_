@@ -85,3 +85,19 @@ void RLText::DrawSphere(Vector3 centerPos, float radius, Color color) {
 float RLText::GetFrameTime() {
     return ::GetFrameTime();
 }
+
+void RLText::DrawButton(Rectangle button, const char *text, int fontSize) {
+    ::DrawButton(button, text, fontSize);
+}
+
+bool RLText::IsKeyPressed(int key) {
+    return ::IsKeyPressed(key);
+}
+
+bool RLText::IsKeyDown(int key) {
+    return ::IsKeyDown(key);
+}
+
+int RLText::GetCharPressed() {
+    return ::GetCharPressed();
+}

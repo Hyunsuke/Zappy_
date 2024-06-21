@@ -19,10 +19,12 @@ public:
     static void UnloadModel(Model& model);
     static Texture2D LoadTexture(const std::string& filePath);
     static void UnloadTexture(Texture2D& texture);
+    static void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
 
     static void DrawModelEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
     static void SetLineWidth(float width);
     static void DrawModelWiresEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
+    static void DrawModel(Model model, Vector3 position, float scale, Color tint);
 
     static float GetFrameTime();
     static double GetTime();

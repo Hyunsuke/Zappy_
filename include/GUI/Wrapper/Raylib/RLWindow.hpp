@@ -25,6 +25,8 @@ public:
     void InitWindow(int width, int height, const std::string& title);
     void SetTargetFPS(int fps);
     void CloseWindow();
+    void SetWindowSize(int width, int height);
+    bool IsWindowResized();
 
 private:
 };

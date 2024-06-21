@@ -36,12 +36,15 @@ private:
     char hostBuffer[128];
     char portBuffer[6];
     std::unique_ptr<ShaderManager> shaderManager;
-    Model islandModel;
-    Texture2D islandTexture;
+    std::shared_ptr<Model> islandModel;
+    std::shared_ptr<Texture2D> islandTexture;
     Camera camera;
     std::unique_ptr<Player> player;
     Settings settings;
-    Sky sky;  // Ajouter l'instance de Sky ici
+    Sky sky;
+    RLWindow window;
+    RLModel rlModel;
+    RLText rlText;
 };
 
 #endif // MENU_HPP

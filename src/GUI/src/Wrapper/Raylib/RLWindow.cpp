@@ -48,3 +48,10 @@ void RLWindow::CloseWindow() {
     ::CloseWindow();
 }
 
+void RLWindow::SetWindowSize(int width, int height) {
+    ::SetWindowSize(width, height);
+}
+
+bool RLWindow::IsWindowResized() {
+    return ::IsWindowResized();
+}
