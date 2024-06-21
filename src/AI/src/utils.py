@@ -1,6 +1,8 @@
 # This file contains some useful functions for the AI
 
 import random
+import sys
+import re
 
 def get_cood(num):
         if num == 0:
@@ -60,5 +62,18 @@ def get_coordinates(target_tile):
             c += 1
     return x, y  # If tile not found (which shouldn't happen in this context)
 
-def random_nb(self):
+def random_nb():
     return random.choice([0, 1, 2])
+
+
+def skip_to_first_comma(string):
+    pos = string.find(',')
+    if pos != -1:
+        return string[pos + 2:]  # Récupère la sous-chaîne après la première virgule et l'espace
+    else:
+        # Si aucune virgule n'est trouvée, retourne la chaîne originale
+        return string
+
+def recuperer_chiffre(text):
+    matches = re.findall(r'\b\w\b', text)
+    return int(matches[0])

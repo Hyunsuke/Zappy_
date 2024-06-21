@@ -7,7 +7,7 @@ import socket
 from InventoryManager import InventoryManager
 import threading
 import os
-
+from utils import *
 
 class Command:
     def __init__(self, socket, current_inventory, team_name):
@@ -173,8 +173,8 @@ class Command:
 
     def adjustBroadcast(self):
         # print("Données reçu : " + self.data_received)
-        broadcastMessage = self.skip_to_first_comma(self.data_received)
-        num = self.recuperer_chiffre(self.data_received)
+        broadcastMessage = skip_to_first_comma(self.data_received)
+        num = recuperer_chiffre(self.data_received)
         # print(num)
         # print(broadcastMessage)
         team_name, object, fct = self.getBroadcastMessage(broadcastMessage)
@@ -256,17 +256,6 @@ class Command:
     def shouldMove(self):
         return self.shallMove
 
-    def skip_to_first_comma(self, string):
-        pos = string.find(',')
-        if pos != -1:
-            return string[pos + 2:]  # Récupère la sous-chaîne après la première virgule et l'espace
-        else:
-            # Si aucune virgule n'est trouvée, retourne la chaîne originale
-            return string
-
-    def recuperer_chiffre(self, text):
-        matches = re.findall(r'\b\w\b', text)
-        return int(matches[0])
 
     def adjustEject(self):
         return
