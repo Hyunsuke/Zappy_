@@ -18,6 +18,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       cameraManager(cameraController, gameMap),
       endMenu(screenWidth, screenHeight) {
 
+    InitializeCommandHandlers();
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
@@ -31,6 +32,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Player/robot.glb");
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Egg/egg.obj");
     TextureCollector::GetInstance().LoadTexture("src/GUI/assets/Egg/egg.png");
+
 
     InitializeMap(mapSize, mapContent, eggs);
 }
