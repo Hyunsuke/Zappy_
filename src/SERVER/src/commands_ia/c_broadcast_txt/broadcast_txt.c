@@ -97,6 +97,7 @@ void send_to_all_players(struct_t *s, int fd)
         }
         receiver = receiver->next;
     }
+    dprintf(s->fd_gui, "pbc %d %s\n", sender->id_player, s->obj);
 }
 
 int c_broadcast_txt(struct_t *s, int fd)
