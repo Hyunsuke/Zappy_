@@ -25,7 +25,7 @@ static void parse_names(int ac, char **av, int i, struct_t *s)
 
 static void check_map_dimension(int nb)
 {
-    if (nb < 10 || nb > 30) {
+    if (nb < 2 || nb > 30) {
         dprintf(2, "Invalid dimension: should be between 10 and 30\n");
         full_free();
         exit(84);

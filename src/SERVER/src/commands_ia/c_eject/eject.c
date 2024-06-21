@@ -41,12 +41,12 @@ int c_eject(struct_t *s, int fd)
 {
     player_t *player = get_player_by_fd(s, fd);
 
-    for (int n = 0; n < s->map[player->x][player->y].nb_mob; n++) {
-        if (s->map[player->x][player->y].id_mob[n] != player->id_player)
+    for (int n = 0; n < s->map[player->y][player->x].nb_mob; n++) {
+        if (s->map[player->y][player->x].id_mob[n] != player->id_player)
             eject_player_in_direction(s, player->view_direction,
-                get_player_by_id(s, s->map[player->x][player->y].id_mob[n]));
+                get_player_by_id(s, s->map[player->y][player->x].id_mob[n]));
     }
-    remove_all_eggs_at_position_for_all_teams(s, player->x, player->y);
+    remove_all_eggs_at_position_for_all_teams(s, player->y, player->x);
     dprintf(fd, "ok\n");
     return 0;
 }
