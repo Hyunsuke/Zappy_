@@ -208,6 +208,7 @@ void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
 
     SetAnimation(Animation::Jump);
 
+    this->newIsland.reset();
     this->newIsland = newIsland;
 }
 

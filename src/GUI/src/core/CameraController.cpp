@@ -20,6 +20,17 @@ CameraController::CameraController() : firstMouseMove(true), isLocked(false), le
 }
 
 void CameraController::RotateCamera(float yaw, float pitch) {
+    currentPitch += pitch;
+
+    if (currentPitch > maxPitch) {
+        pitch -= (currentPitch - maxPitch);
+        currentPitch = maxPitch;
+    }
+    if (currentPitch < minPitch) {
+        pitch += (minPitch - currentPitch);
+        currentPitch = minPitch;
+    }
+
     Vector3 forward = rlModel.Vector3Normalize(rlModel.Vector3Subtract(camera.target, camera.position));
     Matrix rotationMatrix = rlModel.MatrixRotate(camera.up, yaw);
     forward = rlModel.Vector3Transform(forward, rotationMatrix);
