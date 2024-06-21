@@ -67,7 +67,6 @@ static int collect_player_ids(player_t *current_player,
         if (current_player->x == player_position->x &&
             current_player->y == player_position->y &&
                 current_player->level_player == level) {
-            printf("COUNT :%d\n", count);
             player_ids[count] = current_player->id_player;
             count++;
         }
@@ -76,8 +75,6 @@ static int collect_player_ids(player_t *current_player,
     player_ids[count] = -1;
     return count;
 }
-
-
 
 bool start_incantation(struct_t *s, player_t *player)
 {

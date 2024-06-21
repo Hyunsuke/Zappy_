@@ -18,4 +18,6 @@ int main(int ac, char **av)
         return 84;
     generator_map(s);
     server_gestion(server, s);
+    full_free();
+    return 0;
 }
