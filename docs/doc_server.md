@@ -180,6 +180,19 @@ make
         │   └── get_team.c
         ├── tick.c
         └── tiredness.c
+
+include
+   ├── all.h
+   ├── commands.h
+   ├── elevation.h
+   ├── map.h
+   ├── parsing.h
+   ├── progress_incantation.h
+   ├── server.h
+   ├── struct.h
+   ├── utils.h
+   └── web_debug.h
+
 ```
 
 ### Description des Composants
@@ -205,28 +218,65 @@ graph TD;
 
 Le serveur communique avec les clients IA, le GUI et le dashboard en utilisant des sockets TCP. Les clients IA envoient des commandes pour interagir avec le jeu, le GUI reçoit des mises à jour en temps réel sur l'état du jeu, et le dashboard reçoit des informations de débogage et des statistiques de performance.
 
-## Structures Principales
+### Structure Principale `struct_t`
 
-### Structure `struct_t`
+La structure `struct_t` contient tous les éléments nécessaires à la gestion du serveur et du jeu. Voici une description détaillée de ses composants :
 
-La structure principale `struct_t` contient tous les éléments nécessaires à la gestion du serveur et du jeu. Elle regroupe les informations sur les joueurs, les équipes, la carte, les commandes en cours, et bien plus encore. Voici une description détaillée de ses composants :
+```c
+typedef struct struct_s {
+    int port;
+    int map_width;
+    int map_height;
+    int client_nb;
+    int time;
+    int fd_gui;
+    int fd_dashboard;
+    char *obj;
+    bool stop_server;
+    bool start_game;
+    char *look_str;
+    int nb_tick_refill;
+    int len_view;
+    int view_num;
+    map_element_t **map;
+    player_t *head_player;
+    int next_id_player;
+    team_t *head_team;
+    int next_id_team;
+    elevation_t *head_elevation;
+    clock_t clock;
+    command_t *command_ticks;
+    incantation_t *head_progress_incantation;
+    dashboard_t *dashboard;
+} struct_t;
+```
 
-- **Paramètres généraux** : Informations sur le port, la taille de la carte, le nombre de clients, etc.
-- **État du jeu** : Indicate
+#### Explication des Éléments de `struct_t`
 
-urs de démarrage/arrêt du serveur, état actuel du jeu.
-- **Carte** : Structure de données représentant la carte du jeu, avec les ressources disponibles.
-- **Joueurs et équipes** : Listes chaînées contenant les informations sur les joueurs et les équipes.
-- **Incantations** : Informations sur les incantations en cours.
-- **Dashboard** : Informations sur les performances et l'utilisation des ressources du serveur.
-
-### Autres Structures
-
-- **player_t** : Représente un joueur dans le jeu, contenant ses ressources, son état, et ses commandes en cours.
-- **team_t** : Représente une équipe dans le jeu, contenant les informations sur les joueurs de l'équipe et les positions des œufs.
-- **map_element_t** : Représente une case de la carte, contenant les ressources présentes et les joueurs sur la case.
-- **incantation_t** : Représente une incantation en cours, contenant les IDs des joueurs impliqués et la position de l'incantation.
-- **dashboard_t** : Représente les informations du tableau de bord, telles que l'utilisation du CPU et de la RAM.
+- **port** : Numéro de port pour le serveur.
+- **map_width** : Largeur de la carte du jeu.
+- **map_height** : Hauteur de la carte du jeu.
+- **client_nb** : Nombre de clients connectés.
+- **time** : Temps de jeu.
+- **fd_gui** : Descripteur de fichier pour le GUI.
+- **fd_dashboard** : Descripteur de fichier pour le dashboard (optionnel).
+- **obj** : Objet courant.
+- **stop_server** : Booléen indiquant si le serveur doit s'arrêter.
+- **start_game** : Booléen indiquant si le jeu a commencé.
+- **look_str** : Chaîne de caractères pour la commande "look".
+- **nb_tick_refill** : Nombre de ticks avant de remplir la carte avec des ressources.
+- **len_view** : Longueur de la vue des joueurs.
+- **view_num** : Nombre de vues.
+- **map** : Pointeur vers une structure représentant la carte du jeu.
+- **head_player** : Pointeur vers la liste chaînée des joueurs.
+- **next_id_player** : Prochain ID de joueur disponible.
+- **head_team** : Pointeur vers la liste chaînée des équipes.
+- **next_id_team** : Prochain ID d'équipe disponible.
+- **head_elevation** : Pointeur vers la liste chaînée des incantations.
+- **clock** : Temps pour exécuter les commandes.
+- **command_ticks** : Commandes avec ticks.
+- **head_progress_incantation** : Pointeur vers les incantations en cours.
+- **dashboard** : Pointeur vers les informations du tableau de bord (optionnel).
 
 ## Communication du Serveur
 
