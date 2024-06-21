@@ -42,6 +42,9 @@ private:
 
     void SmoothMoveCamera(const Vector3& targetPosition, const Vector3& targetLookAt);
     RLModel rlModel;
+    float maxPitch = 1.30f;
+    float minPitch = -1.30f;
+    float currentPitch = 0.0f;
 };
 
 #endif /* !CAMERACONTROLLER_HPP_ */

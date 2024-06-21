@@ -89,6 +89,7 @@ private:
     bool gameOver = false;
     std::string winningTeam;
     EndMenu endMenu;
+
 };
 
 #endif /* !GAME_HPP_ */

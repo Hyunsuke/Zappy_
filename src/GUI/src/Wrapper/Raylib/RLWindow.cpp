@@ -48,6 +48,9 @@ void RLWindow::CloseWindow() {
     ::CloseWindow();
 }
 
+float RLWindow::GetFrameTime() {
+    return ::GetFrameTime();
+}
 void RLWindow::SetWindowSize(int width, int height) {
     ::SetWindowSize(width, height);
 }

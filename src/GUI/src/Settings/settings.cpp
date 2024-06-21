@@ -3,7 +3,7 @@
 Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
     : open(false), instanceName(InstanceName),screenWidth(screenWidth), screenHeight(screenHeight), fps(60),
       selectedResolutionIndex(0), selectedFPSIndex(0),
-      tempResolutionIndex(0), tempFPSIndex(0),
+      tempResolutionIndex(0), tempFPSIndex(0), selectedTimeUnitIndex(0), tempTimeUnitIndex(0),
       chat(screenWidth, screenHeight) {
 
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
