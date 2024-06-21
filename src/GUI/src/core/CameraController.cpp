@@ -40,7 +40,6 @@ void CameraController::RotateCamera(float yaw, float pitch) {
     forward = rlModel.Vector3Transform(forward, rotationMatrix);
 
     camera.target = rlModel.Vector3Add(camera.position, forward);
-    std::cout << "currentPitch: " << currentPitch << std::endl;
 }
 
 void CameraController::SmoothUnlockCamera() {
