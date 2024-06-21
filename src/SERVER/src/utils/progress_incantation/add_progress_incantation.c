@@ -13,8 +13,7 @@ void add_incantation(struct_t *s, int fd, int *player_ids, int num_players)
         (incantation_t *)my_malloc(sizeof(incantation_t));
     player_t *player = get_player_by_fd(s, fd);
 
-    new_incantation->player_ids =
-        (int *)my_malloc(num_players * sizeof(int));
+    new_incantation->player_ids = my_malloc(sizeof(int *) * (num_players + 2));
     for (int i = 0; i < num_players; i++)
         new_incantation->player_ids[i] = player_ids[i];
     new_incantation->num_players = num_players;
