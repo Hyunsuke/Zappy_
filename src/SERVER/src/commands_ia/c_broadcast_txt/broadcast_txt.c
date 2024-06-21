@@ -26,7 +26,7 @@ int get_sound_from_angle(double angle)
     return 1;
 }
 
-double define_angle(int *part, double orientation1)
+static double define_angle(int *part, double orientation1)
 {
     double angle;
 
@@ -40,7 +40,7 @@ double define_angle(int *part, double orientation1)
     return angle;
 }
 
-double find_angle(struct_t *s, player_t *sender, player_t *receiver,
+static double find_angle(struct_t *s, player_t *sender, player_t *receiver,
     double orientation1)
 {
     double angle;
@@ -84,7 +84,7 @@ static int rec_place(struct_t *s, player_t *receiver, player_t *sender)
     return place;
 }
 
-void send_to_all_players(struct_t *s, int fd)
+static void send_to_all_players(struct_t *s, int fd)
 {
     player_t *receiver = s->head_player;
     player_t *sender = get_player_by_fd(s, fd);
@@ -97,7 +97,8 @@ void send_to_all_players(struct_t *s, int fd)
         }
         receiver = receiver->next;
     }
-    dprintf(s->fd_gui, "pbc %d %s\n", sender->id_player, s->obj);
+    if (s->fd_gui != -1)
+        dprintf(s->fd_gui, "pbc %d %s\n", sender->id_player, s->obj);
 }
 
 int c_broadcast_txt(struct_t *s, int fd)

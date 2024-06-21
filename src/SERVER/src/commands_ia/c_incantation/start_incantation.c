@@ -67,6 +67,7 @@ static int collect_player_ids(player_t *current_player,
         if (current_player->x == player_position->x &&
             current_player->y == player_position->y &&
                 current_player->level_player == level) {
+            printf("COUNT :%d\n", count);
             player_ids[count] = current_player->id_player;
             count++;
         }
@@ -76,12 +77,15 @@ static int collect_player_ids(player_t *current_player,
     return count;
 }
 
+
+
 bool start_incantation(struct_t *s, player_t *player)
 {
     elevation_t *eleva = get_elevation_by_level_to(s,
         (player->level_player + 1));
     position_t p_pos = { .x = player->x, .y = player->y };
-    int *p_id = (int *)my_malloc((eleva->nb_players + 2) * sizeof(int));
+    int *p_id =
+        (int *)my_malloc((s->map[p_pos.y][p_pos.x].nb_mob + 1) * sizeof(int));
     int nb = 0;
 
     if (eleva == NULL ||

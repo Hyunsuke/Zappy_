@@ -26,14 +26,14 @@ int inverse_direction(int digit)
 static void eject_player_in_direction(struct_t *s, int direction,
     player_t *ejected)
 {
-    if (direction == 0)
+    // if (direction == 0)
         moove_top(s, ejected, ejected->x, ejected->y);
-    if (direction == 1)
+    // if (direction == 1)
         moove_right(s, ejected, ejected->x, ejected->y);
-    if (direction == 2)
+    // if (direction == 2)
         moove_bottom(s, ejected, ejected->x, ejected->y);
-    if (direction == 3)
-        moove_left(s, ejected, ejected->x, ejected->y);
+    // if (direction == 3)
+    moove_left(s, ejected, ejected->x, ejected->y);
     dprintf(ejected->fd, "eject: %d\n", inverse_direction(direction + 1));
 }
 
