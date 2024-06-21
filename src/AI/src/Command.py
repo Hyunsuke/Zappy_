@@ -278,6 +278,7 @@ class Command:
             if (self.leaderIsChosen == 1):
                 self.broadcast(f"{self.team_name}_reset_reset")
                 self.reset_command()
+                return
             self.responseList.pop(1)
             self.commandWaitingRoom -= 1 # C'est parce que Incantation est la seule commande à envoyer 2 recv
             return

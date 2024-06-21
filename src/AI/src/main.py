@@ -8,6 +8,7 @@ from Command import Command
 import time
 import os
 import random
+from utils import *
 
 
 class ZappyClient:
@@ -81,11 +82,8 @@ class ZappyClient:
             self.cmd.inventory()
             self.cmd.look()
 
-    def random_nb(self):
-        return random.choice([0, 1, 2])
-
     def rotatePlayer(self):
-        nb = self.random_nb()
+        nb = random_nb()
         if nb == 0:
             return
         elif nb == 1:
@@ -94,7 +92,6 @@ class ZappyClient:
             self.cmd.turn_right()
 
     def fastLvl2(self):
-        i = 0
         try:
             while True:
                 self.blockingBuffer()
@@ -112,7 +109,7 @@ class ZappyClient:
                         break
                     else:
                         continue
-                self.eat_nearest_ressource("linemate", False) # Le pb c'est que ça utilse des return d'inventory alors que le code fonctionne plus comme ça
+                self.eat_nearest_ressource("linemate", False)
                 self.rotatePlayer()
                 self.cmd.move_forward()
                 self.updateInfos()
@@ -129,7 +126,6 @@ class ZappyClient:
                 self.update_inventory()
                 if self.cmd.get_reset == True:
                     self.reset_main()
-                # print(self.cmd.get_status())
                 if self.cmd.get_status() == -2:
                     if self.ready == True:
                         print(self.cmd.nb_joiner_ready())
@@ -138,8 +134,6 @@ class ZappyClient:
                         self.cmd.responseList.append("Current level")
                     elif self.cmd.nb_player_ready() == self.cmd.nb_player_food_ready() and self.cmd.nb_player_food_ready() >= 5 and self.ready == False:
                         print("EVERYONE'S READY TO PLAY")
-                        # self.cmd.broadcast(f"{self.team_name}_ready_os")
-                        # os._exit(1)
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
@@ -200,7 +194,6 @@ class ZappyClient:
             return
         inventory_string = self.cmd.inventoryString
         if inventory_string is None or inventory_string.startswith("[ food") == False:
-            # print("Error: Inventory string is None")
             return
         # Nettoyer et séparer la chaîne de caractères
         inventory_string = inventory_string.strip('[] ')
@@ -218,15 +211,12 @@ class ZappyClient:
             print("Inventory updated: ", self.current_inventory.current_inventory)
 
     def eat_nearest_ressource(self, ressource, needPrint=False):
-        # print("Eat nearest resource")
         if (self.cmd.isLookUpdated == False):
             return
-        # print("We managed to get a look string. Let's eat")
         response = self.cmd.lookString
         if response is None:
             return
         self.cmd.isLookUpdated = False
-        # tiles_with_resource = []
         destinationTile = 0
         currentTile = 0
         objects = response.split(",")
@@ -234,10 +224,9 @@ class ZappyClient:
             object = object.split(" ")
             for obj in object:
                 if obj.startswith(ressource) or obj.startswith("food"):
-                    # tiles_with_resource.append(destinationTile)
                     print("Moving to tile: ", destinationTile)
-                    x, y = self.get_coordinates(destinationTile)
-                    current_x, current_y = self.get_coordinates(currentTile)
+                    x, y = get_coordinates(destinationTile)
+                    current_x, current_y = get_coordinates(currentTile)
                     print("x: ", x, "y: ", y)
                     self.move_to_tile(x, y, current_x, current_y)
                     currentTile = destinationTile
@@ -245,7 +234,6 @@ class ZappyClient:
                         self.cmd.take_object("food")
                     else :
                         self.cmd.take_object(ressource)
-                    # return
             destinationTile += 1
 
     def look_for_rarest_stone(self):
@@ -254,26 +242,16 @@ class ZappyClient:
             return
         response = self.cmd.inventoryString
         total_value = 0
-        # print(response)
         for key, value in self.current_inventory.objective_inventory.items():
             total_value += value
-            # print(key, value)
             if key in response and self.current_inventory.objective_inventory[key] > 0:
-                # print("Found ", key)
                 total_amount = self.cmd.current_inventory.current_inventory.get(key, 0) + self.cmd.current_inventory.shared_inventory.get(key, 0)
                 print(key, ": ", total_amount)
                 if total_amount < self.cmd.current_inventory.objective_inventory[key]:
                     self.eat_nearest_ressource(key, True)
-                # self.current_inventory.objective_inventory[key] -= 1
                     return
-            # if self.current_inventory.current_inventory[key] < value:
-            #     self.lookForTile(key)
-        # if total_value == 0:
-        #     print("All stones have been found")
-        #     os._exit(1)
 
     def move_to_tile(self, target_x, target_y, current_x, current_y, needPrint=False):
-        # Move in the X direction
         while current_x != target_x:
             if current_x < target_x:
                 self.cmd.turn_right(needPrint)
@@ -288,7 +266,6 @@ class ZappyClient:
                     current_x -= 1
                 self.cmd.turn_right(needPrint)
 
-        # Move in the Y direction
         while current_y != target_y:
             if current_y < target_y:
                 while current_y < target_y:
@@ -303,65 +280,6 @@ class ZappyClient:
                 self.cmd.turn_left(needPrint)
                 self.cmd.turn_left(needPrint)
 
-    def get_coordinates(self, target_tile):
-        if target_tile == 0:
-            return (0, 0)
-
-        a = 0
-        b = 0
-        tab = []
-        for i in range(9):  # max level + 1
-            tab.append([])
-            b = (i * 2) + 1
-            a += b
-            b = a - b
-            while b < a:
-                tab[i].append(b)
-                b += 1
-
-        c = 0
-        x = 0
-        y = 0
-        for i in tab:
-            tmp = i
-            if c != 0:
-                y += 1
-            if target_tile <= i[-1]:
-                break
-            c += 1
-        c = tmp[-1] -c
-        if target_tile < c:
-            # self.cmd.turn_left(needPrint)
-            while c != target_tile:
-                x -= 1
-                c -= 1
-        elif target_tile > c:
-            # self.cmd.turn_right(needPrint)
-            while c != target_tile:
-                x += 1
-                c += 1
-        return x, y  # If tile not found (which shouldn't happen in this context)
-
-    def get_cood(self, num):
-        if num == 0:
-            return
-        mov = {
-            1: (0, 1),
-            2: (-1, 1),
-            3: (-1, 0),
-            4: (-1, -1),
-            5: (0, -1),
-            6: (1, -1),
-            7: (1, 0),
-            8: (1, 1)
-        }
-
-        if num not in mov:
-            raise ValueError("Le numéro doit être entre 1 et 8")
-
-        dx, dy = mov[num]
-        return dx, dy
-
 
     def join_leader(self):
         print("IM JOINING THE LEADER")
@@ -373,7 +291,7 @@ class ZappyClient:
             print("-----------------------------------------------------------------------------------------------")
             # os._exit(1)
             return
-        x, y = self.get_cood(status)
+        x, y = get_cood(status)
         self.move_to_tile(x, y, 0, 0)
         self.cmd.shallMove = False
         self.cmd.positionHasBeenChanged = False
