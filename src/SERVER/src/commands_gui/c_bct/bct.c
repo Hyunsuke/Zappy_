@@ -32,16 +32,10 @@ int c_bct(struct_t *s, char *buffer)
     if (x < 0 || x >= s->map_width || y < 0 || y >= s->map_height)
         return -1;
     element = &s->map[y][x];
-    if (s->fd_gui != -1) {
+    if (s->fd_gui != -1)
         dprintf(s->fd_gui, "bct %d %d %d %d %d %d %d %d %d\n",
-            x, y,
-            element->food,
-            element->linemate,
-            element->deraumere,
-            element->sibur,
-            element->mendiane,
-            element->phiras,
+            x, y, element->food, element->linemate, element->deraumere,
+            element->sibur, element->mendiane, element->phiras,
             element->thystame);
-    }
     return 0;
 }
