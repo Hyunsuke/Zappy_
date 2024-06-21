@@ -12,6 +12,8 @@
 #include <vector>
 #include <memory>
 #include "Player/Player.hpp"
+#include "../Wrapper/Raylib/RLModel.hpp"
+#include <atomic>
 
 class Map {
 public:
@@ -32,12 +34,15 @@ public:
     int GetPlayerCount() const;
     std::shared_ptr<Player> GetPlayerByNumber(int playerNumber);
     void RemoveEgg(int eggId);
+    Map& operator=(const Map& other);
 
 private:
     std::vector<std::shared_ptr<Island>> islands;
     int width;
     int height;
     std::vector<std::shared_ptr<Player>> players;
+    std::atomic_flag playersLock = ATOMIC_FLAG_INIT;
+    RLModel model;
 };
 
 #endif // MAP_HPP_

@@ -22,6 +22,7 @@
 #include "../Wrapper/Raylib/RLWindow.hpp"
 #include "../Wrapper/Raylib/RLModel.hpp"
 #include "../Menu/endMenu.hpp"
+#include <functional>
 
 #include <vector>
 #include <iostream>
@@ -66,6 +67,31 @@ private:
 
     void UpdateIslandResources(int x, int y, int q0, int q1, int q2, int q3, int q4, int q5, int q6);
     ///////
+    void InitializeCommandHandlers();
+
+    void HandleMapSize(std::istringstream& iss);
+    void HandleTileContent(std::istringstream& iss);
+    void HandleTeamName(std::istringstream& iss);
+    void HandlePlayerNew(std::istringstream& iss);
+    void HandlePlayerPosition(std::istringstream& iss);
+    void HandlePlayerLevel(std::istringstream& iss);
+    void HandlePlayerInventory(std::istringstream& iss);
+    void HandlePlayerExpulsion(std::istringstream& iss);
+    void HandlePlayerBroadcast(std::istringstream& iss);
+    void HandleStartIncantation(std::istringstream& iss);
+    void HandleEndIncantation(std::istringstream& iss);
+    void HandleEggLaying(std::istringstream& iss);
+    void HandlePlayerDrop(std::istringstream& iss);
+    void HandlePlayerTake(std::istringstream& iss);
+    void HandlePlayerDeath(std::istringstream& iss);
+    void HandleEggLayingPlayer(std::istringstream& iss);
+    void HandleEggConnection(std::istringstream& iss);
+    void HandleEggDeath(std::istringstream& iss);
+    void HandleTimeUnitChange(std::istringstream& iss);
+    void HandleGameOver(std::istringstream& iss);
+    void HandleServerMessage(std::istringstream& iss);
+    void HandleUnknownCommand();
+    void HandleBadParameter();
 
     int screenWidth;
     int screenHeight;
@@ -89,6 +115,8 @@ private:
     bool gameOver = false;
     std::string winningTeam;
     EndMenu endMenu;
+
+    std::unordered_map<std::string, std::function<void(std::istringstream&)>> commandHandlers;
 };
 
 #endif /* !GAME_HPP_ */
