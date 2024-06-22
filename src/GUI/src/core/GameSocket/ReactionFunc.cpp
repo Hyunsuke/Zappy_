@@ -63,8 +63,8 @@ void Game::HandlePlayerPosition(std::istringstream& iss) {
                 currentIsland->RemovePlayer(player);
             }
             if (newIsland) {
-                newIsland->AddPlayer(player);
                 player->JumpTo(newIsland, 7.0f / timeUnit);
+                newIsland->AddPlayer(player);
             }
         }
     }
