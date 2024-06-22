@@ -49,8 +49,6 @@ static bool end_game(struct_t *s, server_t *server)
     while (current_player != NULL) {
         if (current_player->level_player >= 8) {
             c_seg(s, get_team_by_id(s, current_player->id_team)->name);
-            printf("WIN THE GAME - TEAM -> %s",
-                get_team_by_id(s, current_player->id_team)->name);
             s->stop_server = true;
             close_all_fd(s, server);
             return true;

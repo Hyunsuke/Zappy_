@@ -18,6 +18,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
       cameraManager(cameraController, gameMap),
       endMenu(screenWidth, screenHeight) {
 
+    InitializeCommandHandlers();
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
@@ -32,6 +33,7 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Egg/egg.obj");
     TextureCollector::GetInstance().LoadTexture("src/GUI/assets/Egg/egg.png");
 
+
     InitializeMap(mapSize, mapContent, eggs);
 }
 
@@ -43,12 +45,12 @@ Game::~Game() {
 
 void Game::InitializeMap(const std::string& mapSize, const std::vector<std::string>& mapContent, const std::vector<std::string>& eggs) {
     int width, height;
-    sscanf(mapSize.c_str(), "msz %d %d", &width, &height);
+    std::sscanf(mapSize.c_str(), "msz %d %d", &width, &height);
     gameMap = Map(width, height);
 
     for (const auto& content : mapContent) {
         int x, y, q0, q1, q2, q3, q4, q5, q6;
-        sscanf(content.c_str(), "bct %d %d %d %d %d %d %d %d %d", &x, &y, &q0, &q1, &q2, &q3, &q4, &q5, &q6);
+        std::sscanf(content.c_str(), "bct %d %d %d %d %d %d %d %d %d", &x, &y, &q0, &q1, &q2, &q3, &q4, &q5, &q6);
         auto island = std::make_shared<Island>(x, y, Vector3{(float)x * 15.0f, 0.0f, (float)y * 15.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
         island->SetShader(shaderManager->GetShader());
         island->food->SetQuantity(q0);
@@ -63,7 +65,7 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
 
     for (const auto& egg : eggs) {
         int e, n, x, y;
-        sscanf(egg.c_str(), "enw %d %d %d %d", &e, &n, &x, &y);
+        std::sscanf(egg.c_str(), "enw %d %d %d %d", &e, &n, &x, &y);
         auto island = gameMap.GetIslandByXY(x, y);
         if (island) {
             auto egg = std::make_shared<Egg>(e, n);

@@ -94,7 +94,8 @@ static void send_info_gui(struct_t *s)
     player_t *current = s->head_player;
 
     printf("It's GUI\n");
-    dprintf(s->fd_gui, "Server: You're a GUI\n");
+    if (s->fd_gui != -1)
+        dprintf(s->fd_gui, "Server: You're a GUI\n");
     c_msz(s, "");
     c_sgt(s, "");
     c_mct(s, "");

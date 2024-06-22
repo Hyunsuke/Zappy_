@@ -118,6 +118,10 @@ void SocketManager::ReceiveMessages() {
                     messageHandler(message);
                 }
             }
+        } else if (bytesReceived == 0) {
+            running = false;
+            Disconnect();
+            std::exit(84);
         }
     }
 }

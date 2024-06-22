@@ -94,8 +94,8 @@ SRC	=	src/main.c	\
 		src/utils/progress_incantation/get_progress_incantation.c \
 		src/utils/progress_incantation/remove_progress_incantation.c \
 		src/utils/refill.c \
-		src/web_debug/web_debug.c \
-		src/web_debug/get_usage.c \
+		src/dashboard/send_info.c \
+		src/dashboard/get_usage.c \
 
 
 INCLUDEDIR = ../../include/SERVER/

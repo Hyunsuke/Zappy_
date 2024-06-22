@@ -48,3 +48,6 @@ void RLWindow::CloseWindow() {
     ::CloseWindow();
 }
 
+float RLWindow::GetFrameTime() {
+    return ::GetFrameTime();
+}

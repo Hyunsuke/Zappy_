@@ -81,7 +81,8 @@ bool start_incantation(struct_t *s, player_t *player)
     elevation_t *eleva = get_elevation_by_level_to(s,
         (player->level_player + 1));
     position_t p_pos = { .x = player->x, .y = player->y };
-    int *p_id = (int *)my_malloc((eleva->nb_players + 2) * sizeof(int));
+    int *p_id =
+        (int *)my_malloc((s->map[p_pos.y][p_pos.x].nb_mob + 1) * sizeof(int));
     int nb = 0;
 
     if (eleva == NULL ||
@@ -94,7 +95,6 @@ bool start_incantation(struct_t *s, player_t *player)
     }
     nb = collect_player_ids(s->head_player, &p_pos, eleva->level_from, p_id);
     add_incantation(s, player->fd, p_id, nb);
-    printf("Start Incantation -> ok\n");
     dprintf(player->fd, "Elevation underway\n");
     c_pic(s, p_pos, eleva->level_to, p_id);
     return true;

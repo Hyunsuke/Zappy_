@@ -7,22 +7,6 @@
 
 #include "all.h"
 
-static void display_map_rsc(map_rsc_t *rsc)
-{
-    if (rsc == NULL) {
-        printf("Ressource map is NULL\n");
-        return;
-    }
-    printf("Ressource Map:\n");
-    printf("Food: %d\n", rsc->food);
-    printf("Linemate: %d\n", rsc->linemate);
-    printf("Deraumere: %d\n", rsc->deraumere);
-    printf("Sibur: %d\n", rsc->sibur);
-    printf("Mendiane: %d\n", rsc->mendiane);
-    printf("Phiras: %d\n", rsc->phiras);
-    printf("Thystame: %d\n", rsc->thystame);
-}
-
 static map_rsc_t *get_nb_rsc_map(struct_t *s)
 {
     map_rsc_t *rsc = my_malloc(sizeof(map_rsc_t));

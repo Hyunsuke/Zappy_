@@ -22,8 +22,8 @@ static void add_position_egg_player(struct_t *s, player_t *new_player)
         new_player->id_team);
 
     if (position != NULL) {
-        add_id_to_map_element(&s->map[position->x][position->y].id_mob,
-            &s->map[position->x][position->y].nb_mob, new_player->id_player);
+        add_id_to_map_element(&s->map[position->y][position->x].id_mob,
+            &s->map[position->y][position->x].nb_mob, new_player->id_player);
     } else {
         add_random_position_player(s, new_player);
     }
