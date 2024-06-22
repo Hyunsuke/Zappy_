@@ -111,22 +111,22 @@ void Game::Draw() {
 
     if (gameOver) {
         while (!window.WindowShouldClose()) {
-        endMenu.HandleMouseInput();
-        endMenu.Draw(winningTeam);
+            endMenu.HandleMouseInput();
+            endMenu.Draw(winningTeam);
         }
     } else {
         sky.DrawBackground();
 
-    window.BeginMode3D(cameraController.GetCamera());
+        window.BeginMode3D(cameraController.GetCamera());
 
         sky.DrawSunAndMoon();
         gameMap.Draw();
         gameMap.DrawIslandWires(selectedIsland);
         gameMap.DrawPlayerWires(selectedPlayer);
 
-    window.EndMode3D();
-    uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
-    settings->Draw();
+        window.EndMode3D();
+        uiManager.DrawUI(selectedIsland, selectedPlayer, teamNames.size(), gameMap.GetPlayerCount() , timeUnit, gameMap.GetMapSize(), GetFPS());
+        settings->Draw();
     }
 
     window.EndDrawing();
