@@ -25,5 +25,5 @@ void print_map(struct_t *s)
         for (int j = 0; j < s->map_width; j++) {
             print_map_elem(s, i, j);
         }
-    }    
+    }
 }

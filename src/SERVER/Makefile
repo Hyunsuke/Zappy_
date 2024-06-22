@@ -93,15 +93,34 @@ SRC	=	src/main.c	\
 		src/utils/progress_incantation/add_progress_incantation.c \
 		src/utils/progress_incantation/get_progress_incantation.c \
 		src/utils/progress_incantation/remove_progress_incantation.c \
+		src/utils/refill.c \
+		src/dashboard/send_info.c \
+		src/dashboard/get_usage.c \
 
 
 INCLUDEDIR = ../../include/SERVER/
 
 OBJ	=	$(SRC:.c=.o)
 
-CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid
+CFLAGS	=	-I$(INCLUDEDIR) -W -Wall -Wextra -g -luuid -ljson-c -lm
 
 NAME	=	../../zappy_server
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
+
+clean:
+	rm -f $(OBJ)
+
+fclean: clean
+	rm -f $(NAME)
+
+re:	fclean all
+
+.PHONY: all clean fclean re
+
 
 all: $(NAME)
 

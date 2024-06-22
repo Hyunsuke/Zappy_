@@ -26,7 +26,6 @@ static bool remove_take_obj(map_element_t *map_element, int id_obj)
 
 static bool remove_obj_map(map_element_t *map_element, int id_obj)
 {
-    printf("%d\n", id_obj);
     if (id_obj == 0 && map_element->food > 0) {
         map_element->food--;
         return true;
@@ -41,7 +40,7 @@ static bool remove_obj_map(map_element_t *map_element, int id_obj)
     }
     if (id_obj == 3 && map_element->sibur > 0) {
         map_element->sibur--;
-        return 0;
+        return true;
     }
     if (remove_take_obj(map_element, id_obj) == false)
         return false;
@@ -92,11 +91,11 @@ int c_take_obj(struct_t *s, int fd)
     int id_obj = get_resource_code(s->obj);
 
     if (remove_obj_map(&s->map[player->y][player->x], id_obj) == false) {
-        dprintf(fd, "KO\n");
+        dprintf(fd, "ko\n");
         return -1;
     }
     add_obj_inventory_player(player, id_obj);
     c_pgt(s, player->id_player, id_obj);
-    dprintf(fd, "OK\n");
+    dprintf(fd, "ok\n");
     return 0;
 }

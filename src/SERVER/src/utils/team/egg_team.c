@@ -52,7 +52,7 @@ static void remove_egg_in_position(team_t *team, int i, int j,
 {
     while (team->position_egg[i] != NULL) {
         if (team->position_egg[i]->x == position.x &&
-            team->position_egg[i]->y == position.x) {
+            team->position_egg[i]->y == position.y) {
             my_free(team->position_egg[i]);
         } else {
             j++;
@@ -67,7 +67,7 @@ static void remove_egg_in_position(team_t *team, int i, int j,
 /// @param s stuct all
 /// @param x position egg x
 /// @param y position egg y
-void remove_all_eggs_at_position_for_all_teams(struct_t *s, int x, int y)
+void remove_all_eggs_at_position_for_all_teams(struct_t *s, int y, int x)
 {
     team_t *team = s->head_team;
     position_t position = { x = x, y = y };

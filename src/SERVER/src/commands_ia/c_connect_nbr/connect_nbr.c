@@ -15,17 +15,16 @@ int c_connect_nbr(struct_t *s, int fd)
     team_t *team = get_team_by_id(s, player->id_team);
 
     if (team == NULL) {
-        dprintf(fd, "KO\n");
         return -1;
     } else {
         list_id_player = team->players_id;
     }
     if (list_id_player == NULL) {
-        dprintf(fd, "%d\n", s->client_nb);
+        dprintf(fd, "%d\n", team->max_cli);
         return 0;
     }
     for (int n = 0; list_id_player[n] != -1; n++)
         nb_player++;
-    dprintf(fd, "%d\n", (s->client_nb - nb_player));
+    dprintf(fd, "%d\n", (team->max_cli - nb_player));
     return 0;
 }

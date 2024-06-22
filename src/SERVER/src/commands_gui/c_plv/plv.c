@@ -22,6 +22,8 @@ int c_plv(struct_t *s, char *buffer)
     int nb_player = 0;
     player_t *player;
 
+    if (s->fd_gui == -1)
+        return -1;
     parse_plv(buffer, &nb_player);
     player = get_player_by_id(s, nb_player);
     dprintf(s->fd_gui, "plv %d %d\n", nb_player, player->level_player);

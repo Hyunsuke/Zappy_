@@ -16,6 +16,7 @@ team_t *create_team(struct_t *s, const char *name)
     new_team->name = my_strdup(name);
     new_team->team_id = s->next_id_team;
     s->next_id_team++;
+    new_team->max_cli = 0;
     new_team->players_id = NULL;
     new_team->position_egg = NULL;
     new_team->next = s->head_team;

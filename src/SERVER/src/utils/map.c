@@ -10,11 +10,10 @@
 void add_id_to_map_element(int **id_mob, int *size, int id_player)
 {
     (*size)++;
-    *id_mob = my_realloc(*id_mob, (*size) * sizeof(int));
-    if (*id_mob == NULL) {
-        fprintf(stderr, "Erreur de réallocation de mémoire\n");
-        exit(1);
-    }
+    if ((*id_mob) != NULL)
+        *id_mob = my_realloc(*id_mob, (*size) * sizeof(int));
+    else
+        *id_mob = my_malloc(sizeof(int) * 1);
     (*id_mob)[*size - 1] = id_player;
 }
 
@@ -37,7 +36,7 @@ void remove_id_from_map_element(int **id_mob, int *size, int id_player)
         (*id_mob) = NULL;
     *id_mob = my_realloc(*id_mob, (*size) * sizeof(int));
     if (*id_mob == NULL && *size > 0) {
-        fprintf(stderr, "Erreur de réallocation de mémoire\n");
+        full_free();
         exit(1);
     }
 }

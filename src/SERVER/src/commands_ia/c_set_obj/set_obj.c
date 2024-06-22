@@ -50,15 +50,15 @@ static int remove_obj_from_player(player_t *player, int id_obj)
 
 static void add_one_obj(struct_t *s, int id_obj, int x, int y)
 {
-    if (id_obj == 4 && s->map[y][x].mendiane > 0) {
+    if (id_obj == 4) {
         s->map[y][x].mendiane++;
         return;
     }
-    if (id_obj == 5 && s->map[y][x].phiras > 0) {
+    if (id_obj == 5) {
         s->map[y][x].phiras++;
         return;
     }
-    if (id_obj == 6 && s->map[y][x].thystame > 0) {
+    if (id_obj == 6) {
         s->map[y][x].thystame++;
         return;
     }
@@ -69,19 +69,19 @@ static void add_obj_to_map(struct_t *s, player_t *player, int id_obj)
     int x = player->x;
     int y = player->y;
 
-    if (id_obj == 0 && s->map[y][x].food > 0) {
+    if (id_obj == 0) {
         s->map[y][x].food++;
         return;
     }
-    if (id_obj == 1 && s->map[y][x].linemate > 0) {
+    if (id_obj == 1) {
         s->map[y][x].linemate++;
         return;
     }
-    if (id_obj == 2 && s->map[y][x].deraumere > 0) {
+    if (id_obj == 2) {
         s->map[y][x].deraumere++;
         return;
     }
-    if (id_obj == 3 && s->map[y][x].sibur > 0) {
+    if (id_obj == 3) {
         s->map[y][x].sibur++;
         return;
     }
@@ -94,11 +94,11 @@ int c_set_obj(struct_t *s, int fd)
     int id_obj = get_resource_code(s->obj);
 
     if (remove_obj_from_player(player, id_obj) == false) {
-        dprintf(fd, "KO\n");
+        dprintf(fd, "ko\n");
         return -1;
     }
     add_obj_to_map(s, player, id_obj);
     c_pdr(s, player->id_player, id_obj);
-    dprintf(fd, "OK\n");
+    dprintf(fd, "ok\n");
     return 0;
 }

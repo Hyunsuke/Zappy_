@@ -10,7 +10,7 @@
 static bool check_items_for_incantation(struct_t *s, elevation_t *elevation,
     position_t *position)
 {
-    map_element_t *element = &s->map[position->y][position->y];
+    map_element_t *element = &s->map[position->y][position->x];
 
     if (element->linemate < elevation->resources.linemate)
         return false;
@@ -55,7 +55,7 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
     while (current_player != NULL) {
         if (current_player->x == position->x && current_player->y
             == position->y && current_player->level_player ==
-                elevation->level_from && count <= elevation->nb_players) {
+                elevation->level_from) {
                 current_player->level_player++;
                 count++;
                 dprintf(current_player->fd, "Current level: %d\n",
@@ -83,10 +83,21 @@ static bool check_incantation_conditions(struct_t *s, elevation_t *elevation,
 
 static int print_incantation_ko(struct_t *s, int fd, position_t *pos_incant)
 {
-    printf("Incantation -> KO\n");
-    dprintf(fd, "KO\n");
+    printf("Incantation -> ko\n");
+    dprintf(fd, "ko\n");
     c_pie(s, pos_incant->x, pos_incant->y, "KO");
     return -1;
+}
+
+static void send_incant_to_gui(struct_t *s, position_t *pos_incant,
+    player_t *player)
+{
+    if (s->fd_gui != -1) {
+        dprintf(s->fd_gui, "pie %d %d %d\n", pos_incant->x, pos_incant->y,
+            player->level_player);
+        dprintf(s->fd_gui, "plv %d %d\n", player->id_player,
+            player->level_player);
+    }
 }
 
 int c_incantation(struct_t *s, int fd)
@@ -99,15 +110,13 @@ int c_incantation(struct_t *s, int fd)
 
     if (incantation == NULL)
         return print_incantation_ko(s, fd, pos_incant);
-    else
-        pos_incant = &incantation->position;
+    pos_incant = incantation->position;
     if (!check_incantation_conditions(s, elevation, pos_incant)) {
         remove_incantation(s, fd);
         return print_incantation_ko(s, fd, pos_incant);
     }
     change_level_elevation(s, elevation, pos_incant);
-    printf("Incantation -> OK\n");
     remove_incantation(s, fd);
-    c_pie(s, pos_incant->x, pos_incant->y, "OK");
+    send_incant_to_gui(s, pos_incant, player);
     return 0;
 }
