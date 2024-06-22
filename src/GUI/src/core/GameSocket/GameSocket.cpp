@@ -31,7 +31,7 @@ void Game::InitializeCommandHandlers() {
         {"pin", [this](std::istringstream& iss) { HandlePlayerInventory(iss); }},
         {"pex", [this](std::istringstream& iss) { HandlePlayerExpulsion(iss); }},
         {"pbc", [this](std::istringstream& iss) { HandlePlayerBroadcast(iss); }},
-        {"pic", [this](std::istringstream& iss) { HandleStartIncantation(iss); }},
+        {"seg", [this](std::istringstream& iss) { HandleStartIncantation(iss); }},
         {"pie", [this](std::istringstream& iss) { HandleEndIncantation(iss); }},
         {"pfk", [this](std::istringstream& iss) { HandleEggLaying(iss); }},
         {"pdr", [this](std::istringstream& iss) { HandlePlayerDrop(iss); }},
@@ -42,7 +42,7 @@ void Game::InitializeCommandHandlers() {
         {"edi", [this](std::istringstream& iss) { HandleEggDeath(iss); }},
         {"sgt", [this](std::istringstream& iss) { HandleTimeUnitChange(iss); }},
         {"sst", [this](std::istringstream& iss) { HandleTimeUnitChange(iss); }},
-        {"seg", [this](std::istringstream& iss) { HandleGameOver(iss); }},
+        {"pic", [this](std::istringstream& iss) { HandleGameOver(iss); }},
     };
 }
 

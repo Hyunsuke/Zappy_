@@ -110,8 +110,10 @@ void Game::Draw() {
     window.ClearBackground(WHITE);
 
     if (gameOver) {
+        while (!window.WindowShouldClose()) {
         endMenu.HandleMouseInput();
         endMenu.Draw(winningTeam);
+        }
     } else {
         sky.DrawBackground();
 
