@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Settings
+*/
+
 #include "gui.hpp"
 
 Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
@@ -76,8 +83,8 @@ void Settings::ApplySettings() {
     screenWidth = resolutions[selectedResolutionIndex].x;
     screenHeight = resolutions[selectedResolutionIndex].y;
     fps = fpsOptions[selectedFPSIndex];
-    SetWindowSize(screenWidth, screenHeight);
-    SetTargetFPS(fps);
+    window.SetWindowSize(screenWidth, screenHeight);
+    window.SetTargetFPS(fps);
     if (instanceName != "menu") {
         int newTimeUnit = timeUnitOptions[selectedTimeUnitIndex];
         game->SetTimeUnit(newTimeUnit);
@@ -87,11 +94,11 @@ void Settings::ApplySettings() {
 void Settings::Update() {
     if (!open) return;
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        if (CheckCollisionPointRec(GetMousePosition(), applyButton)) {
+    if (rlText.IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        if (rlText.CheckCollisionPointRec(rlText.GetMousePosition(), applyButton)) {
             ApplySettings();
             Close();
-        } else if (CheckCollisionPointRec(GetMousePosition(), closeButton)) {
+        } else if (rlText.CheckCollisionPointRec(rlText.GetMousePosition(), closeButton)) {
             tempResolutionIndex = selectedResolutionIndex;
             tempFPSIndex = selectedFPSIndex;
             Close();
@@ -100,17 +107,17 @@ void Settings::Update() {
 }
 
 void Settings::HandleMouseInput(Vector2 mousePosition, Rectangle settingsButton, Rectangle closeButton) {
-    if (CheckCollisionPointRec(mousePosition, settingsButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    if (rlText.CheckCollisionPointRec(mousePosition, settingsButton) && rlText.IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         Open();
     }
-    if (CheckCollisionPointRec(mousePosition, closeButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        CloseWindow();
+    if (rlText.CheckCollisionPointRec(mousePosition, closeButton) && rlText.IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        window.CloseWindow();
         std::exit(0);
     }
 }
 
 void Settings::HandleWindowResize(Sky& sky, UIManager& uiManager) {
-    if (IsWindowResized()) {
+    if (window.IsWindowResized()) {
         int newWidth = GetScreenWidth();
         int newHeight = GetScreenHeight();
         sky.OnWindowResized(newWidth, newHeight);
@@ -132,32 +139,32 @@ void Settings::Draw() {
     int dialogY = (screenHeight - dialogHeight) / 2;
     int i = 0;
 
-    DrawRectangle(dialogX, dialogY, dialogWidth, dialogHeight, LIGHTGRAY);
-    DrawRectangleLines(dialogX, dialogY, dialogWidth, dialogHeight, DARKGRAY);
+    rlText.DrawRectangle(dialogX, dialogY, dialogWidth, dialogHeight, LIGHTGRAY);
+    rlText.DrawRectangleLines(dialogX, dialogY, dialogWidth, dialogHeight, DARKGRAY);
 
-    DrawText("Resolution:", resolutionBox.x - 100, resolutionBox.y + 5, 20, BLACK);
+    rlText.DrawText("Resolution:", resolutionBox.x - 100, resolutionBox.y + 5, 20, BLACK);
     std::vector<std::string> resolutionOptions = { "1920x1080", "1280x720", "800x600" };
     DrawDropDown(resolutionOptions, tempResolutionIndex, resolutionBox);
 
-    DrawText("FPS:", fpsBox.x - 50, fpsBox.y + 5, 20, BLACK);
+    rlText.DrawText("FPS:", fpsBox.x - 50, fpsBox.y + 5, 20, BLACK);
     std::vector<std::string> fpsOptionsText = { "30", "60", "120" };
     DrawDropDown(fpsOptionsText, tempFPSIndex, fpsBox);
 
     if (instanceName != "menu") {
-        DrawText("Time Unit:", timeUnitBox.x - 100, timeUnitBox.y + 5, 20, BLACK);
+        rlText.DrawText("Time Unit:", timeUnitBox.x - 100, timeUnitBox.y + 5, 20, BLACK);
         std::vector<std::string> timeUnitOptionsText = { "5", "10", "20", "40", "80", "160", "320", "640", "1280" };
         DrawDropDown(timeUnitOptionsText, tempTimeUnitIndex, timeUnitBox);
     }
 
-    DrawText("Key Bindings:", keyBindingsBox.x - 150, keyBindingsBox.y - 25, 20, BLACK);
+    rlText.DrawText("Key Bindings:", keyBindingsBox.x - 150, keyBindingsBox.y - 25, 20, BLACK);
 
     for (const auto& description : keyBindingsDescriptions) {
-        DrawText(description.c_str(), keyBindingsBox.x, keyBindingsBox.y + i * 20, 20, BLACK);
+        rlText.DrawText(description.c_str(), keyBindingsBox.x, keyBindingsBox.y + i * 20, 20, BLACK);
         i++;
     }
 
-    DrawButton(applyButton, "Apply", 20);
-    DrawButton(closeButton, "Close", 20);
+    button.DrawButton(applyButton, "Apply", 20);
+    button.DrawButton(closeButton, "Close", 20);
 }
 
 void Settings::UpdateLayout(int screenWidth, int screenHeight) {
@@ -185,11 +192,11 @@ void Settings::UpdateLayout(int screenWidth, int screenHeight) {
 }
 
 void Settings::DrawDropDown(const std::vector<std::string>& options, int& selectedIndex, Rectangle box) {
-    DrawRectangleRec(box, WHITE);
-    DrawText(options[selectedIndex].c_str(), box.x + 5, box.y + 5, 20, BLACK);
-    DrawRectangleLines(box.x, box.y, box.width, box.height, DARKGRAY);
+    rlText.DrawRectangleRec(box, WHITE);
+    rlText.DrawText(options[selectedIndex].c_str(), box.x + 5, box.y + 5, 20, BLACK);
+    rlText.DrawRectangleLines(box.x, box.y, box.width, box.height, DARKGRAY);
 
-    if (CheckCollisionPointRec(GetMousePosition(), box) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (rlText.CheckCollisionPointRec(rlText.GetMousePosition(), box) && rlText.IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         selectedIndex = (selectedIndex + 1) % options.size();
     }
 }

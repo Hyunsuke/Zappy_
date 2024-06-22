@@ -1,9 +1,18 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Button
+*/
+
 #include "gui.hpp"
 
-ButtonState GetButtonState(Rectangle button) {
-    Vector2 mousePoint = GetMousePosition();
-    if (CheckCollisionPointRec(mousePoint, button)) {
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+Button::Button() {}
+
+ButtonState Button::GetButtonState(Rectangle button) {
+    Vector2 mousePoint = rlText.GetMousePosition();
+    if (rlText.CheckCollisionPointRec(mousePoint, button)) {
+        if (rlText.IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
             return PRESSED;
         } else {
             return HOVER;
@@ -12,7 +21,7 @@ ButtonState GetButtonState(Rectangle button) {
     return NORMAL;
 }
 
-Color GetButtonColor(ButtonState state) {
+Color Button::GetButtonColor(ButtonState state) {
     switch (state) {
         case NORMAL: return LIGHTGRAY;
         case HOVER: return YELLOW;
@@ -21,16 +30,16 @@ Color GetButtonColor(ButtonState state) {
     }
 }
 
-void DrawButton(Rectangle button, const char* text, int fontSize) {
+void Button::DrawButton(Rectangle button, const char* text, int fontSize) {
     ButtonState state = GetButtonState(button);
     Color color = GetButtonColor(state);
 
-    DrawRectangleRec(button, color);
-    DrawRectangleLines(button.x, button.y, button.width, button.height, DARKGRAY);
+    rlText.DrawRectangleRec(button, color);
+    rlText.DrawRectangleLines(button.x, button.y, button.width, button.height, DARKGRAY);
 
-    int textWidth = MeasureText(text, fontSize);
+    int textWidth = rlText.MeasureText(text, fontSize);
     int textX = button.x + (button.width - textWidth) / 2;
     int textY = button.y + (button.height - fontSize) / 2;
 
-    DrawText(text, textX, textY, fontSize, BLACK);
+    rlText.DrawText(text, textX, textY, fontSize, BLACK);
 }

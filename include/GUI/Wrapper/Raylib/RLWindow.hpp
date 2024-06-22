@@ -26,6 +26,8 @@ public:
     void SetTargetFPS(int fps);
     void CloseWindow();
     float GetFrameTime();
+    void SetWindowSize(int width, int height);
+    bool IsWindowResized();
 
 private:
 };

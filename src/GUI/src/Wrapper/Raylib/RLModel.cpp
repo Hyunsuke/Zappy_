@@ -127,3 +127,11 @@ Ray RLModel::GetMouseRay(Vector2 mousePosition, Camera camera) {
 float RLModel::Vector3Distance(Vector3 v1, Vector3 v2) {
     return ::Vector3Distance(v1, v2);
 }
+
+void RLModel::DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint) {
+    return ::DrawTextureEx(texture, position, rotation, scale, tint);
+}
+
+void RLModel::DrawModel(Model model, Vector3 position, float scale, Color tint) {
+    ::DrawModel(model, position, scale, tint);
+}

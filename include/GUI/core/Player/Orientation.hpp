@@ -15,7 +15,7 @@ class Orientation {
 
     protected:
     private:
-        
+
 };
 
 #endif /* !ORIENTATION_HPP_ */

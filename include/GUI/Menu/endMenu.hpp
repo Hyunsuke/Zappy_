@@ -1,8 +1,16 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** EndMenu
+*/
+
 #ifndef ENDMENU_HPP
 #define ENDMENU_HPP
 
 #include "../Sky/Sky.hpp"
 #include "../core/CameraController.hpp"
+#include "../Menu/Button.hpp"
 
 #include "raylib.h"
 #include <string>
@@ -22,6 +30,11 @@ private:
     bool closeButtonClicked;
 
     bool IsMouseOverButton(Rectangle button);
+
+    RLWindow window;
+    RLModel rlModel;
+    RLText rlText;
+    Button button;
 };
 
 #endif // ENDMENU_HPP

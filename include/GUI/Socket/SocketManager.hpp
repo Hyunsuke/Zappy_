@@ -39,6 +39,7 @@ public:
     bool TryReceiveMessage(std::string& message);
     void SetMessageHandler(MessageHandler handler);
     bool IsRunning() const;
+    void Setwin();
 
 private:
     void ReceiveMessages();
@@ -54,6 +55,7 @@ private:
     bool running;
     bool waitingForResponse;
     std::string response;
+    bool iswin;
     SocketWrapper socketWrapper;
 };
 

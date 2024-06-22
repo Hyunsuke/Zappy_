@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Button
+*/
+
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
@@ -9,8 +16,16 @@ enum ButtonState {
     PRESSED
 };
 
-ButtonState GetButtonState(Rectangle button);
-Color GetButtonColor(ButtonState state);
-void DrawButton(Rectangle button, const char* text, int fontSize);
+class Button {
+public:
+    Button();
+    ButtonState GetButtonState(Rectangle button);
+    Color GetButtonColor(ButtonState state);
+    void DrawButton(Rectangle button, const char* text, int fontSize);
+private:
+    Rectangle button;
+    ButtonState state;
+    RLText rlText;
+};
 
 #endif // BUTTON_HPP

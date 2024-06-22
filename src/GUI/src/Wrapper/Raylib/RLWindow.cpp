@@ -51,3 +51,10 @@ void RLWindow::CloseWindow() {
 float RLWindow::GetFrameTime() {
     return ::GetFrameTime();
 }
+void RLWindow::SetWindowSize(int width, int height) {
+    ::SetWindowSize(width, height);
+}
+
+bool RLWindow::IsWindowResized() {
+    return ::IsWindowResized();
+}

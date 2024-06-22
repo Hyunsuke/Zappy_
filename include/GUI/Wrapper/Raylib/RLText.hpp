@@ -34,6 +34,9 @@ public:
     static void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color);
     static void DrawSphere(Vector3 centerPos, float radius, Color color);
     static float GetFrameTime();
+    static bool IsKeyPressed(int key);
+    static bool IsKeyDown(int key);
+    static int GetCharPressed();
 };
 
 #endif // RLTEXT_HPP_

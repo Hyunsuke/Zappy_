@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** LoadingMenu
+*/
+
 #ifndef LOADING_MENU_HPP
 #define LOADING_MENU_HPP
 
@@ -6,15 +13,17 @@
 class LoadingMenu {
 public:
     LoadingMenu(int screenWidth, int screenHeight);
-    ~LoadingMenu();
     void Draw();
 private:
     int screenWidth;
     int screenHeight;
     Camera camera;
     Sky sky;
-    Texture2D image;
-    Texture2D imageStudio;
+    std::shared_ptr<Texture2D> image;
+    std::shared_ptr<Texture2D> imageStudio;
+    RLText rlText;
+    RLWindow window;
+    RLModel rlmodel;
 };
 
 #endif // LOADING_MENU_HPP
