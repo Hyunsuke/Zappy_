@@ -1,4 +1,9 @@
-// AnimationCollector.cpp
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** AnimationCollector
+*/
 
 #include "gui.hpp"
 

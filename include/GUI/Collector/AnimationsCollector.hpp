@@ -1,4 +1,9 @@
-// AnimationCollector.hpp
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** AnimationsCollector
+*/
 
 #ifndef ANIMATIONCOLLECTOR_HPP
 #define ANIMATIONCOLLECTOR_HPP

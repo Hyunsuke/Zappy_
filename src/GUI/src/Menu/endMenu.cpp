@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** EndMenu
+*/
+
 #include "gui.hpp"
 
 EndMenu::EndMenu(int screenWidth, int screenHeight)
@@ -18,7 +25,7 @@ void EndMenu::Draw(const std::string& winningTeam) {
     rlText.DrawText(("Winning Team: " + winningTeam + " !").c_str(), screenWidth / 2 - rlText.MeasureText(("Winning Team: " + winningTeam + " !").c_str(), 60) / 2, screenHeight / 2, 60, LIGHTGRAY);
 
     Rectangle CloseButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
-    rlText.DrawButton(CloseButton, "Close", 20);
+    button.DrawButton(CloseButton, "Close", 20);
 
     window.EndDrawing();
 }

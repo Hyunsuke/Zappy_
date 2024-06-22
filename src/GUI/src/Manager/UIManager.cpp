@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** UIManager
+*/
+
 #include "gui.hpp"
 
 UIManager::UIManager(int screenWidth, int screenHeight)

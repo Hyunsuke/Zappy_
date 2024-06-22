@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** LoadingMenu
+*/
+
 #ifndef LOADING_MENU_HPP
 #define LOADING_MENU_HPP
 

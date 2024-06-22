@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Settings
+*/
+
 #include "gui.hpp"
 
 Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
@@ -156,8 +163,8 @@ void Settings::Draw() {
         i++;
     }
 
-    rlText.DrawButton(applyButton, "Apply", 20);
-    rlText.DrawButton(closeButton, "Close", 20);
+    button.DrawButton(applyButton, "Apply", 20);
+    button.DrawButton(closeButton, "Close", 20);
 }
 
 void Settings::UpdateLayout(int screenWidth, int screenHeight) {

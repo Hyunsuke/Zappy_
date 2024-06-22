@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Loading
+*/
+
 #include "gui.hpp"
 #include <cmath>
 

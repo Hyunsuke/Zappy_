@@ -30,7 +30,6 @@ public:
     static Vector2 GetMousePosition();
     static bool CheckCollisionPointRec(Vector2 point, Rectangle rec);
     static bool IsMouseButtonPressed(int button);
-    static void DrawButton(Rectangle button, const char *text, int fontSize);
 
     static void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color);
     static void DrawSphere(Vector3 centerPos, float radius, Color color);

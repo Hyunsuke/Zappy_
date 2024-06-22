@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Menu
+*/
+
 #include "gui.hpp"
 
 Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
@@ -186,10 +193,10 @@ void Menu::Draw() {
     rlText.DrawText(portBuffer, screenWidth / 4 + 110, screenHeight / 2 + 5, 20, BLACK);
 
     Rectangle connectButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
-    rlText.DrawButton(connectButton, "Connect", 20);
+    button.DrawButton(connectButton, "Connect", 20);
 
     Rectangle settingsButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 80), 100.0f, 40.0f};
-    rlText.DrawButton(settingsButton, "Settings", 20);
+    button.DrawButton(settingsButton, "Settings", 20);
 
     settings.Draw();
 

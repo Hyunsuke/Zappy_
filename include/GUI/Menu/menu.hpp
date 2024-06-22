@@ -1,9 +1,17 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Menu
+*/
+
 #ifndef MENU_HPP
 #define MENU_HPP
 
 #include <string>
 #include <raylib.h>
 #include "gui.hpp"
+#include "../Menu/Button.hpp"
 
 class Menu {
 public:
@@ -45,6 +53,7 @@ private:
     RLWindow window;
     RLModel rlModel;
     RLText rlText;
+    Button button;
 };
 
 #endif // MENU_HPP

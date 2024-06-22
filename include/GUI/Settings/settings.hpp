@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** Settings
+*/
+
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
@@ -9,6 +16,7 @@
 #include "../Manager/UIManager.hpp"
 #include "../Manager/ChatManager.hpp"
 #include "../Wrapper/Raylib/RLWindow.hpp"
+#include "../Menu/Button.hpp"
 
 class Game;
 
@@ -63,6 +71,7 @@ private:
     RLWindow window;
     RLModel rlModel;
     RLText rlText;
+    Button button;
 };
 
 #endif // SETTINGS_HPP
