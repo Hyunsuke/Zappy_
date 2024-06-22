@@ -17,18 +17,6 @@ Le projet Zappy est un jeu en réseau où plusieurs équipes s'affrontent sur un
     ├── Command.py
     └── utils.py
 
-include
-   ├── all.h
-   ├── commands.h
-   ├── elevation.h
-   ├── map.h
-   ├── parsing.h
-   ├── progress_incantation.h
-   ├── server.h
-   ├── struct.h
-   ├── utils.h
-   └── web_debug.h
-
 ```
 
 ### Description des Composants
