@@ -37,12 +37,11 @@ static void eject_player_in_direction(struct_t *s, int direction,
     if (s->fd_gui != -1)
         dprintf(s->fd_gui, "ppo %d %d %d %d\n", ejected->id_player, ejected->x,
         ejected->y, orientation);
-
 }
 
-static void send_eject_to_gui(struct_t *s, player_t *player, bool sendAnimation)
+static void send_eject_to_gui(struct_t *s, player_t *player, bool animation)
 {
-    if (sendAnimation == false)
+    if (animation == false)
         return;
     if (s->fd_gui != -1)
         dprintf(s->fd_gui, "pex %d\n", player->id_player);
