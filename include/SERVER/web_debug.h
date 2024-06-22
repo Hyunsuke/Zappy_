@@ -7,10 +7,8 @@
 
 #ifndef DASHBOARD_H_
     #define DASHBOARD_H_
-
-#include "struct.h"
-
-#include <json-c/json.h>
+    #include "struct.h"
+    #include <json-c/json.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////  WEB DEBUG  ///////////////////////////////////////////
@@ -22,7 +20,7 @@ int run_commands_dashboard(struct_t *s, int fd, char *buffer);
 void get_usage(struct_t *s);
 
 
-#define INITIAL_BUFFER_SIZE 10000
+    #define INITIAL_BUFFER_SIZE 10000
 
 
 typedef struct buffer_info_s {
