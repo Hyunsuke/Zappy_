@@ -116,9 +116,9 @@ Afin de faire de la place au tableau de commandList, lorsqu'on reçoit une répo
         self.responseList.pop(0)
 ```
 
-## Communication du Serveur
+## Communication de l'IA
 
-### Communication avec les IA
+### Communication avec le serveur
 
 La communication entre l'IA et le serveur se fait via des sockets TCP. Voici un exemple de séquence de communication :
 
