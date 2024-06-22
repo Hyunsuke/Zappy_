@@ -29,8 +29,6 @@ private:
 
     bool closeButtonClicked;
 
-    bool IsMouseOverButton(Rectangle button);
-
     RLWindow window;
     RLModel rlModel;
     RLText rlText;

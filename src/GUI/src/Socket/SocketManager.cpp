@@ -121,7 +121,8 @@ void SocketManager::ReceiveMessages() {
         } else if (bytesReceived == 0 && !iswin) {
             running = false;
             Disconnect();
-            std::exit(84);
+            std::cerr << "Disconnected from server" << std::endl;
+            std::exit(0);
         }
     }
 }

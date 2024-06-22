@@ -31,16 +31,11 @@ void EndMenu::Draw(const std::string& winningTeam) {
 }
 
 void EndMenu::HandleMouseInput() {
-    Rectangle CloseButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
     if (rlText.IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        if (IsMouseOverButton(CloseButton)) {
+        Rectangle CloseButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
+        if (rlText.IsMouseOverButton(CloseButton)) {
             window.CloseWindow();
             std::exit(0);
         }
     }
-}
-
-bool EndMenu::IsMouseOverButton(Rectangle button) {
-    Vector2 mousePoint = rlText.GetMousePosition();
-    return rlText.CheckCollisionPointRec(mousePoint, button);
 }
