@@ -5,9 +5,7 @@ import sys
 from sys import argv, exit, stdout
 from InventoryManager import InventoryManager
 from Command import Command
-import time
 import os
-import random
 from utils import *
 
 
@@ -62,16 +60,6 @@ class ZappyClient:
         except Exception as e:
             print(f"Handshake error: {e}")
             sys.exit(1)
-
-
-    level_2_objectives = [
-        ("linemate", 10),
-        ("deraumere", 5),
-        ("sibur", 20),
-        ("mendiane", 7),
-        ("phiras", 3),
-        ("thystame", 12)
-    ]
 
     def blockingBuffer(self):
         while self.cmd.getWaitingRoom() > 0:
@@ -137,7 +125,7 @@ class ZappyClient:
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
-                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
+                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False and self.current_inventory.current_inventory["food"] > 30:
                         self.cmd.broadcast(f"{self.team_name}_ready_come")
                     elif self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_gather")
@@ -201,9 +189,6 @@ class ZappyClient:
 
         # Parcourir les éléments et mettre à jour le dictionnaire
         for item in items:
-            # if (item == "ok" or "ko"): # Gestion d'erreur du broadcast
-            #     print("Broadcast response: ", item)
-            #     return
             key, value = item.split()
             self.current_inventory.current_inventory[key] = int(value)
             self.cmd.current_inventory.current_inventory[key] = int(value)
@@ -289,7 +274,6 @@ class ZappyClient:
             print("Je suis prêt")
             self.ready = True
             print("-----------------------------------------------------------------------------------------------")
-            # os._exit(1)
             return
         x, y = get_cood(status)
         self.move_to_tile(x, y, 0, 0)
@@ -298,7 +282,6 @@ class ZappyClient:
 
     def drop_all(self, leads=False):
         for key, value in self.current_inventory.current_inventory.items():
-            # print("Dropping all  {}".format(key))
             if key == "food":
                 continue
             for i in range(value):

@@ -55,6 +55,7 @@ void Game::HandlePlayerPosition(std::istringstream& iss) {
     iss >> n >> x >> y >> o;
     auto player = gameMap.GetPlayerByNumber(n);
     if (player) {
+        std::cout << "Player " << n << " moved to " << x << " " << y << std::endl;
         player->SetOrientation(o);
         auto currentIsland = player->GetIsland();
         auto newIsland = gameMap.GetIslandByXY(x, y);
@@ -164,6 +165,7 @@ void Game::HandlePlayerDeath(std::istringstream& iss) {
     auto player = gameMap.GetPlayerByNumber(n);
     if (player) {
         player->SetDead();
+        player->WaitForAnimationEnd(Player::Animation::Idle);
     }
 }
 
@@ -196,6 +198,7 @@ void Game::HandleTimeUnitChange(std::istringstream& iss) {
 }
 
 void Game::HandleGameOver(std::istringstream& iss) {
+    socketManager->Setwin();
     std::string teamName;
     iss >> teamName;
     gameOver = true;

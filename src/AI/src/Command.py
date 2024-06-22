@@ -41,11 +41,8 @@ class Command:
         # Il faut aussi que lorsque le leader est chosen il envoi en boucle son message et dans cette fonciton il faut mettre leaderIsChosen == 0
         thread_reception = threading.Thread(target=self.reception_loop)
         thread_reception.start()
-        # thread_send = threading.Thread(target=self.sendArrayCmd)
-        # thread_send.start()
 
     def sendArrayCmd(self):
-            # print("len : ", len(self.commandList))
         while len(self.commandList) != 0:
             try:
                 if (self.commandWaitingRoom < 10):
@@ -55,7 +52,6 @@ class Command:
                         self.commandWaitingRoom += 1
             except socket.error as e:
                 print(f"Error sending command '{self.commandList[0]}': {e}")
-                # return None
                 os._exit(84)
 
     def getWaitingRoom(self):
@@ -89,10 +85,10 @@ class Command:
         if data.startswith("message"):
             print("Le recv reçu est un broadcast")
             self.adjustBroadcast()
-        # if data.startswith("eject"):
-        #     print("Le recv reçu est un eject")
-        #     print(self.data_received)
-        #     return
+        elif data.startswith("eject"):
+            print("Le recv reçu est un eject")
+            print(self.data_received)
+            return
         else:
             print("We received " + data)
             if not self.responseList:
@@ -117,16 +113,12 @@ class Command:
         if not self.responseList:
             return
         if self.responseList[0].startswith("Take"):
-            # print("C'est la réponse du Take")
             self.adjustTake()
         elif self.responseList[0].startswith("Set"):
-            # print("C'est la réponse du Set")
             self.adjustSet()
         elif self.responseList[0].startswith("Incantation"):
-            # print("C'est la réponse du Incantation")
             self.adjustIncantation()
         elif self.responseList[0].startswith("Eject"):
-            # print("C'est la réponse du Eject")
             self.adjustEject()
         elif self.responseList[0].startswith("Broadcast"):
             if self.responseList[0].endswith("END"):
@@ -151,7 +143,6 @@ class Command:
         return self.positionHasBeenChanged
 
     def adjustForward(self):
-        # if self.nb != 0 il faut continuer la fonction
         if self.leaderIsChosen == -1:
             return
         if self.positionHasBeenChanged == True:

@@ -8,7 +8,7 @@
 #include "gui.hpp"
 
 SocketManager::SocketManager()
-    : port(0), sockfd(-1), running(false), waitingForResponse(false) {}
+    : port(0), sockfd(-1), running(false), waitingForResponse(false), iswin(false) {}
 
 SocketManager::SocketManager(const std::string& host, int port)
     : host(host), port(port), sockfd(-1), running(false), waitingForResponse(false) {
@@ -118,10 +118,16 @@ void SocketManager::ReceiveMessages() {
                     messageHandler(message);
                 }
             }
-        } else if (bytesReceived == 0) {
+        } else if (bytesReceived == 0 && !iswin) {
             running = false;
             Disconnect();
-            std::exit(84);
+            std::cerr << "Disconnected from server" << std::endl;
+            std::exit(0);
         }
     }
+}
+
+void SocketManager::Setwin()
+{
+    iswin = true;
 }

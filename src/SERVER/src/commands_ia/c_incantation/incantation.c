@@ -46,6 +46,17 @@ static bool check_level_player(struct_t *s, elevation_t *elevation,
         return true;
 }
 
+static void send_incant_to_gui(struct_t *s, position_t *pos_incant,
+    player_t *player)
+{
+    if (s->fd_gui != -1) {
+        dprintf(s->fd_gui, "pie %d %d %d\n", pos_incant->x, pos_incant->y,
+            player->level_player);
+        dprintf(s->fd_gui, "plv %d %d\n", player->id_player,
+            player->level_player);
+    }
+}
+
 static void change_level_elevation(struct_t *s, elevation_t *elevation,
     position_t *position)
 {
@@ -60,6 +71,7 @@ static void change_level_elevation(struct_t *s, elevation_t *elevation,
                 count++;
                 dprintf(current_player->fd, "Current level: %d\n",
                     current_player->level_player);
+                send_incant_to_gui(s, position, current_player);
             }
         current_player = current_player->next;
     }
@@ -89,17 +101,6 @@ static int print_incantation_ko(struct_t *s, int fd, position_t *pos_incant)
     return -1;
 }
 
-static void send_incant_to_gui(struct_t *s, position_t *pos_incant,
-    player_t *player)
-{
-    if (s->fd_gui != -1) {
-        dprintf(s->fd_gui, "pie %d %d %d\n", pos_incant->x, pos_incant->y,
-            player->level_player);
-        dprintf(s->fd_gui, "plv %d %d\n", player->id_player,
-            player->level_player);
-    }
-}
-
 int c_incantation(struct_t *s, int fd)
 {
     player_t *player = get_player_by_fd(s, fd);
@@ -117,6 +118,5 @@ int c_incantation(struct_t *s, int fd)
     }
     change_level_elevation(s, elevation, pos_incant);
     remove_incantation(s, fd);
-    send_incant_to_gui(s, pos_incant, player);
     return 0;
 }
