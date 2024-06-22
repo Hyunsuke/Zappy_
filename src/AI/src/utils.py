@@ -78,20 +78,6 @@ def recuperer_chiffre(text):
     matches = re.findall(r'\b\w\b', text)
     return int(matches[0])
 
-def broadcastMaterial(team_name, material, fct):
-    if (material == "linemate"):
-        return f"{team_name}_linemate_{fct}"
-    elif (material == "deraumere"):
-        return f"{team_name}_deraumere_{fct}"
-    elif (material == "sibur"):
-        return f"{team_name}_sibur_{fct}"
-    elif (material == "mendiane"):
-        return f"{team_name}_mendiane_{fct}"
-    elif (material == "phiras"):
-        return f"{team_name}_phiras_{fct}"
-    elif (material == "thystame"):
-        return f"{team_name}_thystame_{fct}"
-
 def getBroadcastMessage(response):
         parts = response.split('_')
         print("Get broadcast message")

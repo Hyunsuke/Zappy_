@@ -94,9 +94,10 @@ class Command:
             if not self.responseList:
                 return
             self.adjustData()
-            if self.responseList[0] != "Incantation":
-                self.commandWaitingRoom -= 1
-            self.responseList.pop(0)
+            if len(self.responseList) > 0:
+                if self.responseList[0] != "Incantation":
+                    self.commandWaitingRoom -= 1
+                self.responseList.pop(0)
 
     def reception_loop(self):
         while True:
@@ -132,10 +133,10 @@ class Command:
                 self.level += 1
                 self.hasElevated = True
                 print("Data received : ", self.data_received)
-        if self.responseList[0].startswith("Look"):
+        elif self.responseList[0].startswith("Look"):
             self.lookString = self.data_received
             self.isLookUpdated = True
-        if self.responseList[0].startswith("Inventory"):
+        elif self.responseList[0].startswith("Inventory"):
             self.inventoryString = self.data_received
             self.isInventoryUpdated = True
 
@@ -156,6 +157,20 @@ class Command:
             if self.forwardIndex == 2:
                 self.positionHasBeenChanged = True
                 self.forwardIndex = 0
+
+    def broadcastMaterial(self, material, fct):
+        if (material == "linemate"):
+            self.broadcast(f"{self.team_name}_linemate_{fct}")
+        elif (material == "deraumere"):
+            self.broadcast(f"{self.team_name}_deraumere_{fct}")
+        elif (material == "sibur"):
+            self.broadcast(f"{self.team_name}_sibur_{fct}")
+        elif (material == "mendiane"):
+            self.broadcast(f"{self.team_name}_mendiane_{fct}")
+        elif (material == "phiras"):
+            self.broadcast(f"{self.team_name}_phiras_{fct}")
+        elif (material == "thystame"):
+            self.broadcast(f"{self.team_name}_thystame_{fct}")
 
     def adjustBroadcast(self):
         broadcastMessage = skip_to_first_comma(self.data_received)
@@ -243,11 +258,11 @@ class Command:
     def validateInventory(self, objectTaken, broadcast=False):
         if check_inventory(self.current_inventory) == True:
             print("Tous les items ont été trouvés. Go faire le passage lvl8")
-            self.broadcast(broadcastMaterial(self.team_name, objectTaken, "END"))
+            self.broadcastMaterial(objectTaken, "END")
             return True
         if check_item(objectTaken, self.current_inventory) == True:
             if broadcast == False and objectTaken != "food":
-                self.broadcast(broadcastMaterial(self.team_name, objectTaken, "OK"))
+                self.broadcastMaterial(objectTaken, "OK")
             return True
         return False
 
@@ -262,7 +277,7 @@ class Command:
             return
         if self.validateInventory(objectTaken) == True:
             return
-        self.broadcast(broadcastMaterial(self.team_name, objectTaken, "Take"))
+        self.broadcastMaterial(objectTaken, "Take")
 
     def move_forward(self, needPrint=False):
         self.send_command("Forward")

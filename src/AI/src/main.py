@@ -2,6 +2,7 @@
 
 import socket
 import sys
+import argparse
 from sys import argv, exit, stdout
 from InventoryManager import InventoryManager
 from Command import Command
@@ -10,8 +11,11 @@ from utils import *
 
 
 class ZappyClient:
-    def __init__(self):
-        self.parse_arguments()
+    def __init__(self, host, port, team_name):
+        self.host = host
+        self.port = port
+        self.team_name = team_name
+
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
@@ -32,15 +36,10 @@ class ZappyClient:
         except socket.error as e:
             print(f"Socket error: {e}")
             os._exit(1)
-
-    def parse_arguments(self):
-        for i in argv:
-            if (i == "-p"):
-                self.port = int(argv[argv.index(i) + 1])
-            elif (i == "-n"):
-                self.team_name = argv[argv.index(i) + 1]
-            elif (i == "-h"):
-                self.host = argv[argv.index(i) + 1]
+        except KeyboardInterrupt:
+            print("Terminating AI client.")
+            self.socket.close()
+            os._exit(0)
 
     def initial_handshake(self):
         try:
@@ -114,6 +113,7 @@ class ZappyClient:
                 self.update_inventory()
                 if self.cmd.get_reset == True:
                     self.reset_main()
+                    continue
                 if self.cmd.get_status() == -2:
                     if self.ready == True:
                         print(self.cmd.nb_joiner_ready())
@@ -125,7 +125,7 @@ class ZappyClient:
                         self.cmd.look()
                         self.ready = True
                         self.drop_all(True)
-                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False and self.current_inventory.current_inventory["food"] > 30:
+                    elif self.cmd.nb_player_food_ready() == self.cmd.nb_joiner_ready() and self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_come")
                     elif self.cmd.nb_joiner_ready() >= 5 and self.ready == False:
                         self.cmd.broadcast(f"{self.team_name}_ready_gather")
@@ -308,5 +308,30 @@ class ZappyClient:
 
         self.cmd.reset = False
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Zappy AI Client', add_help=False)
+    parser.add_argument('-p', '--port', type=int, required=True, help='Port number of the server')
+    parser.add_argument('-n', '--team_name', type=str, required=True, help='Name of the team')
+    parser.add_argument('-h', '--host', type=str, default='localhost', help='Host address of the server')
+    parser.add_argument('--help', action='help', help='Show this help message and exit')
+
+    # Parse the arguments and handle errors
+    try:
+        args = parser.parse_args()
+        if args.port < 0 or args.port > 65535:
+            parser.print_help()
+            sys.exit(84)
+    except argparse.ArgumentError as e:
+        print(f"Error: {e}")
+        parser.print_help()
+        sys.exit(2)
+    except SystemExit as e:
+        # This will catch argparse's SystemExit exception
+        parser.print_help()
+        sys.exit(e.code)
+
+    return args.host, args.port, args.team_name
+
 if __name__ == "__main__":
-    client = ZappyClient()
+    host, port, team_name = parse_arguments()
+    client = ZappyClient(host, port, team_name)
