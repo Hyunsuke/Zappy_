@@ -356,7 +356,6 @@ class Command:
         self.player_food_ready = 0
         self.elevation = False
         self.data_received = ""
-        self.commandWaitingRoom = 0
         self.dataIndex = 0
         self.debug = 0
         self.lookString = ""
@@ -367,8 +366,6 @@ class Command:
         self.inventoryString = ""
         self.isInventoryUpdated = False
         self.hasElevated = False
-        self.commandList = []
-        self.responseList = []
 
         self.reset = True
 
