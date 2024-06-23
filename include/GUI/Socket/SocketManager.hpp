@@ -55,7 +55,7 @@ private:
     bool running;
     bool waitingForResponse;
     std::string response;
-    bool iswin;
+    bool iswin = false;
     SocketWrapper socketWrapper;
 };
 

@@ -55,7 +55,6 @@ void Game::HandlePlayerPosition(std::istringstream& iss) {
     iss >> n >> x >> y >> o;
     auto player = gameMap.GetPlayerByNumber(n);
     if (player) {
-        std::cout << "Player " << n << " moved to " << x << " " << y << std::endl;
         player->SetOrientation(o);
         auto currentIsland = player->GetIsland();
         auto newIsland = gameMap.GetIslandByXY(x, y);

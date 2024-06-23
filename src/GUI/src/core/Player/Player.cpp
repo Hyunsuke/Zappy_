@@ -110,7 +110,6 @@ void Player::UpdatePosition() {
             this->y = newIsland->GetY();
             SetIsland(newIsland);
 
-            UpdatePlayersPositionsOnIsland(newIsland);
         }
 
         Vector3 newPos = rlModel.Vector3Lerp(startPos, endPos, t);

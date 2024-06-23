@@ -31,9 +31,11 @@ void Map::Draw() {
     for (auto& island : islands) {
         island->Draw();
     }
+    while (playersLock.test_and_set(std::memory_order_acquire)) {}
     for (auto& player : players) {
         player->Draw();
     }
+    playersLock.clear(std::memory_order_release);
 }
 
 void Map::DrawIslandWires(const std::shared_ptr<Island>& selectedIsland) {
@@ -49,11 +51,13 @@ void Map::DrawIslandWires(const std::shared_ptr<Island>& selectedIsland) {
 void Map::DrawPlayerWires(const std::shared_ptr<Player>& selectedPlayer) {
     if (!selectedPlayer)
         return;
+    while (playersLock.test_and_set(std::memory_order_acquire)) {}
     for (auto& player : players) {
         if (player == selectedPlayer) {
             player->DrawWires();
         }
     }
+    playersLock.clear(std::memory_order_release);
 }
 
 void Map::Update() {
@@ -85,6 +89,7 @@ std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
 }
 
 std::shared_ptr<Player> Map::GetPlayerByNumber(int playerNumber) {
+    
     for (auto& player : players) {
         if (player->GetPlayerNumber() == playerNumber) {
             return player;

@@ -76,6 +76,8 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
 
 void Game::Run() {
     while (!window.WindowShouldClose()) {
+        if (!socketManager->IsRunning())
+            break;
         Update();
         Draw();
     }
