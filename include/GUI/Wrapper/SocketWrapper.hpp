@@ -18,7 +18,7 @@ public:
     static int Socket(int domain, int type, int protocol);
     static uint16_t Htons(uint16_t hostshort);
     static int InetPton(int af, const char* src, void* dst);
-    static int Connect(int sockfd, const struct sockaddr* addr, socklen_t addrlen);
+    static int Connect(int sockfd, sockaddr_in addr, socklen_t addrlen);
     static int Close(int fd);
     static ssize_t Recv(int sockfd, void* buf, std::size_t len, int flags);
 };

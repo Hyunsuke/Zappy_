@@ -19,8 +19,8 @@ int SocketWrapper::InetPton(int af, const char* src, void* dst) {
     return inet_pton(af, src, dst);
 }
 
-int SocketWrapper::Connect(int sockfd, const struct sockaddr* addr, socklen_t addrlen) {
-    return connect(sockfd, addr, addrlen);
+int SocketWrapper::Connect(int sockfd, sockaddr_in addr, socklen_t addrlen) {
+    return connect(sockfd, (struct sockaddr *)&addr, addrlen);
 }
 
 int SocketWrapper::Close(int fd) {

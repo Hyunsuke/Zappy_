@@ -34,7 +34,7 @@ void SocketManager::Connect() {
         return;
     }
 
-    if (socketWrapper.Connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    if (socketWrapper.Connect(sockfd, serv_addr, sizeof(serv_addr)) < 0) {
         throw GameException("Connection Failed");
         return;
     }

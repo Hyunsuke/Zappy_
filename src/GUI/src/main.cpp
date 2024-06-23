@@ -39,7 +39,7 @@ bool connectToServer(const std::string& host, int port, std::unique_ptr<SocketMa
     if (connectFuture.wait_for(std::chrono::seconds(2)) == std::future_status::timeout) {
         std::cerr << "Failed to connect to the server: timeout" << std::endl;
         socketManager->Disconnect();
-        exit(84);
+        std::exit(84);
     }
 
     if (!connectFuture.get()) {
