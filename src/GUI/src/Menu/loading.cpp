@@ -31,7 +31,7 @@ void LoadingScreen::Draw(const std::string& message, float progress) {
     float scale = 0.1f;
     float offsetY = 10.0f * std::sin(time * 2.0f);
     Vector2 position = { screenWidth - image->width * scale - 20, screenHeight - image->height * scale - 30 + offsetY };
-    rlmodel.DrawTextureEx(*image, position, 0.0f, scale, WHITE);
+    rlmodel.DrawTextureEx(image, position, 0.0f, scale, WHITE);
 
     window.EndDrawing();
 }

@@ -27,10 +27,10 @@ void LoadingMenu::Draw() {
     float scale = 0.1f;
     float offsetY = 10.0f * std::sin(time * 2.0f);
     Vector2 position1 = { screenWidth - image->width * scale - 20, screenHeight - image->height * scale - 30 + offsetY };
-    rlmodel.DrawTextureEx(*image, position1, 0.0f, scale, WHITE);
+    rlmodel.DrawTextureEx(image, position1, 0.0f, scale, WHITE);
 
     Vector2 position2 = { screenWidth / 2 - imageStudio->width * 2.0f / 2, screenHeight / 2 - imageStudio->height * 2.0f / 2 };
-    rlmodel.DrawTextureEx(*imageStudio, position2, 0.0f, 2.0f, WHITE);
+    rlmodel.DrawTextureEx(imageStudio, position2, 0.0f, 2.0f, WHITE);
 
     window.EndDrawing();
 }

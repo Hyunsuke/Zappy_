@@ -30,7 +30,7 @@ std::shared_ptr<Texture2D> TextureCollector::LoadTexture(const std::string& file
 
 void TextureCollector::UnloadAllTextures() {
     for (auto& entry : textureCache) {
-        rlModel.UnloadTexture(*entry.second);
+        rlModel.UnloadTexture(entry.second);
     }
     textureCache.clear();
 }

@@ -22,7 +22,7 @@ public:
     std::shared_ptr<Player> GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players);
 
 private:
-    bool CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform);
+    bool CheckRayCollisionModel(Ray ray, std::shared_ptr<Model> model, const Matrix& transform);
     bool CheckCollisionRayBox(Ray ray, BoundingBox box);
     bool CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint);
     Ray ray;

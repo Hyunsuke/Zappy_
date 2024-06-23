@@ -56,7 +56,7 @@ void Island::Draw() {
         }
     }
     for (auto& egg: eggs) {
-        rlModel.DrawModelEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
+        rlModel.DrawModelEx(egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
     }
 }
 
@@ -68,7 +68,7 @@ void Island::DrawWires() {
         }
     }
     for (auto& egg: eggs) {
-        rlModel.DrawModelWiresEx(*egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
+        rlModel.DrawModelWiresEx(egg->GetModel(), GetEggPosition(), {0.0f, 0.0f, 0.0f}, 0.0f, {0.4f, 0.4f, 0.4f}, WHITE);
     }
 }
 
