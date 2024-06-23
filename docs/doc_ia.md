@@ -29,6 +29,7 @@ Le projet Zappy est un jeu en réseau où plusieurs équipes s'affrontent sur un
 ### Schéma de Communication
 
 ```mermaid
+graph TD;
     IA_Client-->|TCP| Server;
     Server-->|TCP| IA_Client;
 ```
