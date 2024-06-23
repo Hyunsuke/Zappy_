@@ -25,7 +25,7 @@ void ShaderManager::UseShader() {
     rlShader.BeginShaderMode(shader);
 }
 
-void ShaderManager::SetShaderValue(const std::string& uniformName, const void* value, int uniformType) {
+void ShaderManager::SetShaderValue(const std::string& uniformName, const Vector3& value, int uniformType) {
     int location = GetUniformLocation(uniformName);
     rlShader.SetShaderValue(shader, location, value, uniformType);
 }

@@ -30,7 +30,7 @@ Color Button::GetButtonColor(ButtonState state) {
     }
 }
 
-void Button::DrawButton(Rectangle button, const char* text, int fontSize) {
+void Button::DrawButton(Rectangle button, const std::string& text, int fontSize) {
     ButtonState state = GetButtonState(button);
     Color color = GetButtonColor(state);
 
