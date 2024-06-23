@@ -11,8 +11,8 @@ Model RLModel::LoadModel(const std::string& filePath) {
     return ::LoadModel(filePath.c_str());
 }
 
-void RLModel::UnloadModel(Model& model) {
-    ::UnloadModel(model);
+void RLModel::UnloadModel(std::shared_ptr<Model> model) {
+    ::UnloadModel(*model);
 }
 
 Texture2D RLModel::LoadTexture(const std::string& filePath) {
@@ -132,6 +132,6 @@ void RLModel::DrawTextureEx(std::shared_ptr<Texture2D> texture, Vector2 position
     return ::DrawTextureEx(*texture, position, rotation, scale, tint);
 }
 
-void RLModel::DrawModel(Model model, Vector3 position, float scale, Color tint) {
-    ::DrawModel(model, position, scale, tint);
+void RLModel::DrawModel(std::shared_ptr<Model> model, Vector3 position, float scale, Color tint) {
+    ::DrawModel(*model, position, scale, tint);
 }
