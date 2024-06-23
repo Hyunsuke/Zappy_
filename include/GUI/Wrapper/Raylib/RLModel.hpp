@@ -16,7 +16,7 @@
 class RLModel {
 public:
     static Model LoadModel(const std::string& filePath);
-    static void UnloadModel(Model& model);
+    static void UnloadModel(std::shared_ptr<Model> model);
     static Texture2D LoadTexture(const std::string& filePath);
     static void UnloadTexture(std::shared_ptr<Texture2D> texture);
     static void DrawTextureEx(std::shared_ptr<Texture2D> texture, Vector2 position, float rotation, float scale, Color tint);
@@ -24,7 +24,7 @@ public:
     static void DrawModelEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
     static void SetLineWidth(float width);
     static void DrawModelWiresEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
-    static void DrawModel(Model model, Vector3 position, float scale, Color tint);
+    static void DrawModel(std::shared_ptr<Model> model, Vector3 position, float scale, Color tint);
 
     static float GetFrameTime();
     static double GetTime();
