@@ -278,6 +278,39 @@ typedef struct struct_s {
 - **head_progress_incantation** : Pointeur vers les incantations en cours.
 - **dashboard** : Pointeur vers les informations du tableau de bord (optionnel).
 
+#### Explication des Éléments de `map_element_t`
+
+Pour gérer notre map nous utilisons un tableau de structure :
+
+```c
+typedef struct map_element_s {
+    int food;
+    int linemate;
+    int deraumere;
+    int sibur;
+    int mendiane;
+    int phiras;
+    int thystame;
+    int nb_mob;
+    int *id_mob;
+} map_element_t;
+```
+
+Chaque élément (case de la map) possède son propre inventaire ici représenté par
+
+- **food**: Nombre de nourriture disponible sur la case.
+- **linemate**: Nombre de linemate disponible sur la case.
+- **deraumere**: Nombre de deraumere disponible sur la case.
+- **sibur**: Nombre de sibur disponible sur la case.
+- **mendiane**: Nombre de mendiane disponible sur la case.
+- **phiras**: Nombre de phiras disponible sur la case.
+- **thystame**: Nombre de thystame disponible sur la case.
+
+Les autres éléments représentent des informations sur les joueurs présents sur la case:
+
+- **nb_mob**: nombre de joueurs sur la case.
+- **id_mob**: tableau d'entier contenant les id des players présents sur la case.
+
 ## Communication du Serveur
 
 ### Communication avec les IA
