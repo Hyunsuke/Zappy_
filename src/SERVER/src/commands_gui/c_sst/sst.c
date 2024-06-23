@@ -27,6 +27,7 @@ int c_sst(struct_t *s, char *buffer)
     } else {
         s->time = unit_time;
         dprintf(s->fd_gui, "sst %d\n", s->time);
+        printf("New Timer: %d\n", s->time);
     }
     return 0;
 }
