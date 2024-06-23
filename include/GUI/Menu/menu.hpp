@@ -30,8 +30,11 @@ private:
     void UpdateWindowSize(int width, int height);
     bool IsMouseOverButton(Rectangle button);
     bool IsMouseOverTextBox(Rectangle textBox);
-    void HandleBackspace(char* buffer, bool& isActive, float& backspaceTime);
-
+    // void HandleBackspace(std::string& buffer, bool& isActive, float& backspaceTime);
+    // void HandleBackspace(int& buffer, bool& isActive, float& backspaceTime);
+    // void HandleBackspace(std::string& buffer, bool& isActive, float& backspaceTime);
+    void HandleBackspace(std::string& buffer, bool& isActive, float& backspaceTime);
+    void HandleBackspace(int& buffer, bool& isActive, float& backspaceTime);
     int screenWidth;
     int screenHeight;
     std::string host;
@@ -41,8 +44,10 @@ private:
     bool portActive;
     float hostBackspaceTime;
     float portBackspaceTime;
-    char hostBuffer[128];
-    char portBuffer[6];
+    // std::string host;
+    // int port;
+    // char hostBuffer[128];
+    // char portBuffer[6];
     std::unique_ptr<ShaderManager> shaderManager;
     std::shared_ptr<Island> islandModel;
     Camera camera;

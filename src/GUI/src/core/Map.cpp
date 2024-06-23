@@ -89,7 +89,7 @@ std::shared_ptr<Island> Map::GetIslandByXY(int x, int y) {
 }
 
 std::shared_ptr<Player> Map::GetPlayerByNumber(int playerNumber) {
-    
+
     for (auto& player : players) {
         if (player->GetPlayerNumber() == playerNumber) {
             return player;

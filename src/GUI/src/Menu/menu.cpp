@@ -12,8 +12,8 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
       startGame(false), hostActive(false), portActive(false),
       hostBackspaceTime(0.0f), portBackspaceTime(0.0f), settings(screenWidth, screenHeight, "menu"),
       sky(screenWidth, screenHeight) {
-    std::strcpy(hostBuffer, host.c_str());
-    std::sprintf(portBuffer, "%d", port);
+
+
 
     shaderManager = std::make_unique<ShaderManager>("src/GUI/assets/shaders/lighting.vs", "src/GUI/assets/shaders/lighting.fs");
     Vector3 lightPosition = { 10.0f, 10.0f, 10.0f };
@@ -83,15 +83,32 @@ bool Menu::IsMouseOverTextBox(Rectangle textBox) {
     return rlText.CheckCollisionPointRec(mousePoint, textBox);
 }
 
-void Menu::HandleBackspace(char* buffer, bool& isActive, float& backspaceTime) {
+void Menu::HandleBackspace(std::string& buffer, bool& isActive, float& backspaceTime) {
     if (isActive) {
-        if (rlText.IsKeyPressed(KEY_BACKSPACE) && std::strlen(buffer) > 0) {
-            buffer[std::strlen(buffer) - 1] = '\0';
+        if (rlText.IsKeyPressed(KEY_BACKSPACE) && !buffer.empty()) {
+            buffer.pop_back();
             backspaceTime = 0.0f;
-        } else if (rlText.IsKeyDown(KEY_BACKSPACE) && std::strlen(buffer) > 0) {
+        } else if (rlText.IsKeyDown(KEY_BACKSPACE) && !buffer.empty()) {
             backspaceTime += rlText.GetFrameTime();
             if (backspaceTime >= 0.1f) {
-                buffer[std::strlen(buffer) - 1] = '\0';
+                buffer.pop_back();
+                backspaceTime = 0.05f;
+            }
+        } else {
+            backspaceTime = 0.0f;
+        }
+    }
+}
+
+void Menu::HandleBackspace(int& buffer, bool& isActive, float& backspaceTime) {
+    if (isActive) {
+        if (rlText.IsKeyPressed(KEY_BACKSPACE) && buffer > 0) {
+            buffer /= 10;
+            backspaceTime = 0.0f;
+        } else if (rlText.IsKeyDown(KEY_BACKSPACE) && buffer > 0) {
+            backspaceTime += rlText.GetFrameTime();
+            if (backspaceTime >= 0.1f) {
+                buffer /= 10;
                 backspaceTime = 0.05f;
             }
         } else {
@@ -108,29 +125,25 @@ void Menu::HandleInput() {
     if (hostActive) {
         int key = rlText.GetCharPressed();
         while (key > 0) {
-            if ((key >= 32) && (key <= 125) && std::strlen(hostBuffer) < sizeof(hostBuffer) - 1) {
-                int len = std::strlen(hostBuffer);
-                hostBuffer[len] = (char)key;
-                hostBuffer[len + 1] = '\0';
+            if ((key >= 32) && (key <= 125) && host.size() < 255) {
+                host += static_cast<char>(key);
             }
             key = rlText.GetCharPressed();
         }
 
-        HandleBackspace(hostBuffer, hostActive, hostBackspaceTime);
+        HandleBackspace(host, hostActive, hostBackspaceTime);
     }
 
     if (portActive) {
         int key = rlText.GetCharPressed();
         while (key > 0) {
-            if ((key >= '0') && (key <= '9') && std::strlen(portBuffer) < sizeof(portBuffer) - 1) {
-                int len = std::strlen(portBuffer);
-                portBuffer[len] = (char)key;
-                portBuffer[len + 1] = '\0';
+            if ((key >= '0') && (key <= '9') && std::to_string(port).size() < 5) {
+                port = port * 10 + (key - '0');
             }
             key = rlText.GetCharPressed();
         }
 
-        HandleBackspace(portBuffer, portActive, portBackspaceTime);
+        HandleBackspace(port, portActive, portBackspaceTime);
     }
 
     if (rlText.IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -154,9 +167,6 @@ void Menu::HandleInput() {
             portActive = false;
         }
     }
-
-    host = std::string(hostBuffer);
-    port = std::atoi(portBuffer);
 
     if (settings.IsOpen()) {
         settings.Update();
@@ -185,11 +195,11 @@ void Menu::Draw() {
 
     rlText.DrawText("Host:", screenWidth / 4, screenHeight / 2 - 60, 20, DARKGRAY);
     rlText.DrawRectangle(screenWidth / 4 + 100, screenHeight / 2 - 60, 200, 30, hostActive ? LIGHTGRAY : GRAY);
-    rlText.DrawText(hostBuffer, screenWidth / 4 + 110, screenHeight / 2 - 55, 20, BLACK);
+    rlText.DrawText(host.c_str(), screenWidth / 4 + 110, screenHeight / 2 - 55, 20, BLACK);
 
     rlText.DrawText("Port:", screenWidth / 4, screenHeight / 2, 20, DARKGRAY);
     rlText.DrawRectangle(screenWidth / 4 + 100, screenHeight / 2, 200, 30, portActive ? LIGHTGRAY : GRAY);
-    rlText.DrawText(portBuffer, screenWidth / 4 + 110, screenHeight / 2 + 5, 20, BLACK);
+    rlText.DrawText(std::to_string(port).c_str(), screenWidth / 4 + 110, screenHeight / 2 + 5, 20, BLACK);
 
     Rectangle connectButton = {(float)(screenWidth / 2 - 50), (float)(screenHeight - 150), 100.0f, 40.0f};
     button.DrawButton(connectButton, "Connect", 20);
