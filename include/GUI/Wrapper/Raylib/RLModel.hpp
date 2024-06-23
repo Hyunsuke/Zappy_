@@ -18,18 +18,18 @@ public:
     static Model LoadModel(const std::string& filePath);
     static void UnloadModel(Model& model);
     static Texture2D LoadTexture(const std::string& filePath);
-    static void UnloadTexture(Texture2D& texture);
-    static void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
+    static void UnloadTexture(std::shared_ptr<Texture2D> texture);
+    static void DrawTextureEx(std::shared_ptr<Texture2D> texture, Vector2 position, float rotation, float scale, Color tint);
 
-    static void DrawModelEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
+    static void DrawModelEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
     static void SetLineWidth(float width);
-    static void DrawModelWiresEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
+    static void DrawModelWiresEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
     static void DrawModel(Model model, Vector3 position, float scale, Color tint);
 
     static float GetFrameTime();
     static double GetTime();
 
-    static void UpdateModelAnimation(Model& model, ModelAnimation& anim, int frame);
+    static void UpdateModelAnimation(std::shared_ptr<Model> model, std::shared_ptr<ModelAnimation> anim, int frame);
     static Vector3 Vector3Lerp(Vector3 start, Vector3 end, float amount);
     static Vector3 Vector3Add(Vector3 v1, Vector3 v2);
     static Vector3 Vector3Normalize(Vector3 v);
@@ -47,7 +47,7 @@ public:
 
     static void SetMaterialTexture(Material& material, int mapType, Texture2D& texture);
 
-    static BoundingBox GetModelBoundingBox(const Model& model);
+    static BoundingBox GetModelBoundingBox(std::shared_ptr<Model> model);
     static Matrix MatrixTranslate(float x, float y, float z);
     static Matrix MatrixMultiply(Matrix left, Matrix right);
     static Matrix MatrixScale(float x, float y, float z);

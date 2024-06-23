@@ -19,12 +19,12 @@ void ModelLoader::Draw(Vector3 position, float scale, Vector3 rotationAxis, floa
     for (int i = 0; i < model->materialCount; i++) {
         model->materials[i].shader = shader;
     }
-    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+    rlModel.DrawModelEx(model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
 }
 
 void ModelLoader::DrawWires(Vector3 position, float scale, Vector3 rotationAxis, float rotationAngle, Color tint) {
     rlModel.SetLineWidth(100.0f);
-    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
+    rlModel.DrawModelWiresEx(model, position, rotationAxis, rotationAngle, (Vector3){scale, scale, scale}, tint);
     rlModel.SetLineWidth(1.0f);
 }
 
