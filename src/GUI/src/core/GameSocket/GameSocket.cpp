@@ -100,7 +100,6 @@ void Game::RequestTimeUnit() {
 void Game::SetTimeUnit(int timeUnit) {
     std::string command = "sst " + std::to_string(timeUnit) + "\n";
     socketManager->SendMessage(command);
-    this->timeUnit = timeUnit;
 }
 
 int Game::GetTimeUnit() const {
