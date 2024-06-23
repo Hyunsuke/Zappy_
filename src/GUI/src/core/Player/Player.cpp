@@ -52,11 +52,11 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
     SetAnimation(Animation::Idle);
     UpdateRotationAngle();
 
-    if (playerNumber < predefinedPositions.size()) {
+    if (playerNumber < static_cast<int>(predefinedPositions.size())) {
         Vector3 islandPos = island->GetPosition();
         position = Vector3Add(islandPos, predefinedPositions[playerNumber]);
     } else {
-        int randomIndex = rand() % predefinedPositions.size();
+        int randomIndex = rand() % static_cast<int>(predefinedPositions.size());
         Vector3 islandPos = island->GetPosition();
         position = Vector3Add(islandPos, predefinedPositions[randomIndex]);
     }
@@ -162,11 +162,11 @@ void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
     this->newIsland.reset();
     this->newIsland = newIsland;
 
-    if (playerNumber < predefinedPositions.size()) {
+    if (playerNumber < static_cast<int>(predefinedPositions.size())) {
         Vector3 islandPos = newIsland->GetPosition();
         endPos = Vector3Add(islandPos, predefinedPositions[playerNumber]);
     } else {
-        int randomIndex = rand() % predefinedPositions.size();
+        int randomIndex = rand() % static_cast<int>(predefinedPositions.size());
         Vector3 islandPos = newIsland->GetPosition();
         endPos = Vector3Add(islandPos, predefinedPositions[randomIndex]);
     }
