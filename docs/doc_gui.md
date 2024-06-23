@@ -165,8 +165,8 @@ commandes envoyées par le server, le fonctionnement des joueurs, de la map et d
 
 ```mermaid
 graph TD;
-    GUI-->|TCP| Server; Il s'agit de l'envoi des commandes du GUI vers le serveur
-    Server-->|TCP| GUI; Il s'agit de l'envoi des commandes du server vers le GUI
+    GUI-->|TCP| Server;
+    Server-->|TCP| GUI;
 ```
 
 Le GUI communique avec le server via des sockets TCP pour recevoir les information concernant l'état du jeu. Le Server envoie des commandes au GUI et le GUI affiche les évenements en conséquence. Par exemple si un player se déplace, le server notifie le GUI pour pouvoir faire avancer le player visuéllement. Le GUI peut aussi envoyer des commandes au server pour demander informations sur l'état de jeu.
