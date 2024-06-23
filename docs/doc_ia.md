@@ -36,6 +36,34 @@ graph TD;
 
 L'IA communique avec le serveur en utilisant des sockets TCP. Ils envoient des commandes pour interagir avec le jeu, et reçoit les réponses du serveur suites à leurs commandes.
 
+### Commandes de l'IA
+
+#### Listes de commandes éxécutables
+
+Pour communiquer avec le serveur, les différentes IA ne peuvent envoyer que certaines commandes, contenu dans cette liste:
+
+- **Forward\n**: Permet de faire avancer une IA d'une case sur la map dans la direction où il regarde.
+- **Right\n**: Permet de faire pivoter un joueur de 90° à droite.
+- **Left\n**: Permet de faire pivoter un joueur de 90° à gauche.
+- **Look\n**: Permet d'obtenir un liste d'éléments que le joueur voit sur les cases de la map qui sont devant lui.
+- **Inventory\n**: Fais une liste des objets que le player possède dans son inventaire.
+- **Broadcast text\n**: Envoie le message "text" (modifiable) à tous les autres joueurs sur la map.
+- **Connect_nbr\n**: Envoie le nombre de places disponibles dans la team du joueur.
+- **Fork\n**: Rajoute une place dans la team du joueur.
+- **Eject\n**: Ejecte tout les joueurs d'une case sauf le joueur qui à lancé la commande.
+- **Take object\n**: Prends un objet présent sur la map et le mets dans l'inventaire du joueur (liste les objets disponibles: food, linemate, sibur, phiras, thystame, mendiane, deraumere).
+- **Set object\n**: Prends un objet présent dans l'inventaire du joueur et le mets sur l'endroit de la map où le joueur est présent (liste les objets disponibles: food, linemate, sibur, phiras, thystame, mendiane, deraumere).
+- **Incantation\n**: Lance une incantation qui fait passer tout les players présents sur la case au niveau supérieur.
+
+#### Réponses du serveur
+
+Pour la plupart des commandes les IA reçoivent "ok\n" en cas de réussite ou "ko\n" en cas d'échecs de la commande sauf pour les cas suivant:
+
+- **Look\n**: [tile1, tile2,...] où tile1 représente la liste des éléments présents sur l'élément 1 de la map par rappot au joueur(IA).
+- **Inventory\n**: [linemate n, sibur n,...]. L'entier n représente le nombre d'éléments que possède le joueur par rapport à un élément précisé avant.
+- **Connect_nbr\n**: value. Value représente le nombre de slots disponibles dans la team.
+- **Incantation\n**: "Elevation underway" -> "Current level: k". Dans un premier temps le joueur qui lance la commande envoie un message et ensuite l'entier k désigne le niveau auquel le joueur est après l'incantation.
+
 ### Stratégie de l'IA
 
 Pour optimiser la montée en niveau de nos IA dans le projet Zappy, nous avons adopté une stratégie collective qui consiste à passer du niveau 2 au niveau 8 ensemble. Cette approche repose sur un système de "Shared Inventory" (Inventaire Partagé), permettant à chaque IA de partager les ressources avec les autres membres de l'équipe.
