@@ -117,6 +117,7 @@ void Player::UpdatePosition() {
         SetPosition(newPos);
     } else if (island) {
         Vector3 islandPosition = island->GetPosition();
+        this->position = islandPosition;
         position.y = islandPosition.y + 0.5f;
     }
 }

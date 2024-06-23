@@ -68,7 +68,7 @@ void UIManager::DrawPlayerInfo(const std::shared_ptr<Player>& selectedPlayer) {
     const int textSize = screenHeight * 0.03;
     const int baseX = padding;
     const int baseY = screenHeight * 0.4;
-    int lines = 10;
+    int lines = 11;
 
     int rectHeight = (lines * lineSpacing) + (2 * padding);
     int rectWidth = screenWidth * 0.25;
@@ -78,15 +78,16 @@ void UIManager::DrawPlayerInfo(const std::shared_ptr<Player>& selectedPlayer) {
     rlText.DrawRectangleLines(baseX, baseY, rectWidth, rectHeight, BLUE);
 
     rlText.DrawText(rlText.TextFormat("Selected Player Pos : %d, %d", selectedPlayer->getX(), selectedPlayer->getY()), baseX + padding, baseY + padding, textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Player Level : %d", selectedPlayer->GetLevel()), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Player Team : %s", selectedPlayer->GetTeam().c_str()), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Food : %d", selectedPlayer->getOBJquantity("food")), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Linemate : %d", selectedPlayer->getOBJquantity("linemate")), baseX + padding, baseY + padding + (4 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Deraumere : %d", selectedPlayer->getOBJquantity("deraumere")), baseX + padding, baseY + padding + (5 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Sibur : %d", selectedPlayer->getOBJquantity("sibur")), baseX + padding, baseY + padding + (6 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Mendiane : %d", selectedPlayer->getOBJquantity("mendiane")), baseX + padding, baseY + padding + (7 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Phiras : %d", selectedPlayer->getOBJquantity("phiras")), baseX + padding, baseY + padding + (8 * lineSpacing), textSize, BLACK);
-    rlText.DrawText(rlText.TextFormat("Thystame : %d", selectedPlayer->getOBJquantity("thystame")), baseX + padding, baseY + padding + (9 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Player Number : %d", selectedPlayer->GetPlayerNumber()), baseX + padding, baseY + padding + lineSpacing, textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Player Level : %d", selectedPlayer->GetLevel()), baseX + padding, baseY + padding + (2 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Player Team : %s", selectedPlayer->GetTeam().c_str()), baseX + padding, baseY + padding + (3 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Food : %d", selectedPlayer->getOBJquantity("food")), baseX + padding, baseY + padding + (4 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Linemate : %d", selectedPlayer->getOBJquantity("linemate")), baseX + padding, baseY + padding + (5 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Deraumere : %d", selectedPlayer->getOBJquantity("deraumere")), baseX + padding, baseY + padding + (6 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Sibur : %d", selectedPlayer->getOBJquantity("sibur")), baseX + padding, baseY + padding + (7 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Mendiane : %d", selectedPlayer->getOBJquantity("mendiane")), baseX + padding, baseY + padding + (8 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Phiras : %d", selectedPlayer->getOBJquantity("phiras")), baseX + padding, baseY + padding + (9 * lineSpacing), textSize, BLACK);
+    rlText.DrawText(rlText.TextFormat("Thystame : %d", selectedPlayer->getOBJquantity("thystame")), baseX + padding, baseY + padding + (10 * lineSpacing), textSize, BLACK);
 }
 
 void UIManager::DrawAdditionalInfo(int teamCount, int playerCount, int timeUnit, const std::string& mapSize) {

@@ -82,7 +82,7 @@ void Game::Run() {
 }
 
 void Game::Update() {
-    cameraManager.Update(selectedPlayer);
+    cameraManager.Update(selectedPlayer, selectedIsland);
     gameMap.Update();
     sky.Update(timeUnit);
 
