@@ -41,6 +41,8 @@ static void list_actions(server_t *server, struct_t *s, int client_fd,
     if (add_player_to_team(s, team->team_id, mob->id_player,
         client_fd) == -1) {
         printf("Error not enough slot in the requested team\n");
+        close(client_fd);
+        FD_CLR(client_fd, &server->fd_tab);
         return;
     }
     print_players(s);
