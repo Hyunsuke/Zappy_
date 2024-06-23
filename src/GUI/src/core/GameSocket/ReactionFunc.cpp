@@ -165,6 +165,7 @@ void Game::HandlePlayerDeath(std::istringstream& iss) {
     auto player = gameMap.GetPlayerByNumber(n);
     if (player) {
         player->SetDead();
+        player->WaitForAnimationEnd(Player::Animation::Idle);
     }
 }
 

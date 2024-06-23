@@ -15,7 +15,7 @@ Settings::Settings(int screenWidth, int screenHeight, std::string InstanceName)
 
     resolutions = { {1920, 1080}, {1280, 720}, {800, 600} };
     fpsOptions = { 30, 60, 120 };
-    timeUnitOptions = { 5, 10, 20, 40, 80, 160, 320, 640, 1280};
+    timeUnitOptions = { 5, 10, 20, 40, 80, 160, 320, 640, 1280, 5000, 10000 };
 
     int currentFPS = 60;
     for (std::size_t i = 0; i < fpsOptions.size(); ++i) {
@@ -152,7 +152,7 @@ void Settings::Draw() {
 
     if (instanceName != "menu") {
         rlText.DrawText("Time Unit:", timeUnitBox.x - 100, timeUnitBox.y + 5, 20, BLACK);
-        std::vector<std::string> timeUnitOptionsText = { "5", "10", "20", "40", "80", "160", "320", "640", "1280" };
+        std::vector<std::string> timeUnitOptionsText = { "5", "10", "20", "40", "80", "160", "320", "640", "1280", "5000", "10000" };
         DrawDropDown(timeUnitOptionsText, tempTimeUnitIndex, timeUnitBox);
     }
 
