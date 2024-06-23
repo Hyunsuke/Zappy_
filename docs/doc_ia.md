@@ -29,8 +29,8 @@ Le projet Zappy est un jeu en réseau où plusieurs équipes s'affrontent sur un
 ### Schéma de Communication
 
 ```mermaid
-    IA_Client-->|TCP| Server; Il s'agit de l'envoi des commandes de l'IA vers le serveur
-    Server-->|TCP| IA_Client; Il s'agit de l'envoi des commandes du serveur vers l'IA
+    IA_Client-->|TCP| Server;
+    Server-->|TCP| IA_Client;
 ```
 
 L'IA communique avec le serveur en utilisant des sockets TCP. Ils envoient des commandes pour interagir avec le jeu, et reçoit les réponses du serveur suites à leurs commandes.
