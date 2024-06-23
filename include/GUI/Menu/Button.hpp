@@ -21,7 +21,7 @@ public:
     Button();
     ButtonState GetButtonState(Rectangle button);
     Color GetButtonColor(ButtonState state);
-    void DrawButton(Rectangle button, const char* text, int fontSize);
+    void DrawButton(Rectangle button, const std::string& text, int fontSize);
 private:
     Rectangle button;
     ButtonState state;

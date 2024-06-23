@@ -24,10 +24,10 @@ Game::Game(int screenWidth, int screenHeight, const std::string& mapSize, int ti
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
     Vector3 lightColor = { 1.0f, 1.0f, 1.0f };
     Vector3 ambientColor = { 0.2f, 0.2f, 0.2f };
-    shaderManager->SetShaderValue("lightPosition", &lightPosition, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("viewPosition", &viewPosition, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightPosition", lightPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("viewPosition", viewPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", lightColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("ambientColor", ambientColor, SHADER_UNIFORM_VEC3);
 
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Player/robot.glb");
     ModelCollector::GetInstance().LoadModel("src/GUI/assets/Egg/egg.obj");
@@ -90,8 +90,8 @@ void Game::Update() {
 
     Vector3 lightPos = sky.GetLightPosition();
     Vector3 lightCol = sky.GetLightColor();
-    shaderManager->SetShaderValue("lightPosition", &lightPos, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("lightColor", &lightCol, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightPosition", lightPos, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", lightCol, SHADER_UNIFORM_VEC3);
 
     rayManager.UpdateRay(cameraController.GetCamera());
 

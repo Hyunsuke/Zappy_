@@ -35,7 +35,7 @@ void ModelLoader::SetShader(Shader newShader) {
 void ModelLoader::SetTexture(const std::string& texturePath) {
     std::shared_ptr<Texture2D> texture = TextureCollector::GetInstance().LoadTexture(texturePath);
     for (int i = 0; i < model->materialCount; i++) {
-        rlModel.SetMaterialTexture(model->materials[i], MATERIAL_MAP_DIFFUSE, *texture);
+        rlModel.SetMaterialTexture(model->materials[i], MATERIAL_MAP_DIFFUSE, texture);
     }
 }
 

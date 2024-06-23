@@ -55,6 +55,11 @@ Vector3 RLModel::Vector3Add(Vector3 v1, Vector3 v2) {
     return ::Vector3Add(v1, v2);
 }
 
+std::shared_ptr<Vector3> RLModel::Vector3AddReturnShared(Vector3 v1, Vector3 v2) {
+    Vector3 result = Vector3Add(v1, v2);
+    return std::make_shared<Vector3>(result);
+}
+
 Vector3 RLModel::Vector3Normalize(Vector3 v) {
     return ::Vector3Normalize(v);
 }
@@ -100,8 +105,8 @@ bool RLModel::IsKeyDown(int key) {
 }
 
 
-void RLModel::SetMaterialTexture(Material& material, int mapType, Texture2D& texture) {
-    ::SetMaterialTexture(&material, mapType, texture);
+void RLModel::SetMaterialTexture(Material& material, int mapType, std::shared_ptr<Texture2D> texture) {
+    ::SetMaterialTexture(&material, mapType, *texture);
 }
 
 BoundingBox RLModel::GetModelBoundingBox(std::shared_ptr<Model> model) {

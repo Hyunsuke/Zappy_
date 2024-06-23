@@ -39,13 +39,14 @@ public:
     static Vector3 Vector3CrossProduct(Vector3 v1, Vector3 v2);
     static Vector3 Vector3Scale(Vector3 v, float scale);
     static float Vector3DotProduct(Vector3 v1, Vector3 v2);
+    static std::shared_ptr<Vector3> Vector3AddReturnShared(Vector3 v1, Vector3 v2);
 
     static Vector2 GetMousePosition();
     static bool IsMouseButtonDown(int button);
     static bool IsMouseButtonPressed(int button);
     static bool IsKeyDown(int key);
 
-    static void SetMaterialTexture(Material& material, int mapType, Texture2D& texture);
+    static void SetMaterialTexture(Material& material, int mapType, std::shared_ptr<Texture2D> texture);
 
     static BoundingBox GetModelBoundingBox(std::shared_ptr<Model> model);
     static Matrix MatrixTranslate(float x, float y, float z);

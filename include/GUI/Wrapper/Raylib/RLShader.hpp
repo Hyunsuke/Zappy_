@@ -16,7 +16,7 @@ public:
     static Shader LoadShader(const std::string& vsFileName, const std::string& fsFileName);
     static void UnloadShader(Shader shader);
     static void BeginShaderMode(Shader shader);
-    static void SetShaderValue(Shader shader, int uniformLoc, const void* value, int uniformType);
+    static void SetShaderValue(Shader shader, int uniformLoc, const Vector3& value, int uniformType);
     static int GetShaderLocation(Shader shader, const std::string& uniformName);
 };
 
