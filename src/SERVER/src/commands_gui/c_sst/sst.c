@@ -36,8 +36,6 @@ int c_sst_dashboard(struct_t *s, char *buffer)
 {
     int unit_time;
 
-    if (s->fd_gui == -1)
-        return -1;
     parse_sst(buffer, &unit_time);
     if (unit_time < 0) {
         return -1;
