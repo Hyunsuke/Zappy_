@@ -30,7 +30,8 @@ std::shared_ptr<Model> ModelCollector::LoadModel(const std::string& filePath) {
 
 void ModelCollector::UnloadAllModels() {
     for (auto& entry : modelCache) {
-        rlModel.UnloadModel(*entry.second);
+        if (entry.second)
+            rlModel.UnloadModel(entry.second);
     }
     modelCache.clear();
 }

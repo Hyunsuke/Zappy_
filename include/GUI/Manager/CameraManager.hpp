@@ -14,7 +14,7 @@
 class CameraManager {
 public:
     CameraManager(CameraController& cameraController, Map& gameMap);
-    void Update(std::shared_ptr<Player>& selectedPlayer);
+    void Update(std::shared_ptr<Player>& selectedPlayer, std::shared_ptr<Island>& selectedIsland);
 
 private:
     CameraController& cameraController;

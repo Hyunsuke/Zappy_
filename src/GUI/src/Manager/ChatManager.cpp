@@ -24,16 +24,18 @@ void ChatManager::Draw() {
     rlText.DrawRectangleRec(chatBox, rlText.Fade(DARKGRAY, 0.5f));
     int yOffset = chatBox.y + chatBox.height - textSize - 10;
 
-    for (auto it = messages.rbegin(); it != messages.rend(); ++it) {
-        char timeBuffer[9];
-        std::strftime(timeBuffer, sizeof(timeBuffer), "%H:%M:%S", std::localtime(&it->timestamp));
-        std::string fullMessage = std::string(timeBuffer) + " [" + it->teamName + "] Player " + std::to_string(it->playerNumber) + ": " + it->message;
+    if (!messages.empty()) {
+        for (auto it = messages.rbegin(); it != messages.rend(); ++it) {
+            char timeBuffer[9];
+            std::strftime(timeBuffer, sizeof(timeBuffer), "%H:%M:%S", std::localtime(&it->timestamp));
+            std::string fullMessage = std::string(timeBuffer) + " [" + it->teamName + "] Player " + std::to_string(it->playerNumber) + ": " + it->message;
 
-        if (rlText.MeasureText(fullMessage.c_str(), textSize) > chatBox.width - 20)
-            fullMessage = fullMessage.substr(0, fullMessage.size() - 3) + "...";
+            if (rlText.MeasureText(fullMessage.c_str(), textSize) > chatBox.width - 20)
+                fullMessage = fullMessage.substr(0, fullMessage.size() - 3) + "...";
 
-        rlText.DrawText(fullMessage.c_str(), chatBox.x + 10, yOffset, textSize, RAYWHITE);
-        yOffset -= textSize + 5;
+            rlText.DrawText(fullMessage.c_str(), chatBox.x + 10, yOffset, textSize, RAYWHITE);
+            yOffset -= textSize + 5;
+        }
     }
 }
 

@@ -11,28 +11,28 @@ Model RLModel::LoadModel(const std::string& filePath) {
     return ::LoadModel(filePath.c_str());
 }
 
-void RLModel::UnloadModel(Model& model) {
-    ::UnloadModel(model);
+void RLModel::UnloadModel(std::shared_ptr<Model> model) {
+    ::UnloadModel(*model);
 }
 
 Texture2D RLModel::LoadTexture(const std::string& filePath) {
     return ::LoadTexture(filePath.c_str());
 }
 
-void RLModel::UnloadTexture(Texture2D& texture) {
-    ::UnloadTexture(texture);
+void RLModel::UnloadTexture(std::shared_ptr<Texture2D> texture) {
+    ::UnloadTexture(*texture);
 }
 
-void RLModel::DrawModelEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
-    ::DrawModelEx(model, position, rotationAxis, rotationAngle, scale, tint);
+void RLModel::DrawModelEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
+    ::DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, tint);
 }
 
 void RLModel::SetLineWidth(float width) {
     ::glLineWidth(width);
 }
 
-void RLModel::DrawModelWiresEx(const Model& model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
-    ::DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, tint);
+void RLModel::DrawModelWiresEx(std::shared_ptr<Model> model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint) {
+    ::DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, tint);
 }
 
 float RLModel::GetFrameTime() {
@@ -43,8 +43,8 @@ double RLModel::GetTime() {
     return ::GetTime();
 }
 
-void RLModel::UpdateModelAnimation(Model& model, ModelAnimation& anim, int frame) {
-    ::UpdateModelAnimation(model, anim, frame);
+void RLModel::UpdateModelAnimation(std::shared_ptr<Model> model, std::shared_ptr<ModelAnimation> anim, int frame) {
+    ::UpdateModelAnimation(*model, *anim, frame);
 }
 
 Vector3 RLModel::Vector3Lerp(Vector3 start, Vector3 end, float amount) {
@@ -104,8 +104,8 @@ void RLModel::SetMaterialTexture(Material& material, int mapType, Texture2D& tex
     ::SetMaterialTexture(&material, mapType, texture);
 }
 
-BoundingBox RLModel::GetModelBoundingBox(const Model& model) {
-    return ::GetModelBoundingBox(model);
+BoundingBox RLModel::GetModelBoundingBox(std::shared_ptr<Model> model) {
+    return ::GetModelBoundingBox(*model);
 }
 
 Matrix RLModel::MatrixTranslate(float x, float y, float z) {
@@ -128,10 +128,10 @@ float RLModel::Vector3Distance(Vector3 v1, Vector3 v2) {
     return ::Vector3Distance(v1, v2);
 }
 
-void RLModel::DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint) {
-    return ::DrawTextureEx(texture, position, rotation, scale, tint);
+void RLModel::DrawTextureEx(std::shared_ptr<Texture2D> texture, Vector2 position, float rotation, float scale, Color tint) {
+    return ::DrawTextureEx(*texture, position, rotation, scale, tint);
 }
 
-void RLModel::DrawModel(Model model, Vector3 position, float scale, Color tint) {
-    ::DrawModel(model, position, scale, tint);
+void RLModel::DrawModel(std::shared_ptr<Model> model, Vector3 position, float scale, Color tint) {
+    ::DrawModel(*model, position, scale, tint);
 }

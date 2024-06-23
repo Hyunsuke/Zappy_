@@ -49,12 +49,10 @@ bool SocketManager::IsRunning() const {
 }
 
 void SocketManager::Disconnect() {
-    if (running) {
-        running = false;
-        socketWrapper.Close(sockfd);
-        if (receiveThread.joinable()) {
-            receiveThread.join();
-        }
+    running = false;
+    socketWrapper.Close(sockfd);
+    if (receiveThread.joinable()) {
+        receiveThread.join();
     }
 }
 
@@ -120,9 +118,7 @@ void SocketManager::ReceiveMessages() {
             }
         } else if (bytesReceived == 0 && !iswin) {
             running = false;
-            Disconnect();
             std::cerr << "Disconnected from server" << std::endl;
-            std::exit(0);
         }
     }
 }

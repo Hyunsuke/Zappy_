@@ -16,7 +16,7 @@ void RayManager::UpdateRay(Camera camera) {
 std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::shared_ptr<Island>>& islands) {
     for (auto& island : islands) {
         Matrix transform = rlModel.MatrixTranslate(island->GetPosition().x, island->GetPosition().y, island->GetPosition().z);
-        if (CheckRayCollisionModel(ray, *island->GetModel(), transform)) {
+        if (CheckRayCollisionModel(ray, island->GetModel(), transform)) {
             return island;
         }
     }
@@ -25,7 +25,7 @@ std::shared_ptr<Island> RayManager::GetIslandUnderMouse(const std::vector<std::s
 
 std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::shared_ptr<Player>>& players) {
     for (auto& player : players) {
-        BoundingBox playerBoundingBox = rlModel.GetModelBoundingBox(*player->GetModel());
+        BoundingBox playerBoundingBox = rlModel.GetModelBoundingBox(player->GetModel());
         Vector3 scale = player->GetScale();
         Matrix transform = rlModel.MatrixMultiply(rlModel.MatrixScale(scale.x, scale.y, scale.z), rlModel.MatrixTranslate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z));
         playerBoundingBox.min = rlModel.Vector3Transform(playerBoundingBox.min, transform);
@@ -64,9 +64,9 @@ bool RayManager::CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vect
     return false;
 }
 
-bool RayManager::CheckRayCollisionModel(Ray ray, const Model& model, const Matrix& transform) {
-    for (int i = 0; i < model.meshCount; i++) {
-        Mesh mesh = model.meshes[i];
+bool RayManager::CheckRayCollisionModel(Ray ray, std::shared_ptr<Model> model, const Matrix& transform) {
+    for (int i = 0; i < model->meshCount; i++) {
+        Mesh mesh = model->meshes[i];
         int vertexCount = mesh.vertexCount;
 
         for (int j = 0; j < mesh.triangleCount; j++) {

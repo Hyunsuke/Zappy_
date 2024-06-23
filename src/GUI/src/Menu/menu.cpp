@@ -177,7 +177,7 @@ void Menu::Draw() {
 
     window.BeginMode3D(camera);
 
-    rlModel.DrawModel(*islandModel, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
+    rlModel.DrawModel(islandModel, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
     player->Draw();
 
     window.EndMode3D();

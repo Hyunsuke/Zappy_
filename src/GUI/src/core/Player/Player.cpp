@@ -56,14 +56,14 @@ Player::~Player() {}
 
 void Player::Draw() {
     model = modelLoader.GetModel();
-    rlModel.DrawModelEx(*model, position, rotationAxis, rotationAngle, scale, teamColor);
+    rlModel.DrawModelEx(model, position, rotationAxis, rotationAngle, scale, teamColor);
 }
 
 
 void Player::DrawWires() {
     rlModel.SetLineWidth(1.0f);
     model = modelLoader.GetModel();
-    rlModel.DrawModelWiresEx(*model, position, rotationAxis, rotationAngle, scale, WHITE);
+    rlModel.DrawModelWiresEx(model, position, rotationAxis, rotationAngle, scale, WHITE);
     rlModel.SetLineWidth(1.0f);
 }
 
@@ -83,7 +83,7 @@ void Player::UpdateAnimation() {
         animationTime -= framesToAdvance / animationSpeed;
 
         model = modelLoader.GetModel();
-        rlModel.UpdateModelAnimation(*model, *animations[animIndex], animCurrentFrame);
+        rlModel.UpdateModelAnimation(model, animations[animIndex], animCurrentFrame);
     }
 }
 
@@ -110,13 +110,13 @@ void Player::UpdatePosition() {
             this->y = newIsland->GetY();
             SetIsland(newIsland);
 
-            UpdatePlayersPositionsOnIsland(newIsland);
         }
 
         Vector3 newPos = rlModel.Vector3Lerp(startPos, endPos, t);
         SetPosition(newPos);
     } else if (island) {
         Vector3 islandPosition = island->GetPosition();
+        this->position = islandPosition;
         position.y = islandPosition.y + 0.5f;
     }
 }

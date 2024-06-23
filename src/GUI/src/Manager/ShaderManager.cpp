@@ -10,7 +10,7 @@
 ShaderManager::ShaderManager(const std::string& vertexPath, const std::string& fragmentPath)
     : vertexPath(vertexPath), fragmentPath(fragmentPath) {
     shader = rlShader.LoadShader(vertexPath.c_str(), fragmentPath.c_str());
-    if (shader.id == 3) {
+    if (shader.id == 5) {
         throw GameException("Failed to load shader: " + vertexPath + " " + fragmentPath);
     }
 }

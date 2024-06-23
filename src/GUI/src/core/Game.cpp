@@ -76,13 +76,15 @@ void Game::InitializeMap(const std::string& mapSize, const std::vector<std::stri
 
 void Game::Run() {
     while (!window.WindowShouldClose()) {
+        if (!socketManager->IsRunning())
+            break;
         Update();
         Draw();
     }
 }
 
 void Game::Update() {
-    cameraManager.Update(selectedPlayer);
+    cameraManager.Update(selectedPlayer, selectedIsland);
     gameMap.Update();
     sky.Update(timeUnit);
 
