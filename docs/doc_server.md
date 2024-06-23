@@ -278,6 +278,39 @@ typedef struct struct_s {
 - **head_progress_incantation** : Pointeur vers les incantations en cours.
 - **dashboard** : Pointeur vers les informations du tableau de bord (optionnel).
 
+#### Explication des Éléments de `map_element_t`
+
+Pour gérer notre map nous utilisons un tableau de structure :
+
+```c
+typedef struct map_element_s {
+    int food;
+    int linemate;
+    int deraumere;
+    int sibur;
+    int mendiane;
+    int phiras;
+    int thystame;
+    int nb_mob;
+    int *id_mob;
+} map_element_t;
+```
+
+Chaque élément (case de la map) possède son propre inventaire ici représenté par
+
+- **food**: Nombre de nourriture disponible sur la case.
+- **linemate**: Nombre de linemate disponible sur la case.
+- **deraumere**: Nombre de deraumere disponible sur la case.
+- **sibur**: Nombre de sibur disponible sur la case.
+- **mendiane**: Nombre de mendiane disponible sur la case.
+- **phiras**: Nombre de phiras disponible sur la case.
+- **thystame**: Nombre de thystame disponible sur la case.
+
+Les autres éléments représentent des informations sur les joueurs présents sur la case:
+
+- **nb_mob**: nombre de joueurs sur la case.
+- **id_mob**: tableau d'entier contenant les id des players présents sur la case.
+
 ## Communication du Serveur
 
 ### Communication avec les IA
@@ -294,9 +327,58 @@ La communication entre le serveur et les IA se fait via des sockets TCP. Voici u
    - L'IA peut envoyer jusqu'à 10 commandes sans attendre de réponse.
    - Le serveur exécute les commandes dans l'ordre de réception et envoie des réponses de confirmation.
 
+Pour gérer les différentes commandes des différentes IA nous utilisons un tableau de poiteur sur fonction contenu dans le fichier run_commands_ia.c :
+
+```c
+static int execute_command_ia(struct_t *s, int fd, char *command)
+{
+    command_struct_ia_t commands[] = {
+        {"Forward", c_forward}, {"Right", c_right},
+        {"Left", c_left}, {"Look", c_look},
+        {"Inventory", c_inventory}, {"Set food", c_set_obj},
+        {"Set linemate", c_set_obj}, {"Set deraumere", c_set_obj},
+        {"Set sibur", c_set_obj}, {"Set mendiane", c_set_obj},
+        {"Set phiras", c_set_obj}, {"Set thystame", c_set_obj},
+        {"Broadcast ", c_broadcast_txt}, {"Fork", c_fork},
+        {"Connect_nbr", c_connect_nbr}, {"Eject", c_eject},
+        {"Take food", c_take_obj}, {"Take linemate", c_take_obj},
+        {"Take deraumere", c_take_obj}, {"Take sibur", c_take_obj},
+        {"Take mendiane", c_take_obj}, {"Take phiras", c_take_obj},
+        {"Take thystame", c_take_obj}, {"Incantation", c_incantation},
+        {NULL, NULL}
+    };
+
+    check_cmd_with_obj(s, command);
+    return check_function(s, fd, command, commands);
+}
+```
+
 ### Communication avec le GUI
 
 Le GUI utilise le même protocole de communication que les IA, mais il s'authentifie en tant que GUI en envoyant le nom d'équipe "GRAPHIC". Le GUI reçoit des mises à jour en temps réel sur l'état du jeu, les positions des joueurs, et les ressources.
+
+Pour gérer les différentes commandes des différentes IA nous utilisons un tableau de poiteur sur fonction contenu dans le fichier run_commands_gui.c :
+
+```c
+static int execute_command_gui(struct_t *s, char *command, char *buffer)
+{
+    command_struct_gui_t commands[] = {
+        {"msz", c_msz}, {"bct", c_bct}, {"mct", c_mct},
+        {"tna", c_tna}, {"ppo", c_ppo}, {"plv", c_plv},
+        {"pin", c_pin}, {"sgt", c_sgt},
+        {"sst", c_sst}, {NULL, NULL}
+    };
+
+    for (int i = 0; commands[i].command != NULL; i++) {
+        if (strcmp(commands[i].command, command) == 0) {
+            return commands[i].func(s, buffer);
+        }
+    }
+    printf("Run_commands_GUI -> Unknown command: %s\n", command);
+    c_suc(s);
+    return -1;
+}
+```
 
 ### Communication avec le Dashboard
 

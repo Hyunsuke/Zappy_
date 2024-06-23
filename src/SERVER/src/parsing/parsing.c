@@ -73,7 +73,7 @@ static void assign_max_cli(struct_t *s)
 
 static void check_frequency(int frequency)
 {
-    if (frequency < 2 || frequency > 1000) {
+    if (frequency < 1 || frequency > 1000) {
         dprintf(2, "Invalid frequency: should be between 2 and 1000\n");
         full_free();
         exit(84);
