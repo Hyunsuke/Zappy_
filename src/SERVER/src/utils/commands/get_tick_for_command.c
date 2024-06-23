@@ -17,7 +17,7 @@ command_t *initialize_command_ticks(void)
 
     for (int i = 0; commands[i] != NULL; i++) {
         command_ticks[i].command = commands[i];
-        command_ticks[i].tick = ticks[i];
+        command_ticks[i].tick = ticks[i] + 1;
     }
     command_ticks[11].command = NULL;
     command_ticks[11].tick = 1;
