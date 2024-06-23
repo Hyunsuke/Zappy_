@@ -44,8 +44,7 @@ private:
     char hostBuffer[128];
     char portBuffer[6];
     std::unique_ptr<ShaderManager> shaderManager;
-    std::shared_ptr<Model> islandModel;
-    std::shared_ptr<Texture2D> islandTexture;
+    std::shared_ptr<Island> islandModel;
     Camera camera;
     std::unique_ptr<Player> player;
     Settings settings;

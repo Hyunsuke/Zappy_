@@ -25,10 +25,8 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
     shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
 
-    islandModel = ModelCollector::GetInstance().LoadModel("src/GUI/assets/Island/Island01.obj");
-    islandTexture = TextureCollector::GetInstance().LoadTexture("src/GUI/assets/Island/TextIsland.png");
-    islandModel->materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = *islandTexture;
-    islandModel->materials[0].shader = shaderManager->GetShader();
+    islandModel = std::make_shared<Island>(0, 0, Vector3{0.0f, 0.0f, 0.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
+    islandModel->SetShader(shaderManager->GetShader());
 
     camera.position = { 0.0f, 5.0f, 20.0f };
     camera.target = { 0.0f, 2.5f, 0.0f };
@@ -36,8 +34,7 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
-    std::shared_ptr<Island> island = std::make_shared<Island>(0, 0, Vector3{0.0f, 0.0f, 0.0f}, "src/GUI/assets/Island/Island01.obj", "src/GUI/assets/Island/TextIsland.png", 0.7f, Vector3{0.0f, 1.0f, 0.0f}, 0.0f);
-    player = std::make_unique<Player>(1, "menu", 0, 0, 1, 1, "src/GUI/assets/Player/robot.glb", island);
+    player = std::make_unique<Player>(1, "menu", 0, 0, 1, 1, "src/GUI/assets/Player/robot.glb", islandModel);
     player->SetAnimation(Player::Animation::Dance);
 }
 
@@ -177,7 +174,9 @@ void Menu::Draw() {
 
     window.BeginMode3D(camera);
 
-    rlModel.DrawModel(islandModel, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
+    for (int i = 0; i < islandModel->GetModel()->materialCount; i++)
+        islandModel->GetModel()->materials[i].shader = shaderManager->GetShader();
+    rlModel.DrawModel(islandModel->GetModel(), {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
     player->Draw();
 
     window.EndMode3D();
