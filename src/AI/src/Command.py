@@ -45,7 +45,7 @@ class Command:
     def sendArrayCmd(self):
         while len(self.commandList) != 0:
             try:
-                if (self.commandWaitingRoom < 10):
+                if (self.commandWaitingRoom < 9):
                     if (len(self.commandList) != 0):
                         self.socket.sendall(f"{self.commandList[0]}\n".encode())
                         self.commandList.pop(0)
@@ -178,8 +178,8 @@ class Command:
         team_name, object, fct = getBroadcastMessage(broadcastMessage)
         if team_name == None or object == None or fct == None:
             return
-        print("Name : " + team_name + " object : " + object + " fct : " + fct + " num : " + str(num))
         if team_name == self.team_name:
+            print("Name : " + team_name + " object : " + object + " fct : " + fct + " num : " + str(num))
             if fct == "Take":
                 if object in self.current_inventory.shared_inventory:
                     self.current_inventory.shared_inventory[object] += 1
