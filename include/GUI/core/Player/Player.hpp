@@ -70,7 +70,6 @@ public:
 
 
     void WaitForAnimationEnd(Player::Animation animation);
-    void UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island);
 
 private:
     std::vector<std::shared_ptr<ModelAnimation>> animations;
@@ -121,6 +120,9 @@ private:
 
     RLModel rlModel;
     static Color GetTeamColor(const std::string& teamName);
+
+    std::vector<Vector3> predefinedPositions;
+    void InitializePredefinedPositions();
 };
 
 #endif // PLAYER_HPP

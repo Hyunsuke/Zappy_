@@ -47,10 +47,39 @@ Player::Player(int playerNumber, const std::string& teamName, int x, int y, int 
     else
         teamColor = GetTeamColor(teamName);
 
+    InitializePredefinedPositions();
     UpdateScaleBasedOnLevel();
     SetAnimation(Animation::Idle);
     UpdateRotationAngle();
+
+    if (playerNumber < predefinedPositions.size()) {
+        Vector3 islandPos = island->GetPosition();
+        position = Vector3Add(islandPos, predefinedPositions[playerNumber]);
+    } else {
+        int randomIndex = rand() % predefinedPositions.size();
+        Vector3 islandPos = island->GetPosition();
+        position = Vector3Add(islandPos, predefinedPositions[randomIndex]);
+    }
 }
+
+void Player::InitializePredefinedPositions() {
+    float radius = 2.0f;
+    predefinedPositions = {
+        {0.0f, 0.0f, radius},
+        {radius * std::cos(PI / 6), 0.0f, radius * std::sin(PI / 6)},
+        {radius * std::cos(PI / 3), 0.0f, radius * std::sin(PI / 3)},
+        {radius, 0.0f, 0.0f},
+        {radius * std::cos(2 * PI / 3), 0.0f, radius * std::sin(2 * PI / 3)},
+        {radius * std::cos(5 * PI / 6), 0.0f, radius * std::sin(5 * PI / 6)},
+        {0.0f, 0.0f, -radius},
+        {-radius * std::cos(PI / 6), 0.0f, -radius * std::sin(PI / 6)},
+        {-radius * std::cos(PI / 3), 0.0f, -radius * std::sin(PI / 3)},
+        {-radius, 0.0f, 0.0f},
+        {-radius * std::cos(2 * PI / 3), 0.0f, -radius * std::sin(2 * PI / 3)},
+        {-radius * std::cos(5 * PI / 6), 0.0f, -radius * std::sin(5 * PI / 6)}
+    };
+}
+
 
 Player::~Player() {}
 
@@ -116,8 +145,30 @@ void Player::UpdatePosition() {
         SetPosition(newPos);
     } else if (island) {
         Vector3 islandPosition = island->GetPosition();
-        this->position = islandPosition;
         position.y = islandPosition.y + 0.5f;
+    }
+}
+
+void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
+    startPos = position;
+    endPos = newIsland->GetPosition();
+
+    moveDuration = baseDuration;
+    moveStartTime = rlModel.GetTime();
+    isMoving = true;
+
+    SetAnimation(Animation::Jump);
+
+    this->newIsland.reset();
+    this->newIsland = newIsland;
+
+    if (playerNumber < predefinedPositions.size()) {
+        Vector3 islandPos = newIsland->GetPosition();
+        endPos = Vector3Add(islandPos, predefinedPositions[playerNumber]);
+    } else {
+        int randomIndex = rand() % predefinedPositions.size();
+        Vector3 islandPos = newIsland->GetPosition();
+        endPos = Vector3Add(islandPos, predefinedPositions[randomIndex]);
     }
 }
 
@@ -197,37 +248,6 @@ std::shared_ptr<Island> Player::GetIsland() const {
 int Player::GetPlayerNumber() const {
     return playerNumber;
 }
-
-void Player::JumpTo(std::shared_ptr<Island> newIsland, float baseDuration) {
-    startPos = position;
-    endPos = newIsland->GetPosition();
-
-    moveDuration = baseDuration;
-    moveStartTime = rlModel.GetTime();
-    isMoving = true;
-
-    SetAnimation(Animation::Jump);
-
-    this->newIsland.reset();
-    this->newIsland = newIsland;
-}
-
-void Player::UpdatePlayersPositionsOnIsland(std::shared_ptr<Island> island) {
-    std::vector<std::shared_ptr<Player>> players = island->GetPlayers();
-    int playerCount = players.size();
-    float radius = std::max(1.0f, playerCount * 0.35f);
-
-    for (int i = 0; i < playerCount; ++i) {
-        float angle = 2.0f * PI * i / playerCount;
-        Vector3 islandPos = island->GetPosition();
-        Vector3 offset = {0.0f, 0.0f, 0.0f};
-        if (playerCount > 1) {
-            offset = {radius * cos(angle), 0.0f, radius * sin(angle)};
-        }
-        players[i]->SetPosition(rlModel.Vector3Add(islandPos, offset));
-    }
-}
-
 
 int Player::getOBJquantity(std::string objName)
 {
