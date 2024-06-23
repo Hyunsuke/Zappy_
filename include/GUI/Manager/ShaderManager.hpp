@@ -18,7 +18,7 @@ public:
     ~ShaderManager();
 
     void UseShader();
-    void SetShaderValue(const std::string& uniformName, const void* value, int uniformType);
+    void SetShaderValue(const std::string& uniformName, const Vector3& value, int uniformType);
     Shader GetShader() const;
 
 private:

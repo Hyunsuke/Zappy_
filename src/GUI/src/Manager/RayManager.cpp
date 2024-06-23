@@ -38,7 +38,7 @@ std::shared_ptr<Player> RayManager::GetPlayerUnderMouse(const std::vector<std::s
     return nullptr;
 }
 
-bool RayManager::CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3* outCollisionPoint) {
+bool RayManager::CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, std::shared_ptr<Vector3> outCollisionPoint) {
     Vector3 edge1 = rlModel.Vector3Subtract(p2, p1);
     Vector3 edge2 = rlModel.Vector3Subtract(p3, p1);
     Vector3 pvec = rlModel.Vector3CrossProduct(ray.direction, edge2);
@@ -57,7 +57,7 @@ bool RayManager::CheckCollisionRayTriangle(Ray ray, Vector3 p1, Vector3 p2, Vect
 
     float t = rlModel.Vector3DotProduct(edge2, qvec) * invDet;
     if (t > 0) {
-        if (outCollisionPoint) *outCollisionPoint = rlModel.Vector3Add(ray.position, rlModel.Vector3Scale(ray.direction, t));
+        if (outCollisionPoint) outCollisionPoint = rlModel.Vector3AddReturnShared(ray.position, rlModel.Vector3Scale(ray.direction, t));
         return true;
     }
 

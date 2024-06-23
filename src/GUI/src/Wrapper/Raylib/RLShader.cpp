@@ -19,8 +19,8 @@ void RLShader::BeginShaderMode(Shader shader) {
     ::BeginShaderMode(shader);
 }
 
-void RLShader::SetShaderValue(Shader shader, int uniformLoc, const void* value, int uniformType) {
-    ::SetShaderValue(shader, uniformLoc, value, uniformType);
+void RLShader::SetShaderValue(Shader shader, int uniformLoc, const Vector3& value, int uniformType) {
+    ::SetShaderValue(shader, uniformLoc, &value, uniformType);
 }
 
 int RLShader::GetShaderLocation(Shader shader, const std::string& uniformName) {

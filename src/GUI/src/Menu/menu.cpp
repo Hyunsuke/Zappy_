@@ -20,10 +20,10 @@ Menu::Menu(int screenWidth, int screenHeight, const std::string& host, int port)
     Vector3 viewPosition = { 0.0f, 10.0f, 10.0f };
     Vector3 lightColor = { 1.0f, 1.0f, 1.0f };
     Vector3 ambientColor = { 0.2f, 0.2f, 0.2f };
-    shaderManager->SetShaderValue("lightPosition", &lightPosition, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("viewPosition", &viewPosition, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("lightColor", &lightColor, SHADER_UNIFORM_VEC3);
-    shaderManager->SetShaderValue("ambientColor", &ambientColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightPosition", lightPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("viewPosition", viewPosition, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("lightColor", lightColor, SHADER_UNIFORM_VEC3);
+    shaderManager->SetShaderValue("ambientColor", ambientColor, SHADER_UNIFORM_VEC3);
 
     islandModel = ModelCollector::GetInstance().LoadModel("src/GUI/assets/Island/Island01.obj");
     islandTexture = TextureCollector::GetInstance().LoadTexture("src/GUI/assets/Island/TextIsland.png");
